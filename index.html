@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>सिल्करूट | SilkRoot - भारतीय परिधान</title>
+  <title>SilkRoot | Premium Indian Ethnic Wear</title>
+  <meta name="description" content="SilkRoot - Premium Indian ethnic wear for men and women. Authentic sarees, kurtas, lehengas with UPI payment & instant checkout.">
+  <meta name="keywords" content="SilkRoot, Indian ethnic wear, saree, kurta, lehenga, online clothing store India, UPI payment">
+  <meta name="author" content="SilkRoot">
+  <meta name="robots" content="index, follow">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, -apple-system, 'Inter', 'Poppins', sans-serif;
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
     }
 
     body {
-      background: #faf6f0;
+      background: #fefaf5;
       min-height: 100vh;
     }
 
+    /* Navbar */
     .navbar {
-      background: #1e2a2e;
-      color: #f4ede4;
+      background: #2c1810;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
@@ -29,40 +33,42 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid #d4bc9a;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
 
     .logo {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      letter-spacing: -0.5px;
+      letter-spacing: 1px;
+      color: #d4af6a;
     }
 
     .logo span {
-      color: #e6b17e;
-      font-weight: 500;
+      color: #f5e6c8;
+      font-weight: 400;
     }
 
     .cart-icon {
       position: relative;
       cursor: pointer;
-      font-size: 1.6rem;
-      background: #2d3e42;
+      font-size: 1.4rem;
+      background: #3e2a22;
       padding: 0.5rem 1.2rem;
-      border-radius: 40px;
+      border-radius: 50px;
       transition: all 0.2s;
+      color: #d4af6a;
     }
 
     .cart-icon:hover {
-      background: #3e5a60;
+      background: #5a3c30;
     }
 
     .cart-count {
       position: absolute;
-      top: -6px;
-      right: -6px;
-      background: #e6b17e;
-      color: #1e2a2e;
+      top: -8px;
+      right: -8px;
+      background: #d4af6a;
+      color: #2c1810;
       border-radius: 50%;
       width: 22px;
       height: 22px;
@@ -73,54 +79,68 @@
       justify-content: center;
     }
 
-    .dashboard {
+    /* Main Container */
+    .container {
       max-width: 1400px;
       margin: 0 auto;
       padding: 2rem;
     }
 
+    /* Hero Banner */
+    .hero {
+      background: linear-gradient(135deg, #2c1810 0%, #4a2c20 100%);
+      border-radius: 1.5rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* Stats Panel */
     .stats-panel {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.5rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .stat-block {
-      background: #ffffffec;
-      padding: 1.3rem 1.5rem;
-      border-radius: 1.2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-      border: 1px solid #efe0d0;
+      background: white;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #f0e0d0;
     }
 
     .stat-label {
-      color: #6f5b47;
-      font-size: 0.85rem;
+      color: #a08060;
+      font-size: 0.8rem;
       letter-spacing: 1px;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .stat-number {
-      font-size: 1.9rem;
+      font-size: 1.6rem;
       font-weight: 800;
-      color: #1e2a2e;
-    }
-
-    .section-head {
-      font-size: 1.7rem;
-      font-weight: 600;
-      margin: 2rem 0 1.2rem 0;
-      color: #2c3e2f;
-      border-left: 5px solid #e6b17e;
-      padding-left: 1rem;
+      color: #2c1810;
     }
 
     /* Spin & Win Section */
     .spin-section {
-      background: linear-gradient(135deg, #1e2a2e 0%, #2d3e42 100%);
+      background: linear-gradient(135deg, #1a2a2e 0%, #2c3e42 100%);
       border-radius: 1.5rem;
-      padding: 1.5rem;
+      padding: 1.8rem;
       margin-bottom: 2rem;
       display: flex;
       flex-wrap: wrap;
@@ -130,28 +150,25 @@
       color: white;
     }
 
-    .spin-info {
-      flex: 1;
-    }
-
     .spin-info h3 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .spin-info p {
-      opacity: 0.9;
-      font-size: 0.9rem;
+      opacity: 0.85;
+      font-size: 0.85rem;
     }
 
     .discount-badge {
-      background: #e6b17e;
-      color: #1e2a2e;
+      background: #d4af6a;
+      color: #2c1810;
       padding: 0.3rem 1rem;
       border-radius: 50px;
       display: inline-block;
       font-weight: bold;
       margin-top: 0.5rem;
+      font-size: 0.8rem;
     }
 
     .wheel-container {
@@ -159,59 +176,62 @@
     }
 
     canvas {
-      background: #f4ede4;
+      background: #fefaf5;
       border-radius: 50%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .spin-btn {
-      background: #e6b17e;
+      background: #d4af6a;
       border: none;
-      padding: 12px 30px;
-      font-size: 1.2rem;
+      padding: 10px 25px;
+      font-size: 1rem;
       font-weight: bold;
       border-radius: 50px;
       cursor: pointer;
-      margin-top: 1rem;
+      margin-top: 0.8rem;
       transition: transform 0.2s;
-      color: #1e2a2e;
+      color: #2c1810;
     }
 
     .spin-btn:hover {
-      transform: scale(1.05);
-      background: #f0c08c;
+      transform: scale(1.03);
+      background: #e8c88a;
     }
 
-    .applied-discount {
-      background: #2d5a3b;
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
+    /* Section Headers */
+    .section-head {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin: 2rem 0 1.2rem;
+      color: #2c1810;
+      border-left: 4px solid #d4af6a;
+      padding-left: 1rem;
     }
 
     /* Products Grid */
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 2rem;
     }
 
     .product-card {
       background: white;
-      border-radius: 1.2rem;
+      border-radius: 1rem;
       overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-      transition: 0.25s ease;
-      border: 1px solid #f0e2d4;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      transition: 0.3s;
+      border: 1px solid #f0e0d0;
     }
 
     .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.12);
     }
 
     .product-img {
-      height: 260px;
+      height: 280px;
       background-size: cover;
       background-position: center;
       position: relative;
@@ -219,30 +239,30 @@
 
     .product-tag {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      background: #1e2a2e;
-      color: #e6b17e;
+      top: 12px;
+      left: 12px;
+      background: #d4af6a;
+      color: #2c1810;
       padding: 0.2rem 0.8rem;
-      border-radius: 40px;
+      border-radius: 20px;
       font-size: 0.7rem;
       font-weight: 600;
     }
 
     .product-info {
-      padding: 1rem 1.2rem 1.2rem;
+      padding: 1rem;
     }
 
     .product-name {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 700;
-      color: #2c3e2f;
+      color: #2c1810;
     }
 
     .product-category {
       font-size: 0.7rem;
-      color: #a18973;
-      margin: 0.25rem 0 0.5rem;
+      color: #a08060;
+      margin: 0.2rem 0;
     }
 
     .price-wrapper {
@@ -250,35 +270,37 @@
       gap: 10px;
       align-items: baseline;
       flex-wrap: wrap;
+      margin: 0.5rem 0;
     }
 
     .original-price {
-      font-size: 1rem;
-      color: #a18973;
+      font-size: 0.85rem;
+      color: #a08060;
       text-decoration: line-through;
     }
 
     .product-price {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 800;
-      color: #b97f44;
+      color: #2c1810;
     }
 
     .discount-tag {
       font-size: 0.7rem;
-      background: #2d5a3b;
-      color: white;
+      background: #d4af6a;
+      color: #2c1810;
       padding: 2px 8px;
       border-radius: 20px;
+      display: inline-block;
     }
 
     .add-btn {
       width: 100%;
-      background: #1e2a2e;
-      color: #f4ede4;
+      background: #2c1810;
+      color: #fefaf5;
       border: none;
       padding: 0.7rem;
-      border-radius: 60px;
+      border-radius: 50px;
       font-weight: 600;
       cursor: pointer;
       transition: 0.2s;
@@ -286,319 +308,295 @@
     }
 
     .add-btn:hover {
-      background: #e6b17e;
-      color: #1e2a2e;
-    }
-
-    /* Cart Sidebar */
-    .cart-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 200;
-      visibility: hidden;
-      opacity: 0;
-      transition: 0.2s;
-    }
-
-    .cart-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .cart-sidebar {
-      position: fixed;
-      top: 0;
-      right: -450px;
-      width: 100%;
-      max-width: 450px;
-      height: 100%;
-      background: #fffbf7;
-      z-index: 201;
-      transition: 0.3s ease;
-      box-shadow: -4px 0 30px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .cart-sidebar.active {
-      right: 0;
-    }
-
-    .cart-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid #efdfcf;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .cart-header h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #2c3e2f;
-    }
-
-    .close-cart {
-      font-size: 1.8rem;
-      cursor: pointer;
-      background: none;
-      border: none;
-      color: #7f6957;
-    }
-
-    .cart-items-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-    }
-
-    .cart-item {
-      display: flex;
-      gap: 1rem;
-      background: #ffffff;
-      margin-bottom: 0.8rem;
-      padding: 0.8rem;
-      border-radius: 1rem;
-      border: 1px solid #f1e4d8;
-    }
-
-    .cart-item-img {
-      width: 70px;
-      height: 70px;
-      border-radius: 12px;
-      background-size: cover;
-    }
-
-    .cart-item-details {
-      flex: 1;
-    }
-
-    .cart-item-title {
-      font-weight: 600;
-      color: #2c3e2f;
-    }
-
-    .cart-item-price {
-      color: #b97f44;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .cart-qty {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .qty-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 30px;
-      border: 1px solid #e6cdb3;
-      background: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .cart-footer {
-      padding: 1.2rem;
-      border-top: 2px solid #f0e0d0;
-      background: #fffbf7;
-    }
-
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 800;
-      font-size: 1.2rem;
-      margin: 0.8rem 0;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      background: #1e2a2e;
-      border: none;
-      padding: 1rem;
-      color: white;
-      font-weight: 700;
-      border-radius: 50px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .payment-section {
-      background: white;
-      border-radius: 1.5rem;
-      margin-top: 2rem;
-      padding: 1.2rem 1.5rem;
-      border: 1px solid #efe0d0;
-    }
-
-    .payment-title {
-      font-weight: 700;
-      color: #1e2a2e;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 1rem;
-    }
-
-    .upi-apps {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 12px 0;
-    }
-
-    .app-pay-btn {
-      background: #faf1e8;
-      border: 1px solid #ddcbb8;
-      padding: 8px 20px;
-      border-radius: 50px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .upi-details-card {
-      background: #fef7f0;
-      padding: 12px 16px;
-      border-radius: 1rem;
-      margin: 12px 0;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .copy-upi {
-      background: #e6cdb3;
-      border: none;
-      padding: 5px 15px;
-      border-radius: 40px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    .payment-message {
-      text-align: center;
-      padding: 8px;
-      font-size: 0.8rem;
-      background: #eef4e8;
-      border-radius: 60px;
-      color: #2c5a2e;
-    }
-
-    hr {
-      margin: 12px 0;
-      border-color: #eee3d8;
+      background: #d4af6a;
+      color: #2c1810;
     }
   </style>
 </head>
 <body>
 
 <div class="navbar">
-  <div class="logo">सिल्करूट <span>SilkRoot</span></div>
+  <div class="logo">SilkRoot <span>Ethnic Wear</span></div>
   <div class="cart-icon" id="cartIcon">
     🛒 <span class="cart-count" id="cartCount">0</span>
   </div>
 </div>
 
-<div class="dashboard">
-  <div class="stats-panel">
-    <div class="stat-block"><div class="stat-label">कलेक्शन</div><div class="stat-number" id="productCountDisplay">0</div></div>
-    <div class="stat-block"><div class="stat-label">कार्ट आइटम</div><div class="stat-number" id="cartItemCountStat">0</div></div>
-    <div class="stat-block"><div class="stat-label">कुल राशि (₹)</div><div class="stat-number" id="cartTotalStat">0</div></div>
+<div class="container">
+  <!-- Hero Banner -->
+  <div class="hero">
+    <h1>SilkRoot Premium Ethnic Wear</h1>
+    <p>Authentic Handcrafted Indian Fashion | UPI Secure Payment</p>
   </div>
 
-  <!-- Spin & Win Section -->
+  <!-- Stats -->
+  <div class="stats-panel">
+    <div class="stat-block"><div class="stat-label">Premium Collection</div><div class="stat-number" id="productCountDisplay">0</div></div>
+    <div class="stat-block"><div class="stat-label">Cart Items</div><div class="stat-number" id="cartItemCountStat">0</div></div>
+    <div class="stat-block"><div class="stat-label">Total (₹)</div><div class="stat-number" id="cartTotalStat">0</div></div>
+  </div>
+
+  <!-- Spin & Win -->
   <div class="spin-section">
     <div class="spin-info">
-      <h3>🎡 घुमाएँ और जीतें</h3>
-      <p>स्पिन करें और अगली खरीदारी पर अतिरिक्त छूट पाएं!</p>
-      <div id="discountDisplay" class="discount-badge">कोई छूट सक्रिय नहीं</div>
+      <h3>🎡 Spin & Win Discount</h3>
+      <p>Spin the wheel and get up to 25% OFF on your purchase!</p>
+      <div id="discountDisplay" class="discount-badge">No active discount</div>
     </div>
     <div class="wheel-container">
-      <canvas id="wheelCanvas" width="180" height="180"></canvas>
-      <button class="spin-btn" id="spinWheelBtn">🎲 स्पिन करें</button>
+      <canvas id="wheelCanvas" width="170" height="170"></canvas>
+      <button class="spin-btn" id="spinWheelBtn">🎲 SPIN NOW</button>
     </div>
-  </div>
-
-  <div class="section-head">✨ हस्तशिल्प संग्रह</div>
-  <div class="products-grid" id="productsGrid"></div>
-          <div class="payment-section" id="paymentDashboard">
-    <div class="payment-title">💳 भुगतान विकल्प · UPI Auto-fill</div>
+    <!-- Payment Section -->
+  <div class="payment-section" id="paymentDashboard">
+    <div class="payment-title">💳 Secure UPI Payment</div>
     <div class="upi-apps" id="upiAppsContainer"></div>
     <div class="upi-details-card">
-      <span>🔖 प्री-फिल्ड UPI ID :</span>
+      <span>🔖 UPI ID (Auto-filled):</span>
       <strong id="upiIdSpan">Q169274193@ybl</strong>
-      <button id="copyUpiBtn" class="copy-upi">📋 कॉपी</button>
+      <button id="copyUpiBtn" class="copy-upi">📋 Copy</button>
     </div>
-    <div class="upi-details-card" style="border-left-color:#e6b17e;">
-      <span>💰 भुगतान राशि :</span>
+    <div class="upi-details-card" style="border-left-color: #d4af6a;">
+      <span>💰 Payment Amount:</span>
       <strong id="payAmountSpan">₹0</strong>
-      <span style="font-size:0.7rem;">(स्वचालित रूप से भरा जाएगा)</span>
+      <span style="font-size:0.7rem;">(auto-filled in UPI app)</span>
     </div>
-    <div id="paymentStatusMsg" class="payment-message">✅ कृपया कार्ट में जोड़ें → चेकआउट करें</div>
+    <div id="paymentStatusMsg" class="payment-message">✅ Add items to cart → Proceed to payment</div>
   </div>
 </div>
 
+<!-- Cart Sidebar -->
 <div class="cart-overlay" id="cartOverlay"></div>
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
-    <h2>आपका थैला 🛍️</h2>
+    <h2>Your Shopping Bag 🛍️</h2>
     <button class="close-cart" id="closeCartBtn">✕</button>
   </div>
   <div class="cart-items-list" id="cartItemsList">
-    <div style="text-align:center; padding:2rem; color:#b89a7a;">कार्ट खाली है</div>
+    <div style="text-align:center; padding:2rem;">Your cart is empty</div>
   </div>
   <div class="cart-footer">
-    <div class="total-row"><span>कुल योग</span><span id="cartTotalAmount">₹0</span></div>
-    <button class="checkout-btn" id="checkoutBtn">💸 प्रोसीड टू पेमेंट</button>
+    <div class="total-row"><span>Total Amount</span><span id="cartTotalAmount">₹0</span></div>
+    <button class="checkout-btn" id="checkoutBtn">💸 Proceed to Payment</button>
   </div>
 </div>
 
+<style>
+  .payment-section {
+    background: white;
+    border-radius: 1.5rem;
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid #f0e0d0;
+  }
+  .payment-title {
+    font-weight: 700;
+    color: #2c1810;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .upi-apps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .app-pay-btn {
+    background: #fefaf5;
+    border: 1px solid #e0c8b0;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+  }
+  .app-pay-btn:hover {
+    background: #d4af6a;
+    border-color: #d4af6a;
+    color: #2c1810;
+  }
+  .upi-details-card {
+    background: #fefaf5;
+    padding: 12px 16px;
+    border-radius: 1rem;
+    margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    border-left: 4px solid #2c1810;
+  }
+  .copy-upi {
+    background: #e0c8b0;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .payment-message {
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8rem;
+    background: #f0e8e0;
+    border-radius: 50px;
+    color: #2c1810;
+  }
+  .cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s;
+  }
+  .cart-overlay.active {
+    visibility: visible;
+    opacity: 1;
+  }
+  .cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 100%;
+    max-width: 450px;
+    height: 100%;
+    background: white;
+    z-index: 201;
+    transition: 0.3s ease;
+    box-shadow: -4px 0 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+  }
+  .cart-sidebar.active {
+    right: 0;
+  }
+  .cart-header {
+    padding: 1.2rem;
+    border-bottom: 1px solid #f0e0d0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close-cart {
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .cart-items-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+  .cart-item {
+    display: flex;
+    gap: 1rem;
+    background: #fefaf5;
+    margin-bottom: 0.8rem;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    border: 1px solid #f0e0d0;
+  }
+  .cart-item-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    background-size: cover;
+  }
+  .cart-item-details {
+    flex: 1;
+  }
+  .cart-item-title {
+    font-weight: 600;
+    color: #2c1810;
+  }
+  .cart-item-price {
+    color: #2c1810;
+    font-weight: 700;
+  }
+  .cart-qty {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .qty-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 30px;
+    border: 1px solid #e0c8b0;
+    background: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .cart-footer {
+    padding: 1rem;
+    border-top: 1px solid #f0e0d0;
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+  }
+  .checkout-btn {
+    width: 100%;
+    background: #2c1810;
+    border: none;
+    padding: 0.8rem;
+    color: white;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+  .checkout-btn:hover {
+    background: #d4af6a;
+    color: #2c1810;
+  }
+</style>
+
 <script>
-  // ---------- INVENTORY ----------
+  // Premium Products with matching names and images
   const PRODUCTS = [
-    { id: 1, name: "बनारसी सिल्क साड़ी", category: "साड़ी", price: 5899, img: "https://images.pexels.com/photos/1159670/pexels-photo-1159670.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "हैंडलूम" },
-    { id: 2, name: "कांठा एम्ब्रॉयडरी कुर्ता", category: "कुर्ता", price: 2499, img: "https://images.pexels.com/photos/8125506/pexels-photo-8125506.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "हस्तशिल्प" },
-    { id: 3, name: "पटोला डुपट्टा", category: "डुपट्टा", price: 1899, img: "https://images.pexels.com/photos/1456705/pexels-photo-1456705.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "गुजराती" },
-    { id: 4, name: "महेश्वरी कोट", category: "महिला कोट", price: 4299, img: "https://images.pexels.com/photos/5208690/pexels-photo-5208690.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "विंटर" },
-    { id: 5, name: "चंदेरी लहंगा", category: "लेहेंगा", price: 7899, img: "https://images.pexels.com/photos/1381556/pexels-photo-1381556.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "ब्राइडल" },
-    { id: 6, name: "फूलकारी दुपट्टा", category: "दुपट्टा", price: 1299, img: "https://images.pexels.com/photos/2079249/pexels-photo-2079249.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "पंजाबी" },
-    { id: 7, name: "कोटा डोरिया साड़ी", category: "साड़ी", price: 3299, img: "https://images.pexels.com/photos/1456357/pexels-photo-1456357.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "समर" },
-    { id: 8, name: "नेहरू जैकेट", category: "पुरुष", price: 3999, img: "https://images.pexels.com/photos/3222070/pexels-photo-3222070.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "क्लासिक" }
+    { id: 1, name: "Banarasi Silk Saree", category: "Saree", price: 5899, img: "https://images.pexels.com/photos/1159670/pexels-photo-1159670.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Handloom" },
+    { id: 2, name: "Embroidered Kurta Set", category: "Kurta", price: 3499, img: "https://images.pexels.com/photos/8125506/pexels-photo-8125506.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Festival" },
+    { id: 3, name: "Chanderi Lehenga", category: "Lehenga", price: 8999, img: "https://images.pexels.com/photos/1381556/pexels-photo-1381556.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Bridal" },
+    { id: 4, name: "Cotton Handloom Dupatta", category: "Dupatta", price: 1299, img: "https://images.pexels.com/photos/1456705/pexels-photo-1456705.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Daily Wear" },
+    { id: 5, name: "Men's Nehru Jacket", category: "Menswear", price: 3999, img: "https://images.pexels.com/photos/3222070/pexels-photo-3222070.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Wedding" },
+    { id: 6, name: "Phulkari Dupatta", category: "Dupatta", price: 1899, img: "https://images.pexels.com/photos/2079249/pexels-photo-2079249.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Punjabi" },
+    { id: 7, name: "Silk Blend Saree", category: "Saree", price: 4599, img: "https://images.pexels.com/photos/1456357/pexels-photo-1456357.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Party Wear" },
+    { id: 8, name: "Designer Lehenga Set", category: "Lehenga", price: 12999, img: "https://images.pexels.com/photos/5208690/pexels-photo-5208690.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "Premium" }
   ];
 
   const FIXED_UPI = "Q169274193@ybl";
   let cart = [];
   let activeDiscount = 0;
-  let discountMessage = "";
 
-  // Spin Wheel Configuration
+  // Wheel segments
   const DISCOUNT_SEGMENTS = [
     { value: 0, label: "0%", color: "#e8e8e8" },
-    { value: 5, label: "5%", color: "#f5c6a0" },
-    { value: 10, label: "10%", color: "#e6b17e" },
-    { value: 15, label: "15%", color: "#d49c6c" },
-    { value: 20, label: "20%", color: "#c28754" },
-    { value: 25, label: "25%", color: "#e6b17e" },
-    { value: 7, label: "7%", color: "#f0cdac" },
-    { value: 12, label: "12%", color: "#e0a870" }
+    { value: 5, label: "5%", color: "#f5d4b0" },
+    { value: 10, label: "10%", color: "#e8c88a" },
+    { value: 15, label: "15%", color: "#d4af6a" },
+    { value: 20, label: "20%", color: "#c49a5c" },
+    { value: 25, label: "25%", color: "#d4af6a" },
+    { value: 7, label: "7%", color: "#f0d0a0" },
+    { value: 12, label: "12%", color: "#e0bc80" }
   ];
 
   let currentRotation = 0;
   let spinning = false;
-  let canvas = document.getElementById("wheelCanvas");
-  let ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("wheelCanvas");
+  const ctx = canvas.getContext("2d");
 
   function drawWheel() {
     const anglePerSegment = (Math.PI * 2) / DISCOUNT_SEGMENTS.length;
@@ -607,31 +605,30 @@
       const end = start + anglePerSegment;
       ctx.beginPath();
       ctx.fillStyle = DISCOUNT_SEGMENTS[i].color;
-      ctx.moveTo(90, 90);
-      ctx.arc(90, 90, 90, start, end);
+      ctx.moveTo(85, 85);
+      ctx.arc(85, 85, 85, start, end);
       ctx.fill();
       ctx.save();
-      ctx.translate(90, 90);
+      ctx.translate(85, 85);
       ctx.rotate(start + anglePerSegment / 2);
-      ctx.fillStyle = "#1e2a2e";
-      ctx.font = "bold 12px 'Segoe UI'";
-      ctx.fillText(DISCOUNT_SEGMENTS[i].label, 55, 8);
+      ctx.fillStyle = "#2c1810";
+      ctx.font = "bold 11px Poppins";
+      ctx.fillText(DISCOUNT_SEGMENTS[i].label, 48, 6);
       ctx.restore();
     }
     ctx.beginPath();
-    ctx.arc(90, 90, 20, 0, Math.PI * 2);
-    ctx.fillStyle = "#1e2a2e";
+    ctx.arc(85, 85, 18, 0, Math.PI * 2);
+    ctx.fillStyle = "#2c1810";
     ctx.fill();
-    ctx.fillStyle = "#e6b17e";
-    ctx.font = "bold 16px sans-serif";
-    ctx.fillText("🎯", 80, 98);
+    ctx.fillStyle = "#d4af6a";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText("🎯", 74, 92);
   }
 
   function spinWheel() {
     if (spinning) return;
     spinning = true;
-    const spinAngle = Math.random() * 360 + 720;
-    const targetRotation = (currentRotation + spinAngle * Math.PI / 180) % (Math.PI * 2);
+    const spinAngle = Math.random() * 360 + 1080;
     const startTime = performance.now();
     const duration = 2000;
     
@@ -645,19 +642,14 @@
       if (progress < 1) {
         requestAnimationFrame(animateSpin);
       } else {
-        currentRotation = targetRotation;
-        drawWheel();
         const anglePerSegment = (Math.PI * 2) / DISCOUNT_SEGMENTS.length;
         const pointerAngle = (Math.PI * 2 - currentRotation) % (Math.PI * 2);
         let segmentIndex = Math.floor(pointerAngle / anglePerSegment) % DISCOUNT_SEGMENTS.length;
-        const wonDiscount = DISCOUNT_SEGMENTS[segmentIndex].value;
-        activeDiscount = wonDiscount;
-        discountMessage = wonDiscount > 0 ? `${wonDiscount}% छूट मिली!` : "कोई छूट नहीं";
-        document.getElementById("discountDisplay").innerHTML = `🎉 ${discountMessage}`;
-        document.getElementById("discountDisplay").style.background = wonDiscount > 0 ? "#2d5a3b" : "#8b6b4a";
+        activeDiscount = DISCOUNT_SEGMENTS[segmentIndex].value;
+        document.getElementById("discountDisplay").innerHTML = activeDiscount > 0 ? `🎉 ${activeDiscount}% OFF Applied!` : "😢 No discount this time";
+        document.getElementById("discountDisplay").style.background = activeDiscount > 0 ? "#2c5a3b" : "#8b6b4a";
         document.getElementById("discountDisplay").style.color = "white";
         updateCartUI();
-        paymentStatusMsg.innerHTML = `✨ ${discountMessage} · कार्ट में छूट लागू होगी।`;
         spinning = false;
       }
     }
@@ -666,22 +658,14 @@
 
   document.getElementById("spinWheelBtn").addEventListener("click", spinWheel);
 
-  function getDiscountedPrice(originalPrice) {
-    if (activeDiscount > 0) {
-      return Math.floor(originalPrice * (1 - activeDiscount / 100));
-    }
-    return originalPrice;
+  function getDiscountedPrice(price) {
+    return activeDiscount > 0 ? Math.floor(price * (1 - activeDiscount / 100)) : price;
   }
 
   function getDiscountedTotal() {
-    let total = 0;
-    for (let item of cart) {
-      total += getDiscountedPrice(item.price) * item.quantity;
-    }
-    return total;
+    return cart.reduce((sum, item) => sum + getDiscountedPrice(item.price) * item.quantity, 0);
   }
 
-  // DOM elements
   const productsGrid = document.getElementById("productsGrid");
   const cartCountSpan = document.getElementById("cartCount");
   const cartItemCountStat = document.getElementById("cartItemCountStat");
@@ -694,7 +678,6 @@
   const cartSidebar = document.getElementById("cartSidebar");
   const closeCartBtn = document.getElementById("closeCartBtn");
   const cartIcon = document.getElementById("cartIcon");
-  const upiIdSpan = document.getElementById("upiIdSpan");
   const payAmountSpan = document.getElementById("payAmountSpan");
   const copyUpiBtn = document.getElementById("copyUpiBtn");
   const paymentStatusMsg = document.getElementById("paymentStatusMsg");
@@ -711,34 +694,29 @@
     cartItemCountStat.innerText = totalItems;
     
     if (activeDiscount > 0 && originalTotal > 0) {
-      cartTotalStat.innerHTML = `<span style="text-decoration:line-through; font-size:0.8rem;">₹${originalTotal.toLocaleString('en-IN')}</span> ₹${discountedTotal.toLocaleString('en-IN')}`;
-      cartTotalAmountSpan.innerHTML = `<span style="text-decoration:line-through; font-size:0.8rem;">₹${originalTotal.toLocaleString('en-IN')}</span> ₹${discountedTotal.toLocaleString('en-IN')}`;
+      cartTotalStat.innerHTML = `<span style="text-decoration:line-through; font-size:0.7rem;">₹${originalTotal.toLocaleString('en-IN')}</span> ₹${discountedTotal.toLocaleString('en-IN')}`;
+      cartTotalAmountSpan.innerHTML = `<span style="text-decoration:line-through; font-size:0.7rem;">₹${originalTotal.toLocaleString('en-IN')}</span> ₹${discountedTotal.toLocaleString('en-IN')}`;
     } else {
       cartTotalStat.innerText = `₹${discountedTotal.toLocaleString('en-IN')}`;
       cartTotalAmountSpan.innerText = `₹${discountedTotal.toLocaleString('en-IN')}`;
     }
     
     if (cart.length === 0) {
-      cartItemsListDiv.innerHTML = '<div style="text-align:center; padding:2rem; color:#b89a7a;">कार्ट खाली है</div>';
+      cartItemsListDiv.innerHTML = '<div style="text-align:center; padding:2rem;">Your cart is empty</div>';
     } else {
       cartItemsListDiv.innerHTML = cart.map(item => {
-        const originalPrice = item.price;
-        const discountedPrice = getDiscountedPrice(originalPrice);
-        const showDiscount = activeDiscount > 0 && discountedPrice !== originalPrice;
+        const discountedPrice = getDiscountedPrice(item.price);
         return `
-          <div class="cart-item" data-id="${item.id}">
-            <div class="cart-item-img" style="background-image: url('${item.img}'); background-size: cover;"></div>
+          <div class="cart-item">
+            <div class="cart-item-img" style="background-image: url('${item.img}');"></div>
             <div class="cart-item-details">
               <div class="cart-item-title">${item.name}</div>
-              <div class="cart-item-price">
-                ${showDiscount ? `<span style="text-decoration:line-through; font-size:0.75rem;">₹${originalPrice.toLocaleString('en-IN')}</span> ` : ''}
-                ₹${discountedPrice.toLocaleString('en-IN')}
-              </div>
+              <div class="cart-item-price">₹${discountedPrice.toLocaleString('en-IN')}</div>
               <div class="cart-qty">
                 <button class="qty-btn" data-id="${item.id}" data-delta="-1">−</button>
                 <span>${item.quantity}</span>
                 <button class="qty-btn" data-id="${item.id}" data-delta="1">+</button>
-                <button class="qty-btn" data-id="${item.id}" data-delta="remove" style="background:#fee2dd;">🗑️</button>
+                <button class="qty-btn" data-id="${item.id}" data-delta="remove">🗑️</button>
               </div>
             </div>
           </div>
@@ -746,16 +724,15 @@
       }).join('');
       
       document.querySelectorAll('.qty-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
           const id = parseInt(btn.dataset.id);
           const delta = btn.dataset.delta;
           if (delta === 'remove') {
             cart = cart.filter(i => i.id !== id);
           } else {
-            const deltaNum = parseInt(delta);
             const existing = cart.find(i => i.id === id);
             if (existing) {
-              const newQty = existing.quantity + deltaNum;
+              const newQty = existing.quantity + parseInt(delta);
               if (newQty <= 0) {
                 cart = cart.filter(i => i.id !== id);
               } else {
@@ -764,22 +741,17 @@
             }
           }
           updateCartUI();
-          updatePaymentAmountDisplay();
+          updatePaymentDisplay();
         });
       });
     }
-    updatePaymentAmountDisplay();
+    updatePaymentDisplay();
   }
 
-  function updatePaymentAmountDisplay() {
+  function updatePaymentDisplay() {
     const total = getDiscountedTotal();
     payAmountSpan.innerText = total > 0 ? `₹${total.toLocaleString('en-IN')}` : "₹0";
-    if (total > 0) {
-      let discountText = activeDiscount > 0 ? ` (${activeDiscount}% छूट लागू)` : "";
-      paymentStatusMsg.innerHTML = `✅ भुगतान राशि: ₹${total.toLocaleString('en-IN')}${discountText} · UPI ID स्वत: भरा जाएगा`;
-    } else {
-      paymentStatusMsg.innerHTML = `🛒 कृपया कार्ट में सामान जोड़ें (₹100 - ₹20000)`;
-    }
+    paymentStatusMsg.innerHTML = total > 0 ? `✅ Payment: ₹${total.toLocaleString('en-IN')}${activeDiscount > 0 ? ` (${activeDiscount}% OFF)` : ''} · UPI ready` : "🛒 Add items to cart";
   }
 
   function addToCart(product) {
@@ -790,15 +762,15 @@
       cart.push({ ...product, quantity: 1 });
     }
     updateCartUI();
-    openCartSidebar();
+    openCart();
   }
 
-  function openCartSidebar() {
+  function openCart() {
     cartOverlay.classList.add("active");
     cartSidebar.classList.add("active");
   }
 
-  function closeCartSidebar() {
+  function closeCart() {
     cartOverlay.classList.remove("active");
     cartSidebar.classList.remove("active");
   }
@@ -817,14 +789,15 @@
             <div class="product-category">${p.category}</div>
             <div class="price-wrapper">
               ${hasDiscount ? `<span class="original-price">₹${p.price.toLocaleString('en-IN')}</span>` : ''}
-              <div class="product-price">₹${discountedPrice.toLocaleString('en-IN')} <span class="price-unit">INR</span></div>
+              <div class="product-price">₹${discountedPrice.toLocaleString('en-IN')}</div>
             </div>
             ${hasDiscount ? `<div class="discount-tag">${activeDiscount}% OFF</div>` : ''}
-            <button class="add-btn" data-id="${p.id}">➕ कार्ट में जोड़ें</button>
+            <button class="add-btn" data-id="${p.id}">🛒 Add to Cart</button>
           </div>
         </div>
       `;
     }).join('');
+    
     document.querySelectorAll('.add-btn').forEach(btn => {
       const id = parseInt(btn.dataset.id);
       const product = PRODUCTS.find(p => p.id === id);
@@ -836,8 +809,7 @@
     { name: "Google Pay", icon: "📱", pkg: "com.google.android.apps.nbu.pay" },
     { name: "PhonePe", icon: "📲", pkg: "com.phonepe.app" },
     { name: "PayTM", icon: "🔷", pkg: "net.one97.paytm" },
-    { name: "BHIM", icon: "🇮🇳", pkg: "in.org.npci.upiapp" },
-    { name: "Amazon Pay", icon: "📦", pkg: "in.amazon.mShop.android.shopping" }
+    { name: "BHIM", icon: "🇮🇳", pkg: "in.org.npci.upiapp" }
   ];
 
   function renderUpiApps() {
@@ -846,65 +818,58 @@
         <span>${app.icon}</span> ${app.name}
       </button>
     `).join('');
+    
     document.querySelectorAll('.app-pay-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const totalAmount = getDiscountedTotal();
-        if (totalAmount < 100) {
-          paymentStatusMsg.innerHTML = "⚠️ कृपया कम से कम ₹100 का सामान कार्ट में डालें";
+        const total = getDiscountedTotal();
+        if (total < 100) {
+          paymentStatusMsg.innerHTML = "⚠️ Minimum ₹100 required";
           return;
         }
-        if (totalAmount > 20000) {
-          paymentStatusMsg.innerHTML = "⚠️ अधिकतम ₹20,000 तक भुगतान संभव है";
+        if (total > 20000) {
+          paymentStatusMsg.innerHTML = "⚠️ Maximum ₹20,000 allowed";
           return;
         }
-        const packageName = btn.dataset.pkg;
         const isAndroid = /android/i.test(navigator.userAgent);
-        let upiLink = `upi://pay?pa=${encodeURIComponent(FIXED_UPI)}&pn=SILKROOT&am=${totalAmount}&cu=INR&tn=Clothing%20Order`;
-        if (isAndroid && packageName) {
-          upiLink = `intent://pay?pa=${encodeURIComponent(FIXED_UPI)}&pn=SILKROOT&am=${totalAmount}&cu=INR#Intent;scheme=upi;package=${packageName};end`;
+        let upiLink = `upi://pay?pa=${encodeURIComponent(FIXED_UPI)}&pn=SilkRoot&am=${total}&cu=INR&tn=Ethnic Wear Purchase`;
+        if (isAndroid && btn.dataset.pkg) {
+          upiLink = `intent://pay?pa=${encodeURIComponent(FIXED_UPI)}&pn=SilkRoot&am=${total}&cu=INR#Intent;scheme=upi;package=${btn.dataset.pkg};end`;
         }
-        paymentStatusMsg.innerHTML = `⏳ ${btn.dataset.app} खोल रहे हैं · राशि ₹${totalAmount.toLocaleString('en-IN')}`;
+        paymentStatusMsg.innerHTML = `⏳ Opening ${btn.dataset.app} with ₹${total.toLocaleString('en-IN')}...`;
         window.location.href = upiLink;
-        setTimeout(() => {
-          paymentStatusMsg.innerHTML = `✅ यदि ऐप न खुले तो मैन्युअल UPI: ${FIXED_UPI}`;
-        }, 2000);
       });
     });
   }
 
   copyUpiBtn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(FIXED_UPI);
-      paymentStatusMsg.innerHTML = "📋 UPI ID कॉपी हो गया: Q169274193@ybl";
-      setTimeout(() => updatePaymentAmountDisplay(), 1500);
-    } catch(e) { paymentStatusMsg.innerHTML = "⚠️ कॉपी असफल"; }
+    await navigator.clipboard.writeText(FIXED_UPI);
+    paymentStatusMsg.innerHTML = "📋 UPI ID copied!";
+    setTimeout(() => updatePaymentDisplay(), 1500);
   });
 
   checkoutBtn.addEventListener('click', () => {
     const total = getDiscountedTotal();
     if (total < 100) {
-      paymentStatusMsg.innerHTML = "⚠️ न्यूनतम भुगतान ₹100 है। कृपया और जोड़ें।";
+      paymentStatusMsg.innerHTML = "⚠️ Add items worth ₹100 or more";
       return;
     }
-    if (total > 20000) {
-      paymentStatusMsg.innerHTML = "⚠️ अधिकतम सीमा ₹20,000 है।";
-      return;
-    }
-    closeCartSidebar();
+    closeCart();
     document.getElementById("paymentDashboard").scrollIntoView({ behavior: 'smooth' });
-    paymentStatusMsg.innerHTML = `✅ भुगतान राशि ₹${total.toLocaleString('en-IN')}${activeDiscount > 0 ? ` (${activeDiscount}% छूट)` : ''} · UPI ऐप चुनें।`;
-    payAmountSpan.innerText = `₹${total.toLocaleString('en-IN')}`;
+    paymentStatusMsg.innerHTML = `✅ Proceed with ₹${total.toLocaleString('en-IN')}${activeDiscount > 0 ? ` (${activeDiscount}% OFF)` : ''}`;
   });
 
-  cartIcon.addEventListener('click', openCartSidebar);
-  closeCartBtn.addEventListener('click', closeCartSidebar);
-  cartOverlay.addEventListener('click', closeCartSidebar);
+  cartIcon.addEventListener('click', openCart);
+  closeCartBtn.addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
 
   renderProducts();
   renderUpiApps();
-  upiIdSpan.innerText = FIXED_UPI;
   drawWheel();
   updateCartUI();
 </script>
 </body>
 </html>
+
+  <div class="section-head">✨ Our Premium Collection</div>
+  <div class="products-grid" id="productsGrid"></div>
+  
