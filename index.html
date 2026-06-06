@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>सिल्करूट | SilkRoot - भारतीय परिधान</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, 'Inter', 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #faf6f0;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: #1e2a2e;
+      color: #f4ede4;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #d4bc9a;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: #e6b17e;
+      font-weight: 500;
+    }
+
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.6rem;
+      background: #2d3e42;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      transition: all 0.2s;
+    }
+
+    .cart-icon:hover {
+      background: #3e5a60;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #e6b17e;
+      color: #1e2a2e;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .stats-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-block {
+      background: #ffffffec;
+      padding: 1.3rem 1.5rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      border: 1px solid #efe0d0;
+    }
+
+    .stat-label {
+      color: #6f5b47;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-number {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #1e2a2e;
+    }
+
+    .section-head {
+      font-size: 1.7rem;
+      font-weight: 600;
+      margin: 2rem 0 1.2rem 0;
+      color: #2c3e2f;
+      border-left: 5px solid #e6b17e;
+      padding-left: 1rem;
+    }
+
+    /* Spin & Win Section */
+    .spin-section {
+      background: linear-gradient(135deg, #1e2a2e 0%, #2d3e42 100%);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      color: white;
+    }
+
+    .spin-info {
+      flex: 1;
+    }
+
+    .spin-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .spin-info p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    .discount-badge {
+      background: #e6b17e;
+      color: #1e2a2e;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      display: inline-block;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .wheel-container {
+      text-align: center;
+    }
+
+    canvas {
+      background: #f4ede4;
+      border-radius: 50%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .spin-btn {
+      background: #e6b17e;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: transform 0.2s;
+      color: #1e2a2e;
+    }
+
+    .spin-btn:hover {
+      transform: scale(1.05);
+      background: #f0c08c;
+    }
+
+    .applied-discount {
+      background: #2d5a3b;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+    }
+
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 1.2rem;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      transition: 0.25s ease;
+      border: 1px solid #f0e2d4;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-img {
+      height: 260px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .product-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #1e2a2e;
+      color: #e6b17e;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .product-info {
+      padding: 1rem 1.2rem 1.2rem;
+    }
+
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2c3e2f;
+    }
+
+    .product-category {
+      font-size: 0.7rem;
+      color: #a18973;
+      margin: 0.25rem 0 0.5rem;
+    }
+
+    .price-wrapper {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    .original-price {
+      font-size: 1rem;
+      color: #a18973;
+      text-decoration: line-through;
+    }
+
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #b97f44;
+    }
+
+    .discount-tag {
+      font-size: 0.7rem;
+      background: #2d5a3b;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .add-btn {
+      width: 100%;
+      background: #1e2a2e;
+      color: #f4ede4;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .add-btn:hover {
+      background: #e6b17e;
+      color: #1e2a2e;
+    }
+
+    /* Cart Sidebar */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 200;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+    }
+
+    .cart-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 100%;
+      max-width: 450px;
+      height: 100%;
+      background: #fffbf7;
+      z-index: 201;
+      transition: 0.3s ease;
+      box-shadow: -4px 0 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-sidebar.active {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #efdfcf;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-header h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2c3e2f;
+    }
+
+    .close-cart {
+      font-size: 1.8rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #7f6957;
+    }
+
+    .cart-items-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      background: #ffffff;
+      margin-bottom: 0.8rem;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      border: 1px solid #f1e4d8;
+    }
+
+    .cart-item-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      background-size: cover;
+    }
+
+    .cart-item-details {
+      flex: 1;
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      color: #2c3e2f;
+    }
+
+    .cart-item-price {
+      color: #b97f44;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 30px;
+      border: 1px solid #e6cdb3;
+      background: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cart-footer {
+      padding: 1.2rem;
+      border-top: 2px solid #f0e0d0;
+      background: #fffbf7;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      font-size: 1.2rem;
+      margin: 0.8rem 0;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: #1e2a2e;
+      border: none;
+      padding: 1rem;
+      color: white;
+      font-weight: 700;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .payment-section {
+      background: white;
+      border-radius: 1.5rem;
+      margin-top: 2rem;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid #efe0d0;
+    }
+
+    .payment-title {
+      font-weight: 700;
+      color: #1e2a2e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .upi-apps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .app-pay-btn {
+      background: #faf1e8;
+      border: 1px solid #ddcbb8;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .upi-details-card {
+      background: #fef7f0;
+      padding: 12px 16px;
+      border-radius: 1rem;
+      margin: 12px 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .copy-upi {
+      background: #e6cdb3;
+      border: none;
+      padding: 5px 15px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .payment-message {
+      text-align: center;
+      padding: 8px;
+      font-size: 0.8rem;
+      background: #eef4e8;
+      border-radius: 60px;
+      color: #2c5a2e;
+    }
+
+    hr {
+      margin: 12px 0;
+      border-color: #eee3d8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo">सिल्करूट <span>SilkRoot</span></div>
+  <div class="cart-icon" id="cartIcon">
+    🛒 <span class="cart-count" id="cartCount">0</span>
+  </div>
+</div>
+
+<div class="dashboard">
+  <div class="stats-panel">
+    <div class="stat-block"><div class="stat-label">कलेक्शन</div><div class="stat-number" id="productCountDisplay">0</div></div>
+    <div class="stat-block"><div class="stat-label">कार्ट आइटम</div><div class="stat-number" id="cartItemCountStat">0</div></div>
+    <div class="stat-block"><div class="stat-label">कुल राशि (₹)</div><div class="stat-number" id="cartTotalStat">0</div></div>
+  </div>
+
+  <!-- Spin & Win Section -->
+  <div class="spin-section">
+    <div class="spin-info">
+      <h3>🎡 घुमाएँ और जीतें</h3>
+      <p>स्पिन करें और अगली खरीदारी पर अतिरिक्त छूट पाएं!</p>
+      <div id="discountDisplay" class="discount-badge">कोई छूट सक्रिय नहीं</div>
+    </div>
+    <div class="wheel-container">
+      <canvas id="wheelCanvas" width="180" height="180"></canvas>
+      <button class="spin-btn" id="spinWheelBtn">🎲 स्पिन करें</button>
+    </div>
+  </div>
+
+  <div class="section-head">✨ हस्तशिल्प संग्रह</div>
+  <div class="products-grid" id="productsGrid"></div>
+          <div class="payment-section" id="paymentDashboard">
+    <div class="payment-title">💳 भुगतान विकल्प · UPI Auto-fill</div>
+    <div class="upi-apps" id="upiAppsContainer"></div>
+    <div class="upi-details-card">
+      <span>🔖 प्री-फिल्ड UPI ID :</span>
+      <strong id="upiIdSpan">Q169274193@ybl</strong>
+      <button id="copyUpiBtn" class="copy-upi">📋 कॉपी</button>
+    </div>
+    <div class="upi-details-card" style="border-left-color:#e6b17e;">
+      <span>💰 भुगतान राशि :</span>
+      <strong id="payAmountSpan">₹0</strong>
+      <span style="font-size:0.7rem;">(स्वचालित रूप से भरा जाएगा)</span>
+    </div>
+    <div id="paymentStatusMsg" class="payment-message">✅ कृपया कार्ट में जोड़ें → चेकआउट करें</div>
+  </div>
+</div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>आपका थैला 🛍️</h2>
+    <button class="close-cart" id="closeCartBtn">✕</button>
+  </div>
+  <div class="cart-items-list" id="cartItemsList">
+    <div style="text-align:center; padding:2rem; color:#b89a7a;">कार्ट खाली है</div>
+  </div>
+  <div class="cart-footer">
+    <div class="total-row"><span>कुल योग</span><span id="cartTotalAmount">₹0</span></div>
+    <button class="checkout-btn" id="checkoutBtn">💸 प्रोसीड टू पेमेंट</button>
+  </div>
+</div>
+
+<script>
+  // ---------- INVENTORY ----------
+  const PRODUCTS = [
+    { id: 1, name: "बनारसी सिल्क साड़ी", category: "साड़ी", price: 5899, img: "https://images.pexels.com/photos/1159670/pexels-photo-1159670.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "हैंडलूम" },
+    { id: 2, name: "कांठा एम्ब्रॉयडरी कुर्ता", category: "कुर्ता", price: 2499, img: "https://images.pexels.com/photos/8125506/pexels-photo-8125506.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "हस्तशिल्प" },
+    { id: 3, name: "पटोला डुपट्टा", category: "डुपट्टा", price: 1899, img: "https://images.pexels.com/photos/1456705/pexels-photo-1456705.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "गुजराती" },
+    { id: 4, name: "महेश्वरी कोट", category: "महिला कोट", price: 4299, img: "https://images.pexels.com/photos/5208690/pexels-photo-5208690.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "विंटर" },
+    { id: 5, name: "चंदेरी लहंगा", category: "लेहेंगा", price: 7899, img: "https://images.pexels.com/photos/1381556/pexels-photo-1381556.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "ब्राइडल" },
+    { id: 6, name: "फूलकारी दुपट्टा", category: "दुपट्टा", price: 1299, img: "https://images.pexels.com/photos/2079249/pexels-photo-2079249.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "पंजाबी" },
+    { id: 7, name: "कोटा डोरिया साड़ी", category: "साड़ी", price: 3299, img: "https://images.pexels.com/photos/1456357/pexels-photo-1456357.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "समर" },
+    { id: 8, name: "नेहरू जैकेट", category: "पुरुष", price: 3999, img: "https://images.pexels.com/photos/3222070/pexels-photo-3222070.jpeg?auto=compress&cs=tinysrgb&w=400", tag: "क्लासिक" }
+  ];
+
+  const FIXED_UPI = "Q169274193@ybl";
+  let cart = [];
+  let activeDiscount = 0;
+  let discountMessage = "";
+
+  // Spin Wheel Configuration
+  const DISCOUNT_SEGMENTS = [
+    { value: 0, label: "0%", color: "#e8e8e8" },
+    { value: 5, label: "5%", color: "#f5c6a0" },
+    { value: 10, label: "10%", color: "#e6b17e" },
+    { value: 15, label: "15%", color: "#d49c6c" },
+    { value: 20, label: "20%", color: "#c28754" },
+    { value: 25, label: "25%", color: "#e6b17e" },
+    { value: 7, label: "7%", color: "#f0cdac" },
+    { value: 12, label: "12%", color: "#e0a870" }
+  ];
+
+  let currentRotation = 0;
+  let spinning = false;
+  let canvas = document.getElementById("wheelCanvas");
+  let ctx = canvas.getContext("2d");
+
+  function drawWheel() {
+    const anglePerSegment = (Math.PI * 2) / DISCOUNT_SEGMENTS.length;
+    for (let i = 0; i < DISCOUNT_SEGMENTS.length; i++) {
+      const start = i * anglePerSegment + currentRotation;
+      const end = start + anglePerSegment;
+      ctx.beginPath();
+      ctx.fillStyle = DISCOUNT_SEGMENTS[i].color;
+      ctx.moveTo(90, 90);
+      ctx.arc(90, 90, 90, start, end);
+      ctx.fill();
+      ctx.save();
+      ctx.translate(90, 90);
+      ctx.rotate(start + anglePerSegment / 2);
+      ctx.fillStyle = "#1e2a2e";
+      ctx.font = "bold 12px 'Segoe UI'";
+      ctx.fillText(DISCOUNT_SEGMENTS[i].label, 55, 8);
+      ctx.restore();
+    }
+    ctx.beginPath();
+    ctx.arc(90, 90, 20, 0, Math.PI * 2);
+    ctx.fillStyle = "#1e2a2e";
+    ctx.fill();
+    ctx.fillStyle = "#e6b17e";
+    ctx.font = "bold 16px sans-serif";
+    ctx.fillText("🎯", 80, 98);
+  }
+
+  function spinWheel() {
+    if (spinning) return;
+    spinning = true;
+    const spinAngle = Math.random() * 360 + 720;
+    const targetRotation = (currentRotation + spinAngle * Math.PI / 180) % (Math.PI * 2);
+    const startTime = performance.now();
+    const duration = 2000;
+    
+    function animateSpin(now) {
+      const elapsed = now - startTime;
+      let progress = Math.min(1, elapsed / duration);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const currentSpinAngle = spinAngle * easeOut;
+      currentRotation = (currentRotation + currentSpinAngle * Math.PI / 180) % (Math.PI * 2);
+      drawWheel();
+      if (progress < 1) {
+        requestAnimationFrame(animateSpin);
+      } else {
+        currentRotation = targetRotation;
+        drawWheel();
+        const anglePerSegment = (Math.PI * 2) / DISCOUNT_SEGMENTS.length;
+        const pointerAngle = (Math.PI * 2 - currentRotation) % (Math.PI * 2);
+        let segmentIndex = Math.floor(pointerAngle / anglePerSegment) % DISCOUNT_SEGMENTS.length;
+        const wonDiscount = DISCOUNT_SEGMENTS[segmentIndex].value;
+        activeDiscount = wonDiscount;
+        discountMessage = wonDiscount > 0 ? `${wonDiscount}% छूट मिली!` : "कोई छूट नहीं";
+        document.getElementById("discountDisplay").innerHTML = `🎉 ${discountMessage}`;
+        document.getElementById("discountDisplay").style.background = wonDiscount > 0 ? "#2d5a3b" : "#8b6b4a";
+        document.getElementById("discountDisplay").style.color = "white";
+        updateCartUI();
+        paymentStatusMsg.innerHTML = `✨ ${discountMessage} · कार्ट में छूट लागू होगी।`;
+        spinning = false;
+      }
+    }
+    requestAnimationFrame(animateSpin);
+  }
+
+  document.getElementById("spinWheelBtn").addEventListener("click", spinWheel);
+
+  function getDiscountedPrice(originalPrice) {
+    if (activeDiscount > 0) {
+      return Math.floor(originalPrice * (1 - activeDiscount / 100));
+    }
+    return originalPrice;
+  }
+
+  function getDiscountedTotal() {
+    let total = 0;
+    for (let item of cart) {
+      total += getDiscountedPrice(item.price) * item.quantity;
+    }
+    return total;
+  }
+
+  // DOM elements
+  const productsGrid = document.getElementById("productsGrid");
+  const cartCountSpan = document.getElementById("cartCount");
+  const cartItemCountStat = document.getElementById("cartItemCountStat");
+  const cartTotalStat = document.getElementById("cartTotalStat");
+  const productCountDisplay = document.getElementById("productCountDisplay");
+  const cartItemsListDiv = document.getElementById("cartItemsList");
+  const cartTotalAmountSpan = document.getElementById("cartTotalAmount");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  const cartOverlay = document.getElementById("cartOverlay");
+  const cartSidebar = document.getElementById("cartSidebar");
+  const closeCartBtn = document.getElementById("closeCartBtn");
+  const cartIcon = document.getElementById("cartIcon");
+  const upiIdSpan = document.getElementById("upiIdSpan");
+  const payAmountSpan = document.getElementById("payAmountSpan");
+  const copyUpiBtn = document.getElementById("copyUpiBtn");
+  const paymentStatusMsg = document.getElementById("paymentStatusMsg");
+  const upiAppsContainer = document.getElementById("upiAppsContainer");
+
+  productCountDisplay.innerText = PRODUCTS.length;
+
+  function updateCartUI() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const originalTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const discountedTotal = getDiscountedTotal();
+    
+    cartCountSpan.innerText = totalItems;
+    cartItemCountStat.innerText = totalItems;
+    
+    if (activeDiscount > 0 && originalTotal > 0) {
+      cartTotalStat.innerHTML = `<span style="text-decoration:line-through; font-size:0.8rem;">₹${originalTotal.toLocaleString('en-IN')}</span> ₹${discountedTotal.toLocaleString('en-IN')}`;
+      cartTotalAmountSpan.innerHTML = `<span style="text-decoration:line-through; font-size:0.8rem;">₹${originalTotal.toLocaleString('en-IN')}</span> ₹${discountedTotal.toLocaleString('en-IN')}`;
+    } else {
+      cartTotalStat.innerText = `₹${discountedTotal.toLocaleString('en-IN')}`;
+      cartTotalAmountSpan.innerText = `₹${discountedTotal.toLocaleString('en-IN')}`;
+    }
+    
+    if (cart.length === 0) {
+      cartItemsListDiv.innerHTML = '<div style="text-align:center; padding:2rem; color:#b89a7a;">कार्ट खाली है</div>';
+    } else {
+      cartItemsListDiv.innerHTML = cart.map(item => {
+        const originalPrice = item.price;
+        const discountedPrice = getDiscountedPrice(originalPrice);
+        const showDiscount = activeDiscount > 0 && discountedPrice !== originalPrice;
+        return `
+          <div class="cart-item" data-id="${item.id}">
+            <div class="cart-item-img" style="background-image: url('${item.img}'); background-size: cover;"></div>
+            <div class="cart-item-details">
+              <div class="cart-item-title">${item.name}</div>
+              <div class="cart-item-price">
+                ${showDiscount ? `<span style="text-decoration:line-through; font-size:0.75rem;">₹${originalPrice.toLocaleString('en-IN')}</span> ` : ''}
+                ₹${discountedPrice.toLocaleString('en-IN')}
+              </div>
+              <div class="cart-qty">
+                <button class="qty-btn" data-id="${item.id}" data-delta="-1">−</button>
+                <span>${item.quantity}</span>
+                <button class="qty-btn" data-id="${item.id}" data-delta="1">+</button>
+                <button class="qty-btn" data-id="${item.id}" data-delta="remove" style="background:#fee2dd;">🗑️</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = parseInt(btn.dataset.id);
+          const delta = btn.dataset.delta;
+          if (delta === 'remove') {
+            cart = cart.filter(i => i.id !== id);
+          } else {
+            const deltaNum = parseInt(delta);
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+              const newQty = existing.quantity + deltaNum;
+              if (newQty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+              } else {
+                existing.quantity = newQty;
+              }
+            }
+          }
+          updateCartUI();
+          updatePaymentAmountDisplay();
+        });
+      });
+    }
+    updatePaymentAmountDisplay();
+  }
+
+  function updatePaymentAmountDisplay() {
+    const total = getDiscountedTotal();
+    payAmountSpan.innerText = total > 0 ? `₹${total.toLocaleString('en-IN')}` : "₹0";
+    if (total > 0) {
+      let discountText = activeDiscount > 0 ? ` (${activeDiscount}% छूट लागू)` : "";
+      paymentStatusMsg.innerHTML = `✅ भुगतान राशि: ₹${total.toLocaleString('en-IN')}${discountText} · UPI ID स्वत: भरा जाएगा`;
+    } else {
+      paymentStatusMsg.innerHTML = `🛒 कृपया कार्ट में सामान जोड़ें (₹100 - ₹20000)`;
+    }
+  }
+
+  function addToCart(product) {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    updateCartUI();
+    openCartSidebar();
+  }
+
+  function openCartSidebar() {
+    cartOverlay.classList.add("active");
+    cartSidebar.classList.add("active");
+  }
+
+  function closeCartSidebar() {
+    cartOverlay.classList.remove("active");
+    cartSidebar.classList.remove("active");
+  }
+
+  function renderProducts() {
+    productsGrid.innerHTML = PRODUCTS.map(p => {
+      const discountedPrice = getDiscountedPrice(p.price);
+      const hasDiscount = activeDiscount > 0 && discountedPrice !== p.price;
+      return `
+        <div class="product-card">
+          <div class="product-img" style="background-image: url('${p.img}');">
+            <span class="product-tag">${p.tag}</span>
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-category">${p.category}</div>
+            <div class="price-wrapper">
+              ${hasDiscount ? `<span class="original-price">₹${p.price.toLocaleString('en-IN')}</span>` : ''}
+              <div class="product-price">₹${discountedPrice.toLocaleString('en-IN')} <span class="price-unit">INR</span></div>
+            </div>
+            ${hasDiscount ? `<div class="discount-tag">${activeDiscount}% OFF</div>` : ''}
+            <button class="add-btn" data-id="${p.id}">➕ कार्ट में जोड़ें</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    document.querySelectorAll('.add-btn').forEach(btn => {
+      const id = parseInt(btn.dataset.id);
+      const product = PRODUCTS.find(p => p.id === id);
+      btn.addEventListener('click', () => addToCart(product));
+    });
+  }
+
+  const upiApps = [
+    { name: "Google Pay", icon: "📱", pkg: "com.google.android.apps.nbu.pay" },
+    { name: "PhonePe", icon: "📲", pkg: "com.phonepe.app" },
+    { name: "PayTM", icon: "🔷", pkg: "net.one97.paytm" },
+    { name: "BHIM", icon: "🇮🇳", pkg: "in.org.npci.upiapp" },
+    { name: "Amazon Pay", icon: "📦", pkg: "in.amazon.mShop.android.shopping" }
+  ];
+
+  function renderUpiApps() {
+    upiAppsContainer.innerHTML = upiApps.map(app => `
+      <button class="app-pay-btn" data-app="${app.name}" data-pkg="${app.pkg}">
+        <span>${app.icon}</span> ${app.name}
+      </button>
+    `).join('');
+    document.querySelectorAll('.app-pay-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const totalAmount = getDiscountedTotal();
+        if (totalAmount < 100) {
+          paymentStatusMsg.innerHTML = "⚠️ कृपया कम से कम ₹100 का सामान कार्ट में डालें";
+          return;
+        }
+        if (totalAmount > 20000) {
+          paymentStatusMsg.innerHTML = "⚠️ अधिकतम ₹20,000 तक भुगतान संभव है";
+          return;
+        }
+        const packageName = btn.dataset.pkg;
+        const isAndroid = /android/i.test(navigator.userAgent);
+        let upiLink = `upi://pay?pa=${encodeURIComponent(FIXED_UPI)}&pn=SILKROOT&am=${totalAmount}&cu=INR&tn=Clothing%20Order`;
+        if (isAndroid && packageName) {
+          upiLink = `intent://pay?pa=${encodeURIComponent(FIXED_UPI)}&pn=SILKROOT&am=${totalAmount}&cu=INR#Intent;scheme=upi;package=${packageName};end`;
+        }
+        paymentStatusMsg.innerHTML = `⏳ ${btn.dataset.app} खोल रहे हैं · राशि ₹${totalAmount.toLocaleString('en-IN')}`;
+        window.location.href = upiLink;
+        setTimeout(() => {
+          paymentStatusMsg.innerHTML = `✅ यदि ऐप न खुले तो मैन्युअल UPI: ${FIXED_UPI}`;
+        }, 2000);
+      });
+    });
+  }
+
+  copyUpiBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(FIXED_UPI);
+      paymentStatusMsg.innerHTML = "📋 UPI ID कॉपी हो गया: Q169274193@ybl";
+      setTimeout(() => updatePaymentAmountDisplay(), 1500);
+    } catch(e) { paymentStatusMsg.innerHTML = "⚠️ कॉपी असफल"; }
+  });
+
+  checkoutBtn.addEventListener('click', () => {
+    const total = getDiscountedTotal();
+    if (total < 100) {
+      paymentStatusMsg.innerHTML = "⚠️ न्यूनतम भुगतान ₹100 है। कृपया और जोड़ें।";
+      return;
+    }
+    if (total > 20000) {
+      paymentStatusMsg.innerHTML = "⚠️ अधिकतम सीमा ₹20,000 है।";
+      return;
+    }
+    closeCartSidebar();
+    document.getElementById("paymentDashboard").scrollIntoView({ behavior: 'smooth' });
+    paymentStatusMsg.innerHTML = `✅ भुगतान राशि ₹${total.toLocaleString('en-IN')}${activeDiscount > 0 ? ` (${activeDiscount}% छूट)` : ''} · UPI ऐप चुनें।`;
+    payAmountSpan.innerText = `₹${total.toLocaleString('en-IN')}`;
+  });
+
+  cartIcon.addEventListener('click', openCartSidebar);
+  closeCartBtn.addEventListener('click', closeCartSidebar);
+  cartOverlay.addEventListener('click', closeCartSidebar);
+
+  renderProducts();
+  renderUpiApps();
+  upiIdSpan.innerText = FIXED_UPI;
+  drawWheel();
+  updateCartUI();
+</script>
+</body>
+</html>
