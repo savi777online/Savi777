@@ -24,7 +24,7 @@
             text-align: center;
         }
         h2 { color: #333; margin-bottom: 5px; }
-        p { color: #666; font-size: 14px; margin-bottom: 25px; }
+        .merchant-name { color: #0070f3; font-weight: 600; margin-bottom: 25px; }
         .input-group {
             margin-bottom: 20px;
             text-align: left;
@@ -61,10 +61,16 @@
             transition: background 0.2s;
         }
         .pay-btn:hover { background-color: #0051b3; }
-        .note {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #999;
+        .instructions {
+            margin-top: 20px;
+            background-color: #fff9db;
+            border: 1px solid #ffe3e3;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #b05700;
+            text-align: left;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -72,7 +78,7 @@
 
 <div class="payment-card">
     <h2>Make a Payment</h2>
-    <p>Merchant: Ganesh Siddharth Patil</p>
+    <div class="merchant-name">To: Ganesh Siddharth Patil</div>
 
     <div class="input-group">
         <label for="amount">Enter Amount (₹)</label>
@@ -81,7 +87,9 @@
 
     <button class="pay-btn" onclick="startPayment()">Proceed to Pay</button>
     
-    <p class="note">Note: This page works on mobile devices with UPI apps installed.</p>
+    <div class="instructions">
+        <strong>💡 Note:</strong> Due to UPI security updates, after choosing your UPI app, please manually enter the same amount inside the app to complete the payment.
+    </div>
 </div>
 
 <script>
@@ -92,18 +100,18 @@
             return;
         }
 
-        // Your verified merchant parameters
+        // Your exact verified details
         const upiId = "s0078204513092824@slc"; 
         const merchantName = "Ganesh Siddharth Patil"; 
         const mccCode = "5968"; 
 
-        // Generates a mandatory unique transaction reference
-        const transactionRef = "TXN" + Date.now(); 
+        // Creating a dynamic payment note text (e.g., "Pay ₹500")
+        const paymentNote = "Pay ₹" + amount;
 
-        // Strict merchant-compliant format with amount pre-filled
-        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&mc=${mccCode}&tr=${transactionRef}&am=${amount}&cu=INR&mode=02`;
+        // The secure standard layout without the locked &am parameter
+        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&mc=${mccCode}&tn=${encodeURIComponent(paymentNote)}&cu=INR`;
 
-        // Redirect to trigger app options tray on mobile
+        // Launch the system's UPI picker tray
         window.location.href = upiUrl;
     }
 </script>
