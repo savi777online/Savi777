@@ -72,7 +72,7 @@
 
 <div class="payment-card">
     <h2>Make a Payment</h2>
-    <p>UPI ID: s0078204513092824@slc</p>
+    <p>Merchant: Ganesh Siddharth Patil</p>
 
     <div class="input-group">
         <label for="amount">Enter Amount (₹)</label>
@@ -81,7 +81,7 @@
 
     <button class="pay-btn" onclick="startPayment()">Proceed to Pay</button>
     
-    <p class="note">Note: This works best on mobile devices with UPI apps installed.</p>
+    <p class="note">Note: This page works on mobile devices with UPI apps installed.</p>
 </div>
 
 <script>
@@ -92,13 +92,18 @@
             return;
         }
 
-        const upiId = "s0078204513092824@slc";
-        const merchantName = "Payment"; // You can change this to your name/business name
-        
-        // Constructing the standard UPI deep link
-        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&am=${amount}&cu=INR`;
+        // Your verified merchant parameters
+        const upiId = "s0078204513092824@slc"; 
+        const merchantName = "Ganesh Siddharth Patil"; 
+        const mccCode = "5968"; 
 
-        // Redirects the browser to open the device's UPI intent picker
+        // Generates a mandatory unique transaction reference
+        const transactionRef = "TXN" + Date.now(); 
+
+        // Strict merchant-compliant format with amount pre-filled
+        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&mc=${mccCode}&tr=${transactionRef}&am=${amount}&cu=INR&mode=02`;
+
+        // Redirect to trigger app options tray on mobile
         window.location.href = upiUrl;
     }
 </script>
