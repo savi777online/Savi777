@@ -3,56 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>savi777 - Ultimate Computer Parts Store</title>
+    <title>savi777 - Massive Computer Components Superstore</title>
     <style>
         :root {
             --primary: #00ffcc;
-            --bg-dark: #0b0f19;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
+            --bg-dark: #07090e;
+            --card-bg: #111827;
+            --text-light: #f3f4f6;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-light); overflow-x: hidden; }
         
-        header { background: linear-gradient(90deg, #0f172a, #1e293b); padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
-        header h1 { color: var(--primary); font-size: 28px; text-transform: uppercase; letter-spacing: 2px; }
-        .cart-info { background: var(--primary); color: #000; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+        header { background: linear-gradient(90deg, #030712, #111827); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        header h1 { color: var(--primary); font-size: 26px; text-transform: uppercase; letter-spacing: 2px; }
+        .cart-info { background: var(--primary); color: #000; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }
 
-        .hero { text-align: center; padding: 60px 20px; background: radial-gradient(circle, #1e293b 0%, #0b0f19 100%); border-bottom: 1px solid #334155; }
-        .hero h2 { font-size: 42px; margin-bottom: 10px; color: var(--text-light); }
-        .hero p { font-size: 18px; color: #94a3b8; }
+        .hero { text-align: center; padding: 50px 20px; background: radial-gradient(circle, #1f2937 0%, #07090e 100%); border-bottom: 1px solid #1f2937; }
+        .hero h2 { font-size: 38px; margin-bottom: 10px; color: var(--text-light); }
+        .hero p { font-size: 16px; color: #9ca3af; max-width: 700px; margin: auto; }
 
-        .container { max-width: 1400px; margin: auto; padding: 40px 20px; }
-        .category-title { font-size: 28px; margin: 40px 0 20px 0; color: var(--primary); border-left: 5px solid var(--primary); padding-left: 15px; }
+        .container { max-width: 1450px; margin: auto; padding: 30px 20px; }
+        .category-title { font-size: 24px; margin: 40px 0 20px 0; color: var(--primary); border-left: 5px solid var(--primary); padding-left: 12px; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: space-between; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0, 255, 204, 0.2); border-color: var(--primary); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #1f2937; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15); border-color: var(--primary); }
         
-        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #334155; }
-        .card h3 { font-size: 18px; margin-bottom: 10px; height: 50px; overflow: hidden; }
-        .price { font-size: 20px; color: var(--primary); font-weight: bold; margin-bottom: 15px; }
+        .card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; background: #1f2937; }
+        .card h3 { font-size: 16px; margin-bottom: 8px; height: 42px; overflow: hidden; color: #e5e7eb; }
+        .price { font-size: 18px; color: var(--primary); font-weight: bold; margin-bottom: 12px; }
         
-        .buy-btn { background: var(--primary); color: #000; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; width: 100%; }
+        .buy-btn { background: var(--primary); color: #000; border: none; padding: 9px 15px; font-size: 15px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background 0.2s; width: 100%; }
         .buy-btn:hover { background: #00ccb1; }
 
-        footer { text-align: center; padding: 40px; background: #0f172a; margin-top: 50px; border-top: 1px solid #334155; color: #64748b; }
+        footer { text-align: center; padding: 40px; background: #030712; margin-top: 60px; border-top: 1px solid #1f2937; color: #4b5563; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>savi777 Store</h1>
-        <div class="cart-info">Secure UPI Checkout Ready</div>
+        <div class="cart-info">Massive Hardware Catalog</div>
     </header>
 
     <div class="hero">
-        <h2>Welcome to savi777 Hardware Hub</h2>
-        <p>Explore thousands of high-performance PC components. Scroll down, choose your gear, and checkout instantly!</p>
+        <h2>Ultimate PC Parts Warehouse</h2>
+        <p>Explore thousands of options spanning across every computer category imaginable. Scroll down to browse components, match your build, and check out securely!</p>
     </div>
 
     <div class="container" id="store-container">
-        <!-- Dynamic Categories and Items will be injected via JS to make it massive -->
+        <!-- Javascript will dynamically inject massive product grids here -->
     </div>
 
     <footer>
@@ -60,39 +60,144 @@
     </footer>
 
     <script>
-        const categories = [
-            { name: "Processors (CPU)", items: ["Intel Core i9-14900K", "AMD Ryzen 9 7950X", "Intel Core i7-14700K", "AMD Ryzen 7 7800X3D", "Intel Core i5-13600K", "AMD Ryzen 5 7600X", "Intel Core i3-13100", "AMD Ryzen 9 5900X"] },
-            { name: "Graphics Cards (GPU)", items: ["NVIDIA RTX 4090 24GB", "NVIDIA RTX 4080 Super", "NVIDIA RTX 4070 Ti", "AMD RX 7900 XTX", "NVIDIA RTX 4060 Ti", "AMD RX 7800 XT", "NVIDIA RTX 3060", "Intel Arc A770"] },
-            { name: "Motherboards", items: ["ASUS ROG Maximus Z790", "MSI MAG B650 Tomahawk", "Gigabyte X670E Aorus", "ASRock B760M Pro", "ASUS TUF Gaming Z790", "MSI MPG B550 Gaming", "NZXT N7 Z790", "Biostar Racing Z690"] },
-            { name: "Memory (RAM)", items: ["Corsair Vengeance 32GB DDR5", "G.Skill Trident Z5 64GB", "Kingston Fury Beast 16GB", "TeamGroup T-Force 32GB", "Corsair Dominator 32GB", "Crucial 16GB DDR4", "ADATA XPG 32GB", "Patriot Viper 16GB"] },
-            { name: "Storage (SSD / HDD)", items: ["Samsung 990 PRO 2TB NVMe", "WD Black SN850X 1TB", "Crucial T700 2TB Gen5", "Seagate Barracuda 4TB HDD", "Kingston KC3000 2TB", "Sabrent Rocket 4 Plus", "SanDisk Extreme 1TB SSD", "Toshiba 2TB Desktop HDD"] },
-            { name: "Power Supplies (PSU)", items: ["Corsair RM1000x 80+ Gold", "Seasonic Prime TX-1600", "EVGA SuperNOVA 850W", "Thermaltake Toughpower 750W", "Cooler Master MWE 650W", "Be Quiet! Dark Power 12", "MSI MPG A850GF", "Asus ROG Thor 1200W"] },
-            { name: "PC Cabinets / Cases", items: ["Lian Li O11 Dynamic EVO", "NZXT H9 Flow RGB", "Corsair 4000D Airflow", "Fractal Design North", "Phanteks Eclipse G500A", "Cooler Master MasterBox", "Antec DF700 Flux", "Montech AIR 903 MAX"] },
-            { name: "CPU Coolers", items: ["NZXT Kraken Elite 360", "Corsair iCUE H150i Elite", "Noctua NH-D15 chromax", "DeepCool AK620 Digital", "Thermalright Peerless Assassin", "Be Quiet! Pure Loop 2", "Arctic Liquid Freezer III", "Cooler Master Hyper 212"] },
-            { name: "Peripherals & Monitors", items: ["LG Ultragear 27" 240Hz", "Razer Huntsman V3 Pro", "Logitech G Pro X Superlight", "SteelSeries Arctis Nova Pro", "ASUS ROG Swift 360Hz", "HyperX Cloud III Wireless", "Corsair K70 RGB Pro", "BenQ Zowie EC2-C"] }
+        const storeCatalog = [
+            {
+                category: "Processors (CPUs - Intel & AMD)",
+                items: [
+                    "Intel Core i9-14900KS Special Edition", "AMD Ryzen 9 7950X3D Gaming Processor", "Intel Core i7-14700K Desktop Chip", 
+                    "AMD Ryzen 7 7800X3D Processor", "Intel Core i5-14600K Unlocked", "AMD Ryzen 5 7600X Desktop CPU", 
+                    "Intel Core i3-13100F Budget Quad-Core", "AMD Ryzen 9 5950X AM4 Processor", "Intel Core i9-13900K Processor", 
+                    "AMD Ryzen 7 5800X3D Processor", "Intel Core i5-12400F Value CPU", "AMD Ryzen 5 5600X Hexa-Core"
+                ]
+            },
+            {
+                category: "Graphics Cards (GPUs - NVIDIA & AMD & Intel)",
+                items: [
+                    "NVIDIA GeForce RTX 4090 24GB Founders", "AMD Radeon RX 7900 XTX 24GB", "NVIDIA GeForce RTX 4080 Super 16GB", 
+                    "NVIDIA GeForce RTX 4070 Ti Super", "AMD Radeon RX 7900 XT 20GB", "NVIDIA GeForce RTX 4070 12GB", 
+                    "AMD Radeon RX 7800 XT 16GB", "NVIDIA GeForce RTX 4060 Ti 8GB", "AMD Radeon RX 7700 XT 12GB", 
+                    "NVIDIA GeForce RTX 4060 8GB", "Intel Arc A770 Limited Edition 16GB", "NVIDIA GeForce RTX 3060 12GB"
+                ]
+            },
+            {
+                category: "Motherboards (Intel LGA1700 & AMD AM5/AM4)",
+                items: [
+                    "ASUS ROG Maximus Z790 Hero WiFi", "MSI MPG B650 Tomahawk WiFi", "Gigabyte X670E Aorus Master", 
+                    "ASRock B760M Steel Legend WiFi", "ASUS TUF Gaming Z790-PLUS WiFi", "MSI MAG B550 TOMAHAWK Gaming", 
+                    "NZXT N7 Z790 Matte White Motherboard", "Gigabyte B650M DS3H Micro-ATX", "ASUS Prime X670-P WiFi", 
+                    "MSI PRO Z790-P WIFI DDR5", "Biostar Racing Z690GTA", "ASRock X670E Taichi Carrara"
+                ]
+            },
+            {
+                category: "Memory (RAM - DDR5 & DDR4 Kits)",
+                items: [
+                    "Corsair Vengeance RGB 32GB (2x16) DDR5 6000MHz", "G.Skill Trident Z5 RGB 64GB (2x32) DDR5", 
+                    "Kingston Fury Beast 16GB (1x16) DDR4 3200MHz", "TeamGroup T-Force Delta RGB 32GB DDR5", 
+                    "Corsair Dominator Titanium 32GB DDR5 6600MHz", "Crucial 16GB (2x8) DDR4 2666MHz RAM", 
+                    "ADATA XPG Lancer RGB 32GB DDR5 5600MHz", "Patriot Viper Steel 16GB DDR4 3600MHz", 
+                    "G.Skill Ripjaws S5 32GB DDR5 5200MHz", "Thermaltake Toughram XG RGB 32GB"
+                ]
+            },
+            {
+                category: "Storage (NVMe M.2 SSDs & Hard Drives)",
+                items: [
+                    "Samsung 990 PRO 2TB PCIe 4.0 NVMe SSD", "WD Black SN850X 1TB NVMe Gaming SSD", 
+                    "Crucial T700 2TB Gen5 NVMe M.2 SSD", "Seagate Barracuda 4TB 5400RPM Desktop HDD", 
+                    "Kingston KC3000 2TB High Performance SSD", "Sabrent Rocket 4 Plus 2TB NVMe SSD", 
+                    "SanDisk Extreme 1TB Portable External SSD", "Toshiba 2TB 7200RPM Internal Hard Drive", 
+                    "Lexar NM790 2TB NVMe with Heatsink", "Western Digital Blue 2TB SATA HDD"
+                ]
+            },
+            {
+                category: "Power Supply Units (PSU - 80+ Gold/Platinum)",
+                items: [
+                    "Corsair RM1000x Shift 80+ Gold Fully Modular", "Seasonic Prime TX-1600 80+ Titanium PSU", 
+                    "EVGA SuperNOVA 850 GT, 80+ Gold 850W", "Thermaltake Toughpower GF3 750W ATX 3.0", 
+                    "Cooler Master MWE Gold 650 V2 Full Modular", "Be Quiet! Dark Power 13 850W PSU", 
+                    "MSI MPG A850GF 850 Watt Gaming Power Supply", "Asus ROG Thor 1200W Platinum II", 
+                    "DeepCool PK650D Non-Modular PSU", "NZXT C850 PSU Gold Certified"
+                ]
+            },
+            {
+                category: "PC Cases / Cabinets (Mid & Full Tower)",
+                items: [
+                    "Lian Li O11 Dynamic EVO Glass Mid-Tower", "NZXT H9 Flow Dual-Chamber Airflow Case", 
+                    "Corsair 4000D Airflow Tempered Glass Case", "Fractal Design North Charcoal Black/Walnut", 
+                    "Phanteks Eclipse G500A Performance ATX Case", "Cooler Master MasterBox TD500 Mesh V2", 
+                    "Antec DF700 Flux Mid-Tower Gaming Case", "Montech AIR 903 MAX High Airflow Case", 
+                    "Lian Li Lancool 216 RGB Black", "Thermaltake Core P3 TG Pro Open Frame"
+                ]
+            },
+            {
+                category: "CPU Coolers (Liquid AIO & Air Coolers)",
+                items: [
+                    "NZXT Kraken Elite 360 RGB Liquid Cooler", "Corsair iCUE H150i Elite Capellix XT AIO", 
+                    "Noctua NH-D15 chromax.black Dual-Tower Cooler", "DeepCool AK620 Digital CPU Air Cooler", 
+                    "Thermalright Peerless Assassin 120 SE", "Be Quiet! Pure Loop 2 FX 240mm AIO", 
+                    "Arctic Liquid Freezer III 360 ARGB", "Cooler Master Hyper 212 Halo Black", 
+                    "ID-COOLING SE-224-XT Basic Air Cooler", "MSI MAG CoreLiquid 360R V2"
+                ]
+            },
+            {
+                category: "Gaming Monitors & Displays",
+                items: [
+                    "LG Ultragear 27GR95QE-B 27inch OLED 240Hz", "ASUS ROG Swift 360Hz PG27AQN Esports Monitor", 
+                    "Gigabyte M32U 32inch 4K UHD 144Hz Gaming", "Samsung Odyssey G9 49inch Curved 240Hz", 
+                    "Dell Alienware AW2723DF 280Hz Fast IPS", "Acer Nitro XV272U Vbmiiprx 27inch 170Hz", 
+                    "MSI Optix MAG274QRF-QD 27inch Quantum Dot", "BenQ Zowie XL2566K 360Hz DyAc+ Monitor"
+                ]
+            },
+            {
+                category: "Keyboards, Mice & Peripherals",
+                items: [
+                    "Razer Huntsman V3 Pro Analog Optical Keyboard", "Logitech G Pro X Superlight 2 Wireless Mouse", 
+                    "SteelSeries Apex Pro Mechanical Keyboard", "Corsair K70 RGB Pro Mechanical Gaming Keyboard", 
+                    "Razer Viper V3 Pro Lightweight Mouse", "HyperX Alloy Origins 60 Mechanical Keyboard", 
+                    "Logitech G502 X Plus Wireless Gaming Mouse", "Zowie EC2-C Ergonomic Esports Mouse"
+                ]
+            },
+            {
+                category: "Headsets & Audio Solutions",
+                items: [
+                    "SteelSeries Arctis Nova Pro Wireless Headset", "HyperX Cloud III Wireless Gaming Headset", 
+                    "Razer BlackShark V2 Pro Wireless Headset", "Logitech G PRO X 2 LIGHTSPEED Headset", 
+                    "Beyerdynamic DT 770 PRO Studio Headphones", "Audio-Technica ATH-M50xBT2 Bluetooth", 
+                    "Corsair Virtuoso RGB Wireless XT", "Sennheiser EPOS H6PRO Closed Acoustic"
+                ]
+            },
+            {
+                category: "Case Fans & Accessories",
+                items: [
+                    "Lian Li Uni Fan SL-Infinity 120 (3-Pack)", "Corsair iCUE QL120 RGB PWM Fans (3-Pack)", 
+                    "Noctua NF-A12x25 PWM Premium Fan", "Arctic P12 PWM PST Value Pack (5-Pack)", 
+                    "Phanteks D30-120 High-Performance Fans", "DeepCool FC120 White ARGB Fans", 
+                    "Lian Li Strimer Plus V2 24-Pin ARGB Cable", "Thermalright TL-C12C-S CPU Fan 3-Pack"
+                ]
+            }
         ];
 
         const container = document.getElementById('store-container');
 
-        categories.forEach((cat, catIndex) => {
+        storeCatalog.forEach((cat, catIndex) => {
             let catTitle = document.createElement('h2');
             catTitle.className = 'category-title';
-            catTitle.innerText = cat.name;
+            catTitle.innerText = cat.category;
             container.appendChild(catTitle);
 
             let grid = document.createElement('div');
             grid.className = 'grid';
 
             cat.items.forEach((item, itemIndex) => {
-                let price = Math.floor(Math.random() * (95000 - 4000 + 1)) + 4000;
+                // Generate a realistic base price between 2,500 and 1,80,000 INR
+                let price = Math.floor(Math.random() * (175000 - 2500 + 1)) + 2500;
                 let card = document.createElement('div');
-                let randomImageId = (catIndex * 10) + itemIndex + 100;
+                let randomImageId = (catIndex * 50) + itemIndex + 200;
                 card.className = 'card';
                 card.innerHTML = `
                     <img src="https://picsum.photos/seed/${randomImageId}/300/200" alt="${item}">
                     <h3>${item}</h3>
                     <div class="price">₹${price.toLocaleString('en-IN')}</div>
-                    <button class="buy-btn" onclick="buyItem('${item}', ${price})">Buy Now</button>
+                    <button class="buy-btn" onclick="buyItem('${item.replace(/'/g, "")}', ${price})">Buy Now</button>
                 `;
                 grid.appendChild(card);
             });
