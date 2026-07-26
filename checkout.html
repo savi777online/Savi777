@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>savi777 - Customer Information</title>
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --bg-dark: #07090e;
+            --card-bg: #111827;
+            --text-light: #f3f4f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .form-box { background: var(--card-bg); width: 100%; max-width: 550px; padding: 30px; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: var(--primary); margin-bottom: 20px; text-align: center; }
+        
+        .order-summary { background: #030712; padding: 12px 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; }
+        .order-summary span { color: #9ca3af; }
+        .order-summary strong { color: var(--primary); font-size: 18px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #9ca3af; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; background: #030712; border: 1px solid #1f2937; border-radius: 6px; color: #fff; font-size: 15px; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+        textarea { resize: vertical; height: 80px; }
+
+        .row { display: flex; gap: 15px; }
+        .row .form-group { flex: 1; }
+
+        .submit-btn { background: var(--primary); color: #000; border: none; padding: 12px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .submit-btn:hover { background: #00ccb1; }
+        
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #9ca3af; text-decoration: none; font-size: 14px; }
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <h2>Shipping & Contact Details</h2>
+        
+        <div class="order-summary">
+            <div>
+                <span id="product-name" style="display:block; font-weight:600; color:#fff;">Loading...</span>
+            </div>
+            <div><strong id="product-price">₹0</strong></div>
+        </div>
+
+        <form onsubmit="handleInfoSubmit(event)">
+            <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="mobile">Mobile Number *</label>
+                    <input type="tel" id="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+                </div>
+                <div class="form-group">
+                    <label for="alt-mobile">Alternate Mobile Number</label>
+                    <input type="tel" id="alt-mobile" placeholder="Optional alternate number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Delivery Address *</label>
+                <textarea id="address" placeholder="House No, Street, Landmark, City" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="pincode">Pin Code *</label>
+                <input type="text" id="pincode" placeholder="6-digit pin code" pattern="[0-9]{6}" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Continue to Payment</button>
+        </form>
+
+        <a href="index.html" class="back-link">&larr; Back to Store</a>
+    </div>
+
+    <script>
+        const itemName = localStorage.getItem('selectedItem') || 'Custom PC Part';
+        const itemPrice = localStorage.getItem('selectedPrice') || '5000';
+
+        document.getElementById('product-name').innerText = itemName;
+        document.getElementById('product-price').innerText = '₹' + Number(itemPrice).toLocaleString('en-IN');
+
+        function handleInfoSubmit(event) {
+            event.preventDefault();
+            
+            // Save user info temporarily in localStorage to carry forward
+            localStorage.setItem('customerName', document.getElementById('name').value);
+            localStorage.setItem('customerMobile', document.getElementById('mobile').value);
+            localStorage.setItem('customerAddress', document.getElementById('address').value);
+            
+            // Redirect to deposit page for payment
+            window.location.href = 'deposit.html';
+        }
+    </script>
+</body>
+</html>
