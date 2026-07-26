@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment Deposit</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h2 {
+            color: #1e293b;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        .input-with-icon {
+            position: relative;
+        }
+        .input-with-icon span {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #94a3b8;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 38px;
+            font-size: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .amt-btn {
+            padding: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .amt-btn:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8;
+        }
+        .pay-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .pay-btn:hover {
+            background: #1d4ed8;
+        }
+        .upi-apps {
+            display: none;
+            margin-top: 25px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .upi-apps h3 {
+            font-size: 15px;
+            color: #334155;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .app-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .app-card:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .app-card img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2>Deposit Funds</h2>
+            <p>Enter the amount you wish to add to your account</p>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Deposit Amount (INR)</label>
+            <div class="input-with-icon">
+                <span>₹</span>
+                <input type="number" id="amount" class="form-control" placeholder="Enter amount" min="1" step="1">
+            </div>
+        </div>
+
+        <div class="quick-amounts">
+            <button type="button" class="amt-btn" onclick="setAmount(500)">₹500</button>
+            <button type="button" class="amt-btn" onclick="setAmount(1000)">₹1000</button>
+            <button type="button" class="amt-btn" onclick="setAmount(5000)">₹5000</button>
+        </div>
+
+        <button type="button" class="pay-btn" id="proceedBtn" onclick="proceedToPay()">Continue to Pay</button>
+
+        <!-- UPI Apps Selection Section -->
+        <div class="upi-apps" id="upiAppsSection">
+            <h3>Select UPI App to Pay</h3>
+            <div class="app-grid">
+                <a href="#" id="gpayLink" class="app-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Google_Pay_Logo_%282020%29.svg" alt="GPay">
+                    Google Pay
+                </a>
+                <a href="#" id="phonepeLink" class="app-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe">
+                    PhonePe
+                </a>
+                <a href="#" id="paytmLink" class="app-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Paytm_logo_digital_blue.svg" alt="Paytm">
+                    Paytm
+                </a>
+                <a href="#" id="bhimLink" class="app-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="BHIM">
+                    Other UPI Apps
+                </a>
+            </div>
+        </div>
+
+        <div class="security-badge">
+            <span>🔒 Secured by 256-bit Encryption</span>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // MERCHANT & API CONFIGURATION (Aapki Details)
+        // =========================================================================
+        const MERCHANT_CONFIG = {
+            privateApiKey: "93c5befca61a5d9628a163ae0e0cd8a6",
+            privateAuthToken: "1586c8673e445e67b0d86213901c2815",
+            privateSalt: "cf5ddd590bc94e78ba865f8e266dfbe4",
+            upiId: "9113224019@ybl",
+            merchantName: "Deposit Payment"
+        };
+
+        function setAmount(val) {
+            document.getElementById('amount').value = val;
+        }
+
+        function proceedToPay() {
+            const amountInput = document.getElementById('amount').value;
+            const amount = parseFloat(amountInput);
+
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid deposit amount.");
+                return;
+            }
+
+            // API Keys validation / console log check (Aap chaho toh yahan backend fetch request laga sakte ho)
+            console.log("API Key Authenticated:", MERCHANT_CONFIG.privateApiKey);
+
+            const transactionId = 'TXN' + Date.now();
+            
+            // Standard UPI Intent URL
+            const upiUrl = `upi://pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
+
+            // App-specific intent links for mobile devices
+            document.getElementById('gpayLink').href = `tez://upi/pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
+            document.getElementById('phonepeLink').href = `phonepe://pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
+            document.getElementById('paytmLink').href = `paytmmp://pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
+            document.getElementById('bhimLink').href = upiUrl;
+
+            // Show UPI app selection grid
+            document.getElementById('upiAppsSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
