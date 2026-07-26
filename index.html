@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>savi777 - Ultimate Computer Parts Store</title>
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --bg-dark: #0b0f19;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); overflow-x: hidden; }
+        
+        header { background: linear-gradient(90deg, #0f172a, #1e293b); padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        header h1 { color: var(--primary); font-size: 28px; text-transform: uppercase; letter-spacing: 2px; }
+        .cart-info { background: var(--primary); color: #000; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+
+        .hero { text-align: center; padding: 60px 20px; background: radial-gradient(circle, #1e293b 0%, #0b0f19 100%); border-bottom: 1px solid #334155; }
+        .hero h2 { font-size: 42px; margin-bottom: 10px; color: var(--text-light); }
+        .hero p { font-size: 18px; color: #94a3b8; }
+
+        .container { max-width: 1400px; margin: auto; padding: 40px 20px; }
+        .category-title { font-size: 28px; margin: 40px 0 20px 0; color: var(--primary); border-left: 5px solid var(--primary); padding-left: 15px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0, 255, 204, 0.2); border-color: var(--primary); }
+        
+        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #334155; }
+        .card h3 { font-size: 18px; margin-bottom: 10px; height: 50px; overflow: hidden; }
+        .price { font-size: 20px; color: var(--primary); font-weight: bold; margin-bottom: 15px; }
+        
+        .buy-btn { background: var(--primary); color: #000; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; width: 100%; }
+        .buy-btn:hover { background: #00ccb1; }
+
+        footer { text-align: center; padding: 40px; background: #0f172a; margin-top: 50px; border-top: 1px solid #334155; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>savi777 Store</h1>
+        <div class="cart-info">Secure UPI Checkout Ready</div>
+    </header>
+
+    <div class="hero">
+        <h2>Welcome to savi777 Hardware Hub</h2>
+        <p>Explore thousands of high-performance PC components. Scroll down, choose your gear, and checkout instantly!</p>
+    </div>
+
+    <div class="container" id="store-container">
+        <!-- Dynamic Categories and Items will be injected via JS to make it massive -->
+    </div>
+
+    <footer>
+        <p>&copy; 2026 savi777. All rights reserved. Powered by GitHub Pages.</p>
+    </footer>
+
+    <script>
+        const categories = [
+            { name: "Processors (CPU)", items: ["Intel Core i9-14900K", "AMD Ryzen 9 7950X", "Intel Core i7-14700K", "AMD Ryzen 7 7800X3D", "Intel Core i5-13600K", "AMD Ryzen 5 7600X", "Intel Core i3-13100", "AMD Ryzen 9 5900X"] },
+            { name: "Graphics Cards (GPU)", items: ["NVIDIA RTX 4090 24GB", "NVIDIA RTX 4080 Super", "NVIDIA RTX 4070 Ti", "AMD RX 7900 XTX", "NVIDIA RTX 4060 Ti", "AMD RX 7800 XT", "NVIDIA RTX 3060", "Intel Arc A770"] },
+            { name: "Motherboards", items: ["ASUS ROG Maximus Z790", "MSI MAG B650 Tomahawk", "Gigabyte X670E Aorus", "ASRock B760M Pro", "ASUS TUF Gaming Z790", "MSI MPG B550 Gaming", "NZXT N7 Z790", "Biostar Racing Z690"] },
+            { name: "Memory (RAM)", items: ["Corsair Vengeance 32GB DDR5", "G.Skill Trident Z5 64GB", "Kingston Fury Beast 16GB", "TeamGroup T-Force 32GB", "Corsair Dominator 32GB", "Crucial 16GB DDR4", "ADATA XPG 32GB", "Patriot Viper 16GB"] },
+            { name: "Storage (SSD / HDD)", items: ["Samsung 990 PRO 2TB NVMe", "WD Black SN850X 1TB", "Crucial T700 2TB Gen5", "Seagate Barracuda 4TB HDD", "Kingston KC3000 2TB", "Sabrent Rocket 4 Plus", "SanDisk Extreme 1TB SSD", "Toshiba 2TB Desktop HDD"] },
+            { name: "Power Supplies (PSU)", items: ["Corsair RM1000x 80+ Gold", "Seasonic Prime TX-1600", "EVGA SuperNOVA 850W", "Thermaltake Toughpower 750W", "Cooler Master MWE 650W", "Be Quiet! Dark Power 12", "MSI MPG A850GF", "Asus ROG Thor 1200W"] },
+            { name: "PC Cabinets / Cases", items: ["Lian Li O11 Dynamic EVO", "NZXT H9 Flow RGB", "Corsair 4000D Airflow", "Fractal Design North", "Phanteks Eclipse G500A", "Cooler Master MasterBox", "Antec DF700 Flux", "Montech AIR 903 MAX"] },
+            { name: "CPU Coolers", items: ["NZXT Kraken Elite 360", "Corsair iCUE H150i Elite", "Noctua NH-D15 chromax", "DeepCool AK620 Digital", "Thermalright Peerless Assassin", "Be Quiet! Pure Loop 2", "Arctic Liquid Freezer III", "Cooler Master Hyper 212"] },
+            { name: "Peripherals & Monitors", items: ["LG Ultragear 27" 240Hz", "Razer Huntsman V3 Pro", "Logitech G Pro X Superlight", "SteelSeries Arctis Nova Pro", "ASUS ROG Swift 360Hz", "HyperX Cloud III Wireless", "Corsair K70 RGB Pro", "BenQ Zowie EC2-C"] }
+        ];
+
+        const container = document.getElementById('store-container');
+
+        categories.forEach((cat, catIndex) => {
+            let catTitle = document.createElement('h2');
+            catTitle.className = 'category-title';
+            catTitle.innerText = cat.name;
+            container.appendChild(catTitle);
+
+            let grid = document.createElement('div');
+            grid.className = 'grid';
+
+            cat.items.forEach((item, itemIndex) => {
+                let price = Math.floor(Math.random() * (95000 - 4000 + 1)) + 4000;
+                let card = document.createElement('div');
+                let randomImageId = (catIndex * 10) + itemIndex + 100;
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="https://picsum.photos/seed/${randomImageId}/300/200" alt="${item}">
+                    <h3>${item}</h3>
+                    <div class="price">₹${price.toLocaleString('en-IN')}</div>
+                    <button class="buy-btn" onclick="buyItem('${item}', ${price})">Buy Now</button>
+                `;
+                grid.appendChild(card);
+            });
+            container.appendChild(grid);
+        });
+
+        function buyItem(name, price) {
+            localStorage.setItem('selectedItem', name);
+            localStorage.setItem('selectedPrice', price);
+            window.location.href = 'deposit.html';
+        }
+    </script>
+</body>
+</html>
