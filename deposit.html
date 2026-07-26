@@ -3,262 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Payment Deposit</title>
+    <title>savi777 - Secure Checkout</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary: #00ffcc;
+            --bg-dark: #0b0f19;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
         }
-        body {
-            background-color: #f0f4f8;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 420px;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .header h2 {
-            color: #1e293b;
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        .header p {
-            color: #64748b;
-            font-size: 14px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 8px;
-        }
-        .input-with-icon {
-            position: relative;
-        }
-        .input-with-icon span {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: #94a3b8;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px 15px 12px 38px;
-            font-size: 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-control:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-        .quick-amounts {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        .amt-btn {
-            padding: 10px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #475569;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .amt-btn:hover {
-            background: #eff6ff;
-            border-color: #bfdbfe;
-            color: #1d4ed8;
-        }
-        .pay-btn {
-            width: 100%;
-            padding: 14px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .pay-btn:hover {
-            background: #1d4ed8;
-        }
-        .upi-apps {
-            display: none;
-            margin-top: 25px;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .upi-apps h3 {
-            font-size: 15px;
-            color: #334155;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .app-card {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #1e293b;
-            font-weight: 500;
-            font-size: 14px;
-            transition: background 0.2s, border-color 0.2s;
-        }
-        .app-card:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-        }
-        .app-card img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-        .security-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 20px;
-            font-size: 12px;
-            color: #64748b;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .checkout-box { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 15px; border: 1px solid #334155; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        h2 { color: var(--primary); margin-bottom: 20px; text-align: center; }
+        
+        .order-summary { background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #334155; }
+        .order-summary p { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; }
+        .total { font-weight: bold; color: var(--primary); font-size: 18px !important; border-top: 1px solid #334155; padding-top: 8px; }
+
+        .upi-section { text-align: center; margin-bottom: 20px; }
+        .upi-id { background: #334155; padding: 10px; border-radius: 6px; font-weight: bold; color: var(--primary); margin: 10px 0; font-size: 18px; letter-spacing: 1px; }
+        
+        .qr-box { background: #fff; padding: 15px; display: inline-block; border-radius: 8px; margin: 10px 0; }
+        .qr-box img { width: 180px; height: 180px; display: block; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #94a3b8; }
+        .form-group input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-size: 16px; }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+
+        .submit-btn { background: var(--primary); color: #000; border: none; padding: 14px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .submit-btn:hover { background: #00ccb1; }
+        
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #94a3b8; text-decoration: none; }
+        .back-link:hover { color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h2>Deposit Funds</h2>
-            <p>Enter the amount you wish to add to your account</p>
+    <div class="checkout-box">
+        <h2>Complete Your Payment</h2>
+        
+        <div class="order-summary">
+            <p><span>Product:</span> <strong id="product-name">Loading...</strong></p>
+            <p class="total"><span>Total Amount:</span> <span id="product-price">₹0</span></p>
         </div>
 
-        <div class="form-group">
-            <label for="amount">Deposit Amount (INR)</label>
-            <div class="input-with-icon">
-                <span>₹</span>
-                <input type="number" id="amount" class="form-control" placeholder="Enter amount" min="1" step="1">
+        <div class="upi-section">
+            <p>Scan QR code or pay directly to UPI ID:</p>
+            <div class="upi-id">9113224019@ybl</div>
+            
+            <div class="qr-box">
+                <!-- Dynamic UPI QR Code generated via API -->
+                <img id="qr-code-img" src="" alt="UPI QR Code">
             </div>
         </div>
 
-        <div class="quick-amounts">
-            <button type="button" class="amt-btn" onclick="setAmount(500)">₹500</button>
-            <button type="button" class="amt-btn" onclick="setAmount(1000)">₹1000</button>
-            <button type="button" class="amt-btn" onclick="setAmount(5000)">₹5000</button>
-        </div>
-
-        <button type="button" class="pay-btn" id="proceedBtn" onclick="proceedToPay()">Continue to Pay</button>
-
-        <!-- UPI Apps Selection Section -->
-        <div class="upi-apps" id="upiAppsSection">
-            <h3>Select UPI App to Pay</h3>
-            <div class="app-grid">
-                <a href="#" id="gpayLink" class="app-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Google_Pay_Logo_%282020%29.svg" alt="GPay">
-                    Google Pay
-                </a>
-                <a href="#" id="phonepeLink" class="app-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe">
-                    PhonePe
-                </a>
-                <a href="#" id="paytmLink" class="app-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Paytm_logo_digital_blue.svg" alt="Paytm">
-                    Paytm
-                </a>
-                <a href="#" id="bhimLink" class="app-card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="BHIM">
-                    Other UPI Apps
-                </a>
+        <form onsubmit="handlePaymentSubmit(event)">
+            <div class="form-group">
+                <label for="utr">Enter UTR / Transaction Reference Number:</label>
+                <input type="text" id="utr" placeholder="e.g., 432109876543" required>
             </div>
-        </div>
+            <button type="submit" class="submit-btn">Verify & Submit Payment</button>
+        </form>
 
-        <div class="security-badge">
-            <span>🔒 Secured by 256-bit Encryption</span>
-        </div>
+        <a href="index.html" class="back-link">&larr; Back to Store</a>
     </div>
 
     <script>
-        // =========================================================================
-        // MERCHANT & API CONFIGURATION (Aapki Details)
-        // =========================================================================
-        const MERCHANT_CONFIG = {
-            privateApiKey: "93c5befca61a5d9628a163ae0e0cd8a6",
-            privateAuthToken: "1586c8673e445e67b0d86213901c2815",
-            privateSalt: "cf5ddd590bc94e78ba865f8e266dfbe4",
-            upiId: "9113224019@ybl",
-            merchantName: "Deposit Payment"
-        };
+        const itemName = localStorage.getItem('selectedItem') || 'Custom PC Part';
+        const itemPrice = localStorage.getItem('selectedPrice') || '5000';
 
-        function setAmount(val) {
-            document.getElementById('amount').value = val;
-        }
+        document.getElementById('product-name').innerText = itemName;
+        document.getElementById('product-price').innerText = '₹' + Number(itemPrice).toLocaleString('en-IN');
 
-        function proceedToPay() {
-            const amountInput = document.getElementById('amount').value;
-            const amount = parseFloat(amountInput);
+        // Generate UPI payment URI string
+        const upiID = "9113224019@ybl";
+        const payeeName = "savi777 Store";
+        const upiUri = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${itemPrice}&cu=INR`;
+        
+        // Generate QR code using public API based on UPI URI
+        document.getElementById('qr-code-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUri)}`;
 
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid deposit amount.");
+        function handlePaymentSubmit(event) {
+            event.preventDefault();
+            const utr = document.getElementById('utr').value;
+            if(utr.length < 8) {
+                alert("Please enter a valid UTR number.");
                 return;
             }
-
-            // API Keys validation / console log check (Aap chaho toh yahan backend fetch request laga sakte ho)
-            console.log("API Key Authenticated:", MERCHANT_CONFIG.privateApiKey);
-
-            const transactionId = 'TXN' + Date.now();
-            
-            // Standard UPI Intent URL
-            const upiUrl = `upi://pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
-
-            // App-specific intent links for mobile devices
-            document.getElementById('gpayLink').href = `tez://upi/pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
-            document.getElementById('phonepeLink').href = `phonepe://pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
-            document.getElementById('paytmLink').href = `paytmmp://pay?pa=${encodeURIComponent(MERCHANT_CONFIG.upiId)}&pn=${encodeURIComponent(MERCHANT_CONFIG.merchantName)}&am=${amount.toFixed(2)}&cu=INR&tr=${transactionId}`;
-            document.getElementById('bhimLink').href = upiUrl;
-
-            // Show UPI app selection grid
-            document.getElementById('upiAppsSection').style.display = 'block';
+            alert("Payment details submitted successfully! Your order for " + itemName + " is under verification.");
+            localStorage.clear();
+            window.location.href = 'index.html';
         }
     </script>
 </body>
