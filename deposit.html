@@ -3,39 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>savi777 - Secure Checkout</title>
+    <title>savi777 - Secure Checkout & Payment</title>
     <style>
         :root {
             --primary: #00ffcc;
-            --bg-dark: #0b0f19;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
+            --bg-dark: #07090e;
+            --card-bg: #111827;
+            --text-light: #f3f4f6;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-dark); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .checkout-box { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 15px; border: 1px solid #334155; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .checkout-box { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         h2 { color: var(--primary); margin-bottom: 20px; text-align: center; }
         
-        .order-summary { background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #334155; }
-        .order-summary p { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 16px; }
-        .total { font-weight: bold; color: var(--primary); font-size: 18px !important; border-top: 1px solid #334155; padding-top: 8px; }
+        .order-summary { background: #030712; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #1f2937; }
+        .order-summary p { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 15px; color: #9ca3af; }
+        .total { font-weight: bold; color: var(--primary) !important; font-size: 18px !important; border-top: 1px solid #1f2937; padding-top: 8px; margin-top: 5px; }
 
         .upi-section { text-align: center; margin-bottom: 20px; }
-        .upi-id { background: #334155; padding: 10px; border-radius: 6px; font-weight: bold; color: var(--primary); margin: 10px 0; font-size: 18px; letter-spacing: 1px; }
+        .upi-id { background: #030712; padding: 10px; border-radius: 6px; font-weight: bold; color: var(--primary); margin: 10px 0; font-size: 17px; letter-spacing: 1px; border: 1px solid #1f2937; }
         
-        .qr-box { background: #fff; padding: 15px; display: inline-block; border-radius: 8px; margin: 10px 0; }
-        .qr-box img { width: 180px; height: 180px; display: block; }
+        .qr-box { background: #fff; padding: 12px; display: inline-block; border-radius: 8px; margin: 10px 0; }
+        .qr-box img { width: 160px; height: 160px; display: block; }
 
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; color: #94a3b8; }
-        .form-group input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-size: 16px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #9ca3af; font-size: 14px; }
+        .form-group input { width: 100%; padding: 11px; background: #030712; border: 1px solid #1f2937; border-radius: 6px; color: #fff; font-size: 15px; }
         .form-group input:focus { outline: none; border-color: var(--primary); }
 
-        .submit-btn { background: var(--primary); color: #000; border: none; padding: 14px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .submit-btn { background: var(--primary); color: #000; border: none; padding: 13px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
         .submit-btn:hover { background: #00ccb1; }
         
-        .back-link { display: block; text-align: center; margin-top: 15px; color: #94a3b8; text-decoration: none; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #9ca3af; text-decoration: none; font-size: 14px; }
         .back-link:hover { color: var(--primary); }
     </style>
 </head>
@@ -45,16 +45,15 @@
         <h2>Complete Your Payment</h2>
         
         <div class="order-summary">
-            <p><span>Product:</span> <strong id="product-name">Loading...</strong></p>
+            <p><span>Product:</span> <strong id="product-name" style="color:#fff;">Loading...</strong></p>
             <p class="total"><span>Total Amount:</span> <span id="product-price">₹0</span></p>
         </div>
 
         <div class="upi-section">
-            <p>Scan QR code or pay directly to UPI ID:</p>
+            <p style="color: #9ca3af; font-size: 14px;">Scan QR code or pay directly to UPI ID:</p>
             <div class="upi-id">9113224019@ybl</div>
             
             <div class="qr-box">
-                <!-- Dynamic UPI QR Code generated via API -->
                 <img id="qr-code-img" src="" alt="UPI QR Code">
             </div>
         </div>
@@ -67,7 +66,7 @@
             <button type="submit" class="submit-btn">Verify & Submit Payment</button>
         </form>
 
-        <a href="index.html" class="back-link">&larr; Back to Store</a>
+        <a href="checkout.html" class="back-link">&larr; Back to Information</a>
     </div>
 
     <script>
@@ -77,13 +76,11 @@
         document.getElementById('product-name').innerText = itemName;
         document.getElementById('product-price').innerText = '₹' + Number(itemPrice).toLocaleString('en-IN');
 
-        // Generate UPI payment URI string
         const upiID = "9113224019@ybl";
         const payeeName = "savi777 Store";
         const upiUri = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${itemPrice}&cu=INR`;
         
-        // Generate QR code using public API based on UPI URI
-        document.getElementById('qr-code-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUri)}`;
+        document.getElementById('qr-code-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUri)}`;
 
         function handlePaymentSubmit(event) {
             event.preventDefault();
@@ -92,7 +89,7 @@
                 alert("Please enter a valid UTR number.");
                 return;
             }
-            alert("Payment details submitted successfully! Your order for " + itemName + " is under verification.");
+            alert("Payment details submitted successfully! Order for " + itemName + " is confirmed.");
             localStorage.clear();
             window.location.href = 'index.html';
         }
