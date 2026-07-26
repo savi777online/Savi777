@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SAVI777 - Google Play Store</title>
+    <title>GOGAMI - Google Play Store</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Roboto", -apple-system, BlinkMacSystemFont, Arial, sans-serif; }
         
@@ -38,21 +38,26 @@
         .play-app-icon { 
             width: 88px; 
             height: 88px; 
-            background: linear-gradient(135deg, #136a7a, #1a8a9d); 
+            background: #ffffff; 
             border-radius: 18px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            font-size: 38px; 
-            font-weight: 900; 
-            color: #ffffff; 
+            overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
             flex-shrink: 0; 
+            border: 1px solid #e8eaed;
+        }
+
+        .play-app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .app-title-block { display: flex; flex-direction: column; justify-content: center; }
         .play-app-title { font-size: 22px; font-weight: 500; color: #202124; line-height: 1.2; margin-bottom: 2px; }
-        .play-developer-team { font-size: 13.5px; font-weight: 500; color: #01875f; text-decoration: none; margin-bottom: 2px; }
+        .play-developer-team { font-size: 13.5px; font-weight: 500; color: #025922; text-decoration: none; margin-bottom: 2px; }
         .play-verified-badge { font-size: 12px; color: #5f6368; display: flex; align-items: center; gap: 4px; }
 
         /* Stats Strip Counter Dashboard */
@@ -70,9 +75,9 @@
         @keyframes scrollWinnersTrack { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
         /* Official Action Call Install Button Setup */
-        .play-install-btn { width: 100%; padding: 11px; background: #01875f; color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; transition: background 0.1s; }
-        .play-install-btn:active { background: #006e4e; }
-        .already-installed-box { display: none; width: 100%; padding: 11px; background: #f1f3f4; border-radius: 8px; color: #01875f; font-size: 14px; font-weight: 500; text-align: center; margin-bottom: 18px; }
+        .play-install-btn { width: 100%; padding: 11px; background: #025922; color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; transition: background 0.1s; }
+        .play-install-btn:active { background: #013b15; }
+        .already-installed-box { display: none; width: 100%; padding: 11px; background: #f1f3f4; border-radius: 8px; color: #025922; font-size: 14px; font-weight: 500; text-align: center; margin-bottom: 18px; }
 
         .play-section-title { font-size: 16px; font-weight: 500; color: #202124; margin-bottom: 10px; margin-top: 6px; }
 
@@ -80,19 +85,19 @@
         .game-rates-matrix-board { background: #f8fafc; border: 1px solid #e8eaed; border-radius: 12px; padding: 4px 14px; margin-bottom: 20px; }
         .rate-matrix-row { display: flex; justify-content: space-between; padding: 9px 0; font-size: 13.5px; font-weight: 500; color: #3c4043; }
         .rate-matrix-row:not(:last-child) { border-bottom: 1px solid #e8eaed; }
-        .rate-multiplier-badge { color: #01875f; font-weight: 700; }
+        .rate-multiplier-badge { color: #025922; font-weight: 700; }
 
         .play-app-description-text { font-size: 13.5px; color: #5f6368; line-height: 1.5; margin-bottom: 20px; }
 
         /* Google Play Store Ratings & Simulation Review Dashboard Engine */
         .reviews-summary-display-box { display: flex; align-items: center; gap: 28px; margin-bottom: 16px; background: #f8fafc; padding: 12px; border-radius: 10px; }
         .huge-rating-number { font-size: 44px; font-weight: 400; color: #202124; }
-        .review-stars-static { color: #01875f; font-size: 13px; margin-top: -4px; }
+        .review-stars-static { color: #025922; font-size: 13px; margin-top: -4px; }
         
         .interactive-user-review-panel { border-top: 1px solid #e8eaed; padding-top: 14px; margin-bottom: 18px; }
         .review-input-box { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; outline: none; margin-bottom: 8px; resize: none; color: #202124; }
-        .review-input-box:focus { border-color: #01875f; }
-        .review-submit-action-btn { background: #01875f; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; font-size: 12.5px; font-weight: 500; cursor: pointer; }
+        .review-input-box:focus { border-color: #025922; }
+        .review-submit-action-btn { background: #025922; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; font-size: 12.5px; font-weight: 500; cursor: pointer; }
         
         .static-review-slip { margin-bottom: 14px; border-bottom: 1px solid #f1f3f4; padding-bottom: 10px; }
         .review-user-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
@@ -115,12 +120,14 @@
     
     <!-- Top App Icon and Title Metadata Frame -->
     <div class="app-main-header">
-        <div class="play-app-icon">🌸</div>
+        <div class="play-app-icon">
+            <img src="https://i.imgur.com/2pTHLy9.png" alt="GOGAMI Logo">
+        </div>
         <div class="app-title-block">
-            <h1 class="play-app-title">DURGA</h1>
-            <a href="#" class="play-developer-team">Savi777 Lab</a>
+            <h1 class="play-app-title">GOGAMI</h1>
+            <a href="#" class="play-developer-team">GOGAMI Official</a>
             <div class="play-verified-badge">
-                <svg style="width:13px; height:13px; fill:#01875f; margin-right:3px;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L11 8l-9 9z"/></svg>
+                <svg style="width:13px; height:13px; fill:#025922; margin-right:3px;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L11 8l-9 9z"/></svg>
                 Verified • Founded in 2021
             </div>
         </div>
@@ -156,7 +163,7 @@
     </div>
 
     <!-- Live GitHub Release Asset Download Anchor Button -->
-    <a href="https://github.com/savi777online/Savi777/releases/download/v1.0.0/durga.apk" class="play-install-btn" id="downloadActionAnchor" download>Install</a>
+    <a href="https://github.com/savi777online/Savi777/releases/download/v1.0.0/Gogami.apk" class="play-install-btn" id="downloadActionAnchor" download>Install</a>
     <div class="already-installed-box" id="alreadyActivePill">Installed</div>
 
     <!-- Play Payout Rates Sheet Grid Display Box -->
@@ -173,7 +180,7 @@
 
     <h2 class="play-section-title">About this app</h2>
     <p class="play-app-description-text">
-        Experience lightning-fast market updates and secure withdrawal clearances inside the official SAVI777 application suite. Engineered with responsive layouts and cloud database matching framework. Founded by Durga Official in 2021.
+        Experience lightning-fast market updates and secure withdrawal clearances inside the official GOGAMI application suite. Engineered with responsive layouts and cloud database matching framework. Founded by GOGAMI Official in 2021.
     </p>
 
     <!-- Google Play Ratings & Real-Time Review Simulation Engine -->
@@ -189,7 +196,7 @@
     <!-- Interactive New Review Gate Panel Section -->
     <div class="interactive-user-review-panel">
         <div style="font-size:13px; font-weight:500; color:#202124; margin-bottom:6px;">Rate this application</div>
-        <textarea id="userReviewInputField" class="review-input-box" rows="2" placeholder="Describe your experience with Savi777 App..."></textarea>
+        <textarea id="userReviewInputField" class="review-input-box" rows="2" placeholder="Describe your experience with GOGAMI App..."></textarea>
         <button class="review-submit-action-btn" onclick="executeSimulatedReviewSubmission()">Submit Review</button>
     </div>
 
