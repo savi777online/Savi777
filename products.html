@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products & Pricing - savi777</title>
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --bg-dark: #07090e;
+            --card-bg: #111827;
+            --text-light: #f3f4f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); overflow-x: hidden; }
+        
+        header { background: linear-gradient(90deg, #030712, #111827); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        header h1 { color: var(--primary); font-size: 26px; text-transform: uppercase; letter-spacing: 2px; }
+        .nav-links a { color: var(--text-light); text-decoration: none; margin-left: 25px; font-size: 15px; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        .container { max-width: 1450px; margin: auto; padding: 30px 20px; }
+        .category-title { font-size: 24px; margin: 40px 0 20px 0; color: var(--primary); border-left: 5px solid var(--primary); padding-left: 12px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 10px; padding: 20px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #1f2937; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15); border-color: var(--primary); }
+        
+        .card h3 { font-size: 17px; margin-bottom: 15px; height: 50px; overflow: hidden; color: #e5e7eb; display: flex; align-items: center; justify-content: center; }
+        .price { font-size: 20px; color: var(--primary); font-weight: bold; margin-bottom: 15px; }
+        
+        .buy-btn { background: var(--primary); color: #000; border: none; padding: 10px 15px; font-size: 15px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background 0.2s; width: 100%; }
+        .buy-btn:hover { background: #00ccb1; }
+
+        footer { text-align: center; padding: 40px; background: #030712; margin-top: 60px; border-top: 1px solid #1f2937; color: #4b5563; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>savi777 Store</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="products.html">Products</a>
+            <a href="booking.html">Login/Booking</a>
+        </div>
+    </header>
+
+    <div class="container" id="products-container">
+        <!-- Javascript will inject product catalog -->
+    </div>
+
+    <footer>
+        <p>&copy; 2026 savi777. All rights reserved. Powered by GitHub Pages.</p>
+    </footer>
+
+    <script>
+        const storeCatalog = [
+            {
+                category: "Processors (CPUs - Intel & AMD)",
+                items: [
+                    "Intel Core i9-14900KS Special Edition", "AMD Ryzen 9 7950X3D Gaming Processor", "Intel Core i7-14700K Desktop Chip", 
+                    "AMD Ryzen 7 7800X3D Processor", "Intel Core i5-14600K Unlocked", "AMD Ryzen 5 7600X Desktop CPU", 
+                    "Intel Core i3-13100F Budget Quad-Core", "AMD Ryzen 9 5950X AM4 Processor", "Intel Core i9-13900K Processor", 
+                    "AMD Ryzen 7 5800X3D Processor", "Intel Core i5-12400F Value CPU", "AMD Ryzen 5 5600X Hexa-Core"
+                ]
+            },
+            {
+                category: "Graphics Cards (GPUs - NVIDIA & AMD & Intel)",
+                items: [
+                    "NVIDIA GeForce RTX 4090 24GB Founders", "AMD Radeon RX 7900 XTX 24GB", "NVIDIA GeForce RTX 4080 Super 16GB", 
+                    "NVIDIA GeForce RTX 4070 Ti Super", "AMD Radeon RX 7900 XT 20GB", "NVIDIA GeForce RTX 4070 12GB", 
+                    "AMD Radeon RX 7800 XT 16GB", "NVIDIA GeForce RTX 4060 Ti 8GB", "AMD Radeon RX 7700 XT 12GB", 
+                    "NVIDIA GeForce RTX 4060 8GB", "Intel Arc A770 Limited Edition 16GB", "NVIDIA GeForce RTX 3060 12GB"
+                ]
+            },
+            {
+                category: "Motherboards (Intel LGA1700 & AMD AM5/AM4)",
+                items: [
+                    "ASUS ROG Maximus Z790 Hero WiFi", "MSI MPG B650 Tomahawk WiFi", "Gigabyte X670E Aorus Master", 
+                    "ASRock B760M Steel Legend WiFi", "ASUS TUF Gaming Z790-PLUS WiFi", "MSI MAG B550 TOMAHAWK Gaming", 
+                    "NZXT N7 Z790 Matte White Motherboard", "Gigabyte B650M DS3H Micro-ATX", "ASUS Prime X670-P WiFi", 
+                    "MSI PRO Z790-P WIFI DDR5", "Biostar Racing Z690GTA", "ASRock X670E Taichi Carrara"
+                ]
+            },
+            {
+                category: "Memory (RAM - DDR5 & DDR4 Kits)",
+                items: [
+                    "Corsair Vengeance RGB 32GB (2x16) DDR5 6000MHz", "G.Skill Trident Z5 RGB 64GB (2x32) DDR5", 
+                    "Kingston Fury Beast 16GB (1x16) DDR4 3200MHz", "TeamGroup T-Force Delta RGB 32GB DDR5", 
+                    "Corsair Dominator Titanium 32GB DDR5 6600MHz", "Crucial 16GB (2x8) DDR4 2666MHz RAM", 
+                    "ADATA XPG Lancer RGB 32GB DDR5 5600MHz", "Patriot Viper Steel 16GB DDR4 3600MHz", 
+                    "G.Skill Ripjaws S5 32GB DDR5 5200MHz", "Thermaltake Toughram XG RGB 32GB"
+                ]
+            }
+        ];
+
+        const container = document.getElementById('products-container');
+
+        storeCatalog.forEach((cat) => {
+            let catTitle = document.createElement('h2');
+            catTitle.className = 'category-title';
+            catTitle.innerText = cat.category;
+            container.appendChild(catTitle);
+
+            let grid = document.createElement('div');
+            grid.className = 'grid';
+
+            cat.items.forEach((item) => {
+                let price = Math.floor(Math.random() * (175000 - 1500 + 1)) + 1500;
+                let card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${item}</h3>
+                    <div class="price">₹${price.toLocaleString('en-IN')}</div>
+                    <button class="buy-btn" onclick="buyItem('${item.replace(/'/g, "")}', ${price})">Buy Now</button>
+                `;
+                grid.appendChild(card);
+            });
+            container.appendChild(grid);
+        });
+
+        function buyItem(name, price) {
+            localStorage.setItem('selectedItem', name);
+            localStorage.setItem('selectedPrice', price);
+            window.location.href = 'checkout.html';
+        }
+    </script>
+</body>
+</html>
