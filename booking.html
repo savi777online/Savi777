@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Booking - savi777</title>
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --bg-dark: #07090e;
+            --card-bg: #111827;
+            --text-light: #f3f4f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); overflow-x: hidden; }
+        
+        header { background: linear-gradient(90deg, #030712, #111827); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        header h1 { color: var(--primary); font-size: 26px; text-transform: uppercase; letter-spacing: 2px; }
+        .nav-links a { color: var(--text-light); text-decoration: none; margin-left: 25px; font-size: 15px; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        .container { max-width: 600px; margin: auto; padding: 50px 20px; }
+        .booking-form { background: var(--card-bg); border-radius: 15px; padding: 50px; border: 1px solid #1f2937; }
+        .booking-form h2 { color: var(--primary); font-size: 28px; margin-bottom: 10px; }
+        .booking-form p.subtitle { color: #9ca3af; margin-bottom: 30px; font-size: 14px; }
+        
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; color: var(--text-light); margin-bottom: 8px; font-weight: 500; }
+        .form-group label .required { color: #ef4444; margin-left: 3px; }
+        .form-group input { width: 100%; padding: 12px 15px; background: #1f2937; border: 2px solid #1f2937; border-radius: 8px; color: var(--text-light); font-size: 15px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        .form-group input.error { border-color: #ef4444; }
+        .error-msg { color: #ef4444; font-size: 13px; margin-top: 5px; display: none; }
+        
+        .submit-btn { width: 100%; padding: 14px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        .submit-btn:hover { background: #00ccb1; }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .success-msg { background: #064e3b; border: 1px solid #10b981; color: #10b981; padding: 15px; border-radius: 8px; margin-top: 20px; display: none; text-align: center; }
+
+        footer { text-align: center; padding: 40px; background: #030712; margin-top: 60px; border-top: 1px solid #1f2937; color: #4b5563; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>savi777 Store</h1>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="products.html">Products</a>
+            <a href="booking.html">Login/Booking</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="booking-form">
+            <h2>📋 Booking Form</h2>
+            <p class="subtitle">Please fill in your details to proceed with your order</p>
+            
+            <form id="bookingForm" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label>Customer Name <span class="required">*</span></label>
+                    <input type="text" id="customerName" placeholder="Enter your full name" required>
+                    <div class="error-msg" id="nameError">Please enter your name</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Address <span class="required">*</span></label>
+                    <input type="text" id="customerAddress" placeholder="Enter your complete address" required>
+                    <div class="error-msg" id="addressError">Please enter your address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email ID <span class="required">*</span></label>
+                    <input type="email" id="customerEmail" placeholder="Enter your email address" required>
+                    <div class="error-msg" id="emailError">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mobile Number <span class="required">*</span></label>
+                    <input type="tel" id="customerMobile" placeholder="Enter your 10-digit mobile number" required>
+                    <div class="error-msg" id="mobileError">Please enter a valid 10-digit mobile number</div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">Submit Booking</button>
+            </form>
+            
+            <div class="success-msg" id="successMsg">
+                ✅ Booking submitted successfully! We will contact you shortly.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 savi777. All rights reserved. Powered by GitHub Pages.</p>
+    </footer>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Reset errors
+            document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.form-group input').forEach(el => el.classList.remove('error'));
+            
+            // Get values
+            const name = document.getElementById('customerName').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            const mobile = document.getElementById('customerMobile').value.trim();
+            
+            let isValid = true;
+            
+            // Validate Name
+            if (name.length < 2) {
+                document.getElementById('nameError').style.display = 'block';
+                document.getElementById('customerName').classList.add('error');
+                isValid = false;
+            }
+            
+            // Validate Address
+            if (address.length < 5) {
+                document.getElementById('addressError').style.display = 'block';
+                document.getElementById('customerAddress').classList.add('error');
+                isValid = false;
+            }
+            
+            // Validate Email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                document.getElementById('customerEmail').classList.add('error');
+                isValid = false;
+            }
+            
+            // Validate Mobile (10 digits)
+            const mobilePattern = /^[0-9]{10}$/;
+            if (!mobilePattern.test(mobile)) {
+                document.getElementById('mobileError').style.display = 'block';
+                document.getElementById('customerMobile').classList.add('error');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Disable button and show success
+                document.getElementById('submitBtn').disabled = true;
+                document.getElementById('submitBtn').textContent = 'Submitting...';
+                document.getElementById('successMsg').style.display = 'block';
+                
+                // Log data (in real app, send to server)
+                console.log({
+                    name: name,
+                    address: address,
+                    email: email,
+                    mobile: mobile
+                });
+                
+                // Reset form after delay
+                setTimeout(() => {
+                    document.getElementById('bookingForm').reset();
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('submitBtn').textContent = 'Submit Booking';
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
