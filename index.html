@@ -18,7 +18,6 @@
         header h1 { color: var(--primary); font-size: 26px; text-transform: uppercase; letter-spacing: 2px; }
         .cart-info { background: var(--primary); color: #000; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }
 
-        /* NEW: Navigation Styles */
         .nav-bar { background: #111827; padding: 12px 40px; border-bottom: 1px solid #1f2937; text-align: center; overflow-x: auto; white-space: nowrap; }
         .nav-bar a { color: #f3f4f6; text-decoration: none; margin: 0 12px; font-size: 14px; transition: color 0.3s; display: inline-block; }
         .nav-bar a:hover { color: var(--primary); }
@@ -41,7 +40,6 @@
         .buy-btn { background: var(--primary); color: #000; border: none; padding: 10px 15px; font-size: 15px; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background 0.2s; width: 100%; }
         .buy-btn:hover { background: #00ccb1; }
 
-        /* NEW: Footer Links */
         .footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px; }
         .footer-links a { color: #9ca3af; text-decoration: none; font-size: 13px; transition: color 0.3s; }
         .footer-links a:hover { color: var(--primary); }
@@ -56,7 +54,6 @@
         <div class="cart-info">Massive Hardware Catalog</div>
     </header>
 
-    <!-- NEW: Navigation Bar -->
     <div class="nav-bar">
         <a href="index.html" class="active">🏠 Home</a>
         <a href="about.html">About Us</a>
@@ -78,7 +75,6 @@
     </div>
 
     <footer>
-        <!-- NEW: Footer Links -->
         <div class="footer-links">
             <a href="index.html">Home</a>
             <a href="about.html">About Us</a>
@@ -93,118 +89,184 @@
     </footer>
 
     <script>
+        // FIXED PRICES - No random generation!
         const storeCatalog = [
             {
                 category: "Processors (CPUs - Intel & AMD)",
                 items: [
-                    "Intel Core i9-14900KS Special Edition", "AMD Ryzen 9 7950X3D Gaming Processor", "Intel Core i7-14700K Desktop Chip", 
-                    "AMD Ryzen 7 7800X3D Processor", "Intel Core i5-14600K Unlocked", "AMD Ryzen 5 7600X Desktop CPU", 
-                    "Intel Core i3-13100F Budget Quad-Core", "AMD Ryzen 9 5950X AM4 Processor", "Intel Core i9-13900K Processor", 
-                    "AMD Ryzen 7 5800X3D Processor", "Intel Core i5-12400F Value CPU", "AMD Ryzen 5 5600X Hexa-Core"
+                    { name: "Intel Core i9-14900KS Special Edition", price: 185000 },
+                    { name: "AMD Ryzen 9 7950X3D Gaming Processor", price: 172000 },
+                    { name: "Intel Core i7-14700K Desktop Chip", price: 102000 },
+                    { name: "AMD Ryzen 7 7800X3D Processor", price: 89000 },
+                    { name: "Intel Core i5-14600K Unlocked", price: 66000 },
+                    { name: "AMD Ryzen 5 7600X Desktop CPU", price: 52000 },
+                    { name: "Intel Core i3-13100F Budget Quad-Core", price: 27000 },
+                    { name: "AMD Ryzen 9 5950X AM4 Processor", price: 158000 },
+                    { name: "Intel Core i9-13900K Processor", price: 165000 },
+                    { name: "AMD Ryzen 7 5800X3D Processor", price: 78000 },
+                    { name: "Intel Core i5-12400F Value CPU", price: 48000 },
+                    { name: "AMD Ryzen 5 5600X Hexa-Core", price: 44000 }
                 ]
             },
             {
                 category: "Graphics Cards (GPUs - NVIDIA & AMD & Intel)",
                 items: [
-                    "NVIDIA GeForce RTX 4090 24GB Founders", "AMD Radeon RX 7900 XTX 24GB", "NVIDIA GeForce RTX 4080 Super 16GB", 
-                    "NVIDIA GeForce RTX 4070 Ti Super", "AMD Radeon RX 7900 XT 20GB", "NVIDIA GeForce RTX 4070 12GB", 
-                    "AMD Radeon RX 7800 XT 16GB", "NVIDIA GeForce RTX 4060 Ti 8GB", "NVIDIA GeForce RTX 7700 XT 12GB", 
-                    "NVIDIA GeForce RTX 4060 8GB", "Intel Arc A770 Limited Edition 16GB", "NVIDIA GeForce RTX 3060 12GB"
+                    { name: "NVIDIA GeForce RTX 4090 24GB Founders", price: 215000 },
+                    { name: "AMD Radeon RX 7900 XTX 24GB", price: 182000 },
+                    { name: "NVIDIA GeForce RTX 4080 Super 16GB", price: 165000 },
+                    { name: "NVIDIA GeForce RTX 4070 Ti Super", price: 128000 },
+                    { name: "AMD Radeon RX 7900 XT 20GB", price: 145000 },
+                    { name: "NVIDIA GeForce RTX 4070 12GB", price: 88000 },
+                    { name: "AMD Radeon RX 7800 XT 16GB", price: 92000 },
+                    { name: "NVIDIA GeForce RTX 4060 Ti 8GB", price: 62000 },
+                    { name: "AMD Radeon RX 7700 XT 12GB", price: 75000 },
+                    { name: "NVIDIA GeForce RTX 4060 8GB", price: 47000 },
+                    { name: "Intel Arc A770 Limited Edition 16GB", price: 58000 },
+                    { name: "NVIDIA GeForce RTX 3060 12GB", price: 52000 }
                 ]
             },
             {
                 category: "Motherboards (Intel LGA1700 & AMD AM5/AM4)",
                 items: [
-                    "ASUS ROG Maximus Z790 Hero WiFi", "MSI MPG B650 Tomahawk WiFi", "Gigabyte X670E Aorus Master", 
-                    "ASRock B760M Steel Legend WiFi", "ASUS TUF Gaming Z790-PLUS WiFi", "MSI MAG B550 TOMAHAWK Gaming", 
-                    "NZXT N7 Z790 Matte White Motherboard", "Gigabyte B650M DS3H Micro-ATX", "ASUS Prime X670-P WiFi", 
-                    "MSI PRO Z790-P WIFI DDR5", "Biostar Racing Z690GTA", "ASRock X670E Taichi Carrara"
+                    { name: "ASUS ROG Maximus Z790 Hero WiFi", price: 95000 },
+                    { name: "MSI MPG B650 Tomahawk WiFi", price: 58000 },
+                    { name: "Gigabyte X670E Aorus Master", price: 72000 },
+                    { name: "ASRock B760M Steel Legend WiFi", price: 42000 },
+                    { name: "ASUS TUF Gaming Z790-PLUS WiFi", price: 65000 },
+                    { name: "MSI MAG B550 TOMAHAWK Gaming", price: 48000 },
+                    { name: "NZXT N7 Z790 Matte White Motherboard", price: 78000 },
+                    { name: "Gigabyte B650M DS3H Micro-ATX", price: 38000 },
+                    { name: "ASUS Prime X670-P WiFi", price: 55000 },
+                    { name: "MSI PRO Z790-P WIFI DDR5", price: 62000 },
+                    { name: "Biostar Racing Z690GTA", price: 48000 },
+                    { name: "ASRock X670E Taichi Carrara", price: 85000 }
                 ]
             },
             {
                 category: "Memory (RAM - DDR5 & DDR4 Kits)",
                 items: [
-                    "Corsair Vengeance RGB 32GB (2x16) DDR5 6000MHz", "G.Skill Trident Z5 RGB 64GB (2x32) DDR5", 
-                    "Kingston Fury Beast 16GB (1x16) DDR4 3200MHz", "TeamGroup T-Force Delta RGB 32GB DDR5", 
-                    "Corsair Dominator Titanium 32GB DDR5 6600MHz", "Crucial 16GB (2x8) DDR4 2666MHz RAM", 
-                    "ADATA XPG Lancer RGB 32GB DDR5 5600MHz", "Patriot Viper Steel 16GB DDR4 3600MHz", 
-                    "G.Skill Ripjaws S5 32GB DDR5 5200MHz", "Thermaltake Toughram XG RGB 32GB"
+                    { name: "Corsair Vengeance RGB 32GB (2x16) DDR5 6000MHz", price: 32000 },
+                    { name: "G.Skill Trident Z5 RGB 64GB (2x32) DDR5", price: 58000 },
+                    { name: "Kingston Fury Beast 16GB (1x16) DDR4 3200MHz", price: 12000 },
+                    { name: "TeamGroup T-Force Delta RGB 32GB DDR5", price: 28000 },
+                    { name: "Corsair Dominator Titanium 32GB DDR5 6600MHz", price: 45000 },
+                    { name: "Crucial 16GB (2x8) DDR4 2666MHz RAM", price: 8500 },
+                    { name: "ADATA XPG Lancer RGB 32GB DDR5 5600MHz", price: 25000 },
+                    { name: "Patriot Viper Steel 16GB DDR4 3600MHz", price: 9500 },
+                    { name: "G.Skill Ripjaws S5 32GB DDR5 5200MHz", price: 22000 },
+                    { name: "Thermaltake Toughram XG RGB 32GB", price: 26000 }
                 ]
             },
             {
                 category: "Storage (NVMe M.2 SSDs & Hard Drives)",
                 items: [
-                    "Samsung 990 PRO 2TB PCIe 4.0 NVMe SSD", "WD Black SN850X 1TB NVMe Gaming SSD", 
-                    "Crucial T700 2TB Gen5 NVMe M.2 SSD", "Seagate Barracuda 4TB 5400RPM Desktop HDD", 
-                    "Kingston KC3000 2TB High Performance SSD", "Sabrent Rocket 4 Plus 2TB NVMe SSD", 
-                    "SanDisk Extreme 1TB Portable External SSD", "Toshiba 2TB 7200RPM Internal Hard Drive", 
-                    "Lexar NM790 2TB NVMe with Heatsink", "Western Digital Blue 2TB SATA HDD"
+                    { name: "Samsung 990 PRO 2TB PCIe 4.0 NVMe SSD", price: 45000 },
+                    { name: "WD Black SN850X 1TB NVMe Gaming SSD", price: 28000 },
+                    { name: "Crucial T700 2TB Gen5 NVMe M.2 SSD", price: 58000 },
+                    { name: "Seagate Barracuda 4TB 5400RPM Desktop HDD", price: 22000 },
+                    { name: "Kingston KC3000 2TB High Performance SSD", price: 38000 },
+                    { name: "Sabrent Rocket 4 Plus 2TB NVMe SSD", price: 42000 },
+                    { name: "SanDisk Extreme 1TB Portable External SSD", price: 18000 },
+                    { name: "Toshiba 2TB 7200RPM Internal Hard Drive", price: 16000 },
+                    { name: "Lexar NM790 2TB NVMe with Heatsink", price: 35000 },
+                    { name: "Western Digital Blue 2TB SATA HDD", price: 15000 }
                 ]
             },
             {
                 category: "Power Supply Units (PSU - 80+ Gold/Platinum)",
                 items: [
-                    "Corsair RM1000x Shift 80+ Gold Fully Modular", "Seasonic Prime TX-1600 80+ Titanium PSU", 
-                    "EVGA SuperNOVA 850 GT, 80+ Gold 850W", "Thermaltake Toughpower GF3 750W ATX 3.0", 
-                    "Cooler Master MWE Gold 650 V2 Full Modular", "Be Quiet! Dark Power 13 850W PSU", 
-                    "MSI MPG A850GF 850 Watt Gaming Power Supply", "Asus ROG Thor 1200W Platinum II", 
-                    "DeepCool PK650D Non-Modular PSU", "NZXT C850 PSU Gold Certified"
+                    { name: "Corsair RM1000x Shift 80+ Gold Fully Modular", price: 38000 },
+                    { name: "Seasonic Prime TX-1600 80+ Titanium PSU", price: 82000 },
+                    { name: "EVGA SuperNOVA 850 GT, 80+ Gold 850W", price: 32000 },
+                    { name: "Thermaltake Toughpower GF3 750W ATX 3.0", price: 28000 },
+                    { name: "Cooler Master MWE Gold 650 V2 Full Modular", price: 22000 },
+                    { name: "Be Quiet! Dark Power 13 850W PSU", price: 45000 },
+                    { name: "MSI MPG A850GF 850 Watt Gaming Power Supply", price: 35000 },
+                    { name: "Asus ROG Thor 1200W Platinum II", price: 75000 },
+                    { name: "DeepCool PK650D Non-Modular PSU", price: 18000 },
+                    { name: "NZXT C850 PSU Gold Certified", price: 33000 }
                 ]
             },
             {
                 category: "PC Cases / Cabinets (Mid & Full Tower)",
                 items: [
-                    "Lian Li O11 Dynamic EVO Glass Mid-Tower", "NZXT H9 Flow Dual-Chamber Airflow Case", 
-                    "Corsair 4000D Airflow Tempered Glass Case", "Fractal Design North Charcoal Black/Walnut", 
-                    "Phanteks Eclipse G500A Performance ATX Case", "Cooler Master MasterBox TD500 Mesh V2", 
-                    "Antec DF700 Flux Mid-Tower Gaming Case", "Montech AIR 903 MAX High Airflow Case", 
-                    "Lian Li Lancool 216 RGB Black", "Thermaltake Core P3 TG Pro Open Frame"
+                    { name: "Lian Li O11 Dynamic EVO Glass Mid-Tower", price: 32000 },
+                    { name: "NZXT H9 Flow Dual-Chamber Airflow Case", price: 28000 },
+                    { name: "Corsair 4000D Airflow Tempered Glass Case", price: 18000 },
+                    { name: "Fractal Design North Charcoal Black/Walnut", price: 25000 },
+                    { name: "Phanteks Eclipse G500A Performance ATX Case", price: 22000 },
+                    { name: "Cooler Master MasterBox TD500 Mesh V2", price: 19000 },
+                    { name: "Antec DF700 Flux Mid-Tower Gaming Case", price: 15000 },
+                    { name: "Montech AIR 903 MAX High Airflow Case", price: 12000 },
+                    { name: "Lian Li Lancool 216 RGB Black", price: 21000 },
+                    { name: "Thermaltake Core P3 TG Pro Open Frame", price: 28000 }
                 ]
             },
             {
                 category: "CPU Coolers (Liquid AIO & Air Coolers)",
                 items: [
-                    "NZXT Kraken Elite 360 RGB Liquid Cooler", "Corsair iCUE H150i Elite Capellix XT AIO", 
-                    "Noctua NH-D15 chromax.black Dual-Tower Cooler", "DeepCool AK620 Digital CPU Air Cooler", 
-                    "Thermalright Peerless Assassin 120 SE", "Be Quiet! Pure Loop 2 FX 240mm AIO", 
-                    "Arctic Liquid Freezer III 360 ARGB", "Cooler Master Hyper 212 Halo Black", 
-                    "ID-COOLING SE-224-XT Basic Air Cooler", "MSI MAG CoreLiquid 360R V2"
+                    { name: "NZXT Kraken Elite 360 RGB Liquid Cooler", price: 38000 },
+                    { name: "Corsair iCUE H150i Elite Capellix XT AIO", price: 32000 },
+                    { name: "Noctua NH-D15 chromax.black Dual-Tower Cooler", price: 22000 },
+                    { name: "DeepCool AK620 Digital CPU Air Cooler", price: 15000 },
+                    { name: "Thermalright Peerless Assassin 120 SE", price: 12000 },
+                    { name: "Be Quiet! Pure Loop 2 FX 240mm AIO", price: 18000 },
+                    { name: "Arctic Liquid Freezer III 360 ARGB", price: 16000 },
+                    { name: "Cooler Master Hyper 212 Halo Black", price: 10000 },
+                    { name: "ID-COOLING SE-224-XT Basic Air Cooler", price: 8000 },
+                    { name: "MSI MAG CoreLiquid 360R V2", price: 21000 }
                 ]
             },
             {
                 category: "Gaming Monitors & Displays",
                 items: [
-                    "LG Ultragear 27GR95QE-B 27inch OLED 240Hz", "ASUS ROG Swift 360Hz PG27AQN Esports Monitor", 
-                    "Gigabyte M32U 32inch 4K UHD 144Hz Gaming", "Samsung Odyssey G9 49inch Curved 240Hz", 
-                    "Dell Alienware AW2723DF 280Hz Fast IPS", "Acer Nitro XV272U Vbmiiprx 27inch 170Hz", 
-                    "MSI Optix MAG274QRF-QD 27inch Quantum Dot", "BenQ Zowie XL2566K 360Hz DyAc+ Monitor"
+                    { name: "LG Ultragear 27GR95QE-B 27inch OLED 240Hz", price: 125000 },
+                    { name: "ASUS ROG Swift 360Hz PG27AQN Esports Monitor", price: 98000 },
+                    { name: "Gigabyte M32U 32inch 4K UHD 144Hz Gaming", price: 85000 },
+                    { name: "Samsung Odyssey G9 49inch Curved 240Hz", price: 165000 },
+                    { name: "Dell Alienware AW2723DF 280Hz Fast IPS", price: 72000 },
+                    { name: "Acer Nitro XV272U Vbmiiprx 27inch 170Hz", price: 48000 },
+                    { name: "MSI Optix MAG274QRF-QD 27inch Quantum Dot", price: 56000 },
+                    { name: "BenQ Zowie XL2566K 360Hz DyAc+ Monitor", price: 89000 }
                 ]
             },
             {
                 category: "Keyboards, Mice & Peripherals",
                 items: [
-                    "Razer Huntsman V3 Pro Analog Optical Keyboard", "Logitech G Pro X Superlight 2 Wireless Mouse", 
-                    "SteelSeries Apex Pro Mechanical Keyboard", "Corsair K70 RGB Pro Mechanical Gaming Keyboard", 
-                    "Razer Viper V3 Pro Lightweight Mouse", "HyperX Alloy Origins 60 Mechanical Keyboard", 
-                    "Logitech G502 X Plus Wireless Gaming Mouse", "Zowie EC2-C Ergonomic Esports Mouse"
+                    { name: "Razer Huntsman V3 Pro Analog Optical Keyboard", price: 32000 },
+                    { name: "Logitech G Pro X Superlight 2 Wireless Mouse", price: 25000 },
+                    { name: "SteelSeries Apex Pro Mechanical Keyboard", price: 28000 },
+                    { name: "Corsair K70 RGB Pro Mechanical Gaming Keyboard", price: 22000 },
+                    { name: "Razer Viper V3 Pro Lightweight Mouse", price: 18000 },
+                    { name: "HyperX Alloy Origins 60 Mechanical Keyboard", price: 15000 },
+                    { name: "Logitech G502 X Plus Wireless Gaming Mouse", price: 16000 },
+                    { name: "Zowie EC2-C Ergonomic Esports Mouse", price: 12000 }
                 ]
             },
             {
                 category: "Headsets & Audio Solutions",
                 items: [
-                    "SteelSeries Arctis Nova Pro Wireless Headset", "HyperX Cloud III Wireless Gaming Headset", 
-                    "Razer BlackShark V2 Pro Wireless Headset", "Logitech G PRO X 2 LIGHTSPEED Headset", 
-                    "Beyerdynamic DT 770 PRO Studio Headphones", "Audio-Technica ATH-M50xBT2 Bluetooth", 
-                    "Corsair Virtuoso RGB Wireless XT", "Sennheiser EPOS H6PRO Closed Acoustic"
+                    { name: "SteelSeries Arctis Nova Pro Wireless Headset", price: 38000 },
+                    { name: "HyperX Cloud III Wireless Gaming Headset", price: 22000 },
+                    { name: "Razer BlackShark V2 Pro Wireless Headset", price: 28000 },
+                    { name: "Logitech G PRO X 2 LIGHTSPEED Headset", price: 32000 },
+                    { name: "Beyerdynamic DT 770 PRO Studio Headphones", price: 18000 },
+                    { name: "Audio-Technica ATH-M50xBT2 Bluetooth", price: 22000 },
+                    { name: "Corsair Virtuoso RGB Wireless XT", price: 25000 },
+                    { name: "Sennheiser EPOS H6PRO Closed Acoustic", price: 28000 }
                 ]
             },
             {
                 category: "Case Fans & Accessories",
                 items: [
-                    "Lian Li Uni Fan SL-Infinity 120 (3-Pack)", "Corsair iCUE QL120 RGB PWM Fans (3-Pack)", 
-                    "Noctua NF-A12x25 PWM Premium Fan", "Arctic P12 PWM PST Value Pack (5-Pack)", 
-                    "Phanteks D30-120 High-Performance Fans", "DeepCool FC120 White ARGB Fans", 
-                    "Lian Li Strimer Plus V2 24-Pin ARGB Cable", "Thermalright TL-C12C-S CPU Fan 3-Pack"
+                    { name: "Lian Li Uni Fan SL-Infinity 120 (3-Pack)", price: 18000 },
+                    { name: "Corsair iCUE QL120 RGB PWM Fans (3-Pack)", price: 16000 },
+                    { name: "Noctua NF-A12x25 PWM Premium Fan", price: 5500 },
+                    { name: "Arctic P12 PWM PST Value Pack (5-Pack)", price: 12000 },
+                    { name: "Phanteks D30-120 High-Performance Fans", price: 14000 },
+                    { name: "DeepCool FC120 White ARGB Fans", price: 10000 },
+                    { name: "Lian Li Strimer Plus V2 24-Pin ARGB Cable", price: 8500 },
+                    { name: "Thermalright TL-C12C-S CPU Fan 3-Pack", price: 7500 }
                 ]
             }
         ];
@@ -221,13 +283,12 @@
             grid.className = 'grid';
 
             cat.items.forEach((item) => {
-                let price = Math.floor(Math.random() * (175000 - 1500 + 1)) + 1500;
                 let card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <h3>${item}</h3>
-                    <div class="price">₹${price.toLocaleString('en-IN')}</div>
-                    <button class="buy-btn" onclick="buyItem('${item.replace(/'/g, "")}', ${price})">Buy Now</button>
+                    <h3>${item.name}</h3>
+                    <div class="price">₹${item.price.toLocaleString('en-IN')}</div>
+                    <button class="buy-btn" onclick="buyItem('${item.name.replace(/'/g, "")}', ${item.price})">Buy Now</button>
                 `;
                 grid.appendChild(card);
             });
