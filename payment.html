@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Payment</title>
+    <title>Secure UPI Payment</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
         .payment-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; width: 300px; }
@@ -33,7 +33,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // पेमेंट बटन क्लिक इवेंट
+        // URL से User ID निकालना (जो Android Studio भेजेगा)
+        const urlParams = new URLSearchParams(window.location.search);
+        const userid = urlParams.get('userid') || "UNKNOWN_USER";
+
         document.getElementById('pay-btn').addEventListener('click', async () => {
             const amount = document.getElementById('amount').value;
             const statusMsg = document.getElementById('status-msg');
@@ -44,45 +47,44 @@
             }
 
             statusMsg.style.color = "blue";
-            statusMsg.innerText = "Processing... Please wait.";
+            statusMsg.innerText = "Opening UPI Apps... Please wait.";
             document.getElementById('pay-btn').disabled = true;
 
             const txnid = "TXN" + new Date().getTime(); 
-            const merchantKey = "BuIISI"; // यहाँ अपनी असली PayU Key (टोकन) डालें
+            const merchantKey = "YOUR_PAYU_MERCHANT_KEY"; // 🔴 यहाँ अपनी PayU Key (टोकन) डालें
             const productinfo = "Wallet Deposit";
             const firstname = "User"; 
             const email = "user@example.com";
             const phone = "9999999999";
             
-            // GitHub Pages के लिंक्स (यहाँ अपना यूजरनेम और रिपॉजिटरी नाम बदलें)
-            const surl = "https://savi777.online/payment.html?status=success";
-            const furl = "https://savi777.online/payment.htmll?status=failed";
+            // 🔴 GitHub Pages URLs (यहाँ अपना Github यूजरनेम और रिपॉजिटरी नाम डालें)
+            const surl = "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/payment.html?status=success";
+            const furl = "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/payment.html?status=failed";
 
             try {
-                // 1. Firestore डेटाबेस में पेंडिंग ट्रांज़ैक्शन सेव करें
+                // 1. Firestore में पेंडिंग सेव करें (User ID के साथ)
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amount,
                     status: "pending",
                     txnid: txnid,
+                    userid: userid,
                     createdAt: new Date()
                 });
 
-                // 2. Cloud Function से Hash प्राप्त करें
-                const functionURL = "https://us-central1-mahalakshmi-91935.cloudfunctions.net/generatePayUHash";
+                // 2. Cloud Function (Hash) कॉल करें (नया URL अपडेट कर दिया गया है)
+                const functionURL = "https://generatepayuhash-u7nrsrlm5q-uc.a.run.app";
                 
                 const response = await fetch(functionURL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ txnid, amount, productinfo, firstname, email })
+                    body: JSON.stringify({ txnid, amount, productinfo, firstname, email, userid })
                 });
                 
                 const data = await response.json();
                 
-                if (!data.hash) {
-                    throw new Error("Hash generation failed!");
-                }
+                if (!data.hash) throw new Error("Hash failed!");
 
-                // 3. PayU पेमेंट गेटवे पर फॉर्म सबमिट करें
+                // 3. PayU फॉर्म (Direct UPI के लिए)
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = "https://secure.payu.in/_payment"; 
@@ -97,7 +99,9 @@
                     phone: phone,
                     surl: surl,
                     furl: furl,
-                    hash: data.hash
+                    hash: data.hash,
+                    udf1: userid,  // यह Webhook को बताएगा कि पॉइंट्स किसे देने हैं
+                    pg: "UPI"      // इससे सीधा UPI ऑप्शन खुलेगा
                 };
 
                 for (const key in params) {
@@ -114,35 +118,29 @@
             } catch (error) {
                 console.error(error);
                 statusMsg.style.color = "red";
-                statusMsg.innerText = "Error occurred. Try again.";
+                statusMsg.innerText = "Error. Try again.";
                 document.getElementById('pay-btn').disabled = false;
             }
         });
 
-        // पेमेंट के बाद स्टेटस दिखाना
+        // पेमेंट के बाद स्टेटस
         window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const status = urlParams.get('status');
-            const statusMsg = document.getElementById('status-msg');
-            
-            if (status === 'success') {
-                statusMsg.style.color = "green";
-                statusMsg.innerText = "Payment Successful!";
-            } else if (status === 'failed') {
-                statusMsg.style.color = "red";
-                statusMsg.innerText = "Payment Failed!";
+            if (urlParams.get('status') === 'success') {
+                document.getElementById('status-msg').style.color = "green";
+                document.getElementById('status-msg').innerText = "Payment Successful! Points Added.";
+            } else if (urlParams.get('status') === 'failed') {
+                document.getElementById('status-msg').style.color = "red";
+                document.getElementById('status-msg').innerText = "Payment Failed!";
             }
         };
     </script>
 </head>
 <body>
-
     <div class="payment-box">
         <h2>Add Deposit</h2>
         <input type="number" id="amount" placeholder="Enter Amount (₹)" required>
-        <button id="pay-btn">Pay Now</button>
+        <button id="pay-btn">Pay with UPI</button>
         <div id="status-msg"></div>
     </div>
-
 </body>
 </html>
