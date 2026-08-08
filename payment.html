@@ -1,300 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
+        .payment-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; width: 300px; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; }
+        button:hover { background-color: #218838; }
+        #status-msg { margin-top: 15px; font-weight: bold; }
+    </style>
 
-  <title>Make Payment</title>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+        // आपकी Firebase कॉन्फ़िगरेशन
+        const firebaseConfig = {
+            apiKey: "AIzaSyBjG-uwtWfr3sFUxLhjs2e7fkbryAo1ysU",
+            authDomain: "mahalakshmi-91935.firebaseapp.com",
+            databaseURL: "https://mahalakshmi-91935-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mahalakshmi-91935",
+            storageBucket: "mahalakshmi-91935.firebasestorage.app",
+            messagingSenderId: "665618845136",
+            appId: "1:665618845136:web:f87b797e5a2a810db7fdd5",
+            measurementId: "G-P2FRX7C8DK"
+        };
 
-    body {
-      min-height: 100vh;
-      background: #f5f7fb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    .payment-card {
-      width: 100%;
-      max-width: 430px;
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.10);
-    }
+        // पेमेंट बटन क्लिक इवेंट
+        document.getElementById('pay-btn').addEventListener('click', async () => {
+            const amount = document.getElementById('amount').value;
+            const statusMsg = document.getElementById('status-msg');
 
-    .logo {
-      text-align: center;
-      font-size: 26px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount!");
+                return;
+            }
 
-    .subtitle {
-      text-align: center;
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 25px;
-    }
+            statusMsg.style.color = "blue";
+            statusMsg.innerText = "Processing... Please wait.";
+            document.getElementById('pay-btn').disabled = true;
 
-    .section-title {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
+            const txnid = "TXN" + new Date().getTime(); 
+            const merchantKey = "YOUR_PAYU_MERCHANT_KEY"; // यहाँ अपनी असली PayU Key (टोकन) डालें
+            const productinfo = "Wallet Deposit";
+            const firstname = "User"; 
+            const email = "user@example.com";
+            const phone = "9999999999";
+            
+            // GitHub Pages के लिंक्स (यहाँ अपना यूजरनेम और रिपॉजिटरी नाम बदलें)
+            const surl = "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/payment.html?status=success";
+            const furl = "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/payment.html?status=failed";
 
-    .amount-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 25px;
-    }
+            try {
+                // 1. Firestore डेटाबेस में पेंडिंग ट्रांज़ैक्शन सेव करें
+                await setDoc(doc(db, "transactions", txnid), {
+                    amount: amount,
+                    status: "pending",
+                    txnid: txnid,
+                    createdAt: new Date()
+                });
 
-    .amount-btn {
-      border: 1px solid #ddd;
-      background: #fff;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+                // 2. Cloud Function से Hash प्राप्त करें
+                const functionURL = "https://us-central1-mahalakshmi-91935.cloudfunctions.net/generatePayUHash";
+                
+                const response = await fetch(functionURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ txnid, amount, productinfo, firstname, email })
+                });
+                
+                const data = await response.json();
+                
+                if (!data.hash) {
+                    throw new Error("Hash generation failed!");
+                }
 
-    .amount-btn:hover {
-      border-color: #333;
-    }
+                // 3. PayU पेमेंट गेटवे पर फॉर्म सबमिट करें
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "https://secure.payu.in/_payment"; 
 
-    .amount-btn.selected {
-      background: #111;
-      color: #fff;
-      border-color: #111;
-    }
+                const params = {
+                    key: merchantKey,
+                    txnid: txnid,
+                    amount: amount,
+                    productinfo: productinfo,
+                    firstname: firstname,
+                    email: email,
+                    phone: phone,
+                    surl: surl,
+                    furl: furl,
+                    hash: data.hash
+                };
 
-    .input-box {
-      width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 15px;
-      font-size: 18px;
-      outline: none;
-      margin-bottom: 20px;
-    }
+                for (const key in params) {
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = key;
+                    input.value = params[key];
+                    form.appendChild(input);
+                }
 
-    .input-box:focus {
-      border-color: #333;
-    }
+                document.body.appendChild(form);
+                form.submit(); 
 
-    .pay-button {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 16px;
-      background: #111;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+            } catch (error) {
+                console.error(error);
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "Error occurred. Try again.";
+                document.getElementById('pay-btn').disabled = false;
+            }
+        });
 
-    .pay-button:hover {
-      opacity: 0.9;
-    }
-
-    .selected-amount {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 15px;
-      color: #555;
-    }
-
-    .message {
-      display: none;
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .error {
-      background: #ffe8e8;
-      color: #c40000;
-    }
-
-    .info {
-      background: #eeeeee;
-      color: #333;
-    }
-  </style>
+        // पेमेंट के बाद स्टेटस दिखाना
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const statusMsg = document.getElementById('status-msg');
+            
+            if (status === 'success') {
+                statusMsg.style.color = "green";
+                statusMsg.innerText = "Payment Successful!";
+            } else if (status === 'failed') {
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "Payment Failed!";
+            }
+        };
+    </script>
 </head>
-
 <body>
 
-  <div class="payment-card">
-
-    <div class="logo">
-      Payment
+    <div class="payment-box">
+        <h2>Add Deposit</h2>
+        <input type="number" id="amount" placeholder="Enter Amount (₹)" required>
+        <button id="pay-btn">Pay Now</button>
+        <div id="status-msg"></div>
     </div>
-
-    <div class="subtitle">
-      Select or enter your payment amount
-    </div>
-
-    <div class="section-title">
-      Select Amount
-    </div>
-
-    <div class="amount-grid">
-
-      <button class="amount-btn" onclick="selectAmount(100, this)">
-        ₹100
-      </button>
-
-      <button class="amount-btn" onclick="selectAmount(200, this)">
-        ₹200
-      </button>
-
-      <button class="amount-btn" onclick="selectAmount(500, this)">
-        ₹500
-      </button>
-
-      <button class="amount-btn" onclick="selectAmount(1000, this)">
-        ₹1000
-      </button>
-
-    </div>
-
-    <div class="section-title">
-      Enter Amount
-    </div>
-
-    <input
-      type="number"
-      id="amountInput"
-      class="input-box"
-      placeholder="Enter amount"
-      min="1"
-      inputmode="numeric"
-      oninput="clearSelection()"
-    >
-
-    <button class="pay-button" onclick="payNow()">
-      Pay Now
-    </button>
-
-    <div id="selectedAmount" class="selected-amount">
-      No amount selected
-    </div>
-
-    <div id="message" class="message"></div>
-
-  </div>
-
-
-  <script>
-
-    let selectedAmount = 0;
-
-    function selectAmount(amount, button) {
-
-      selectedAmount = amount;
-
-      document.getElementById("amountInput").value = amount;
-
-      document.querySelectorAll(".amount-btn").forEach(function(btn) {
-        btn.classList.remove("selected");
-      });
-
-      button.classList.add("selected");
-
-      document.getElementById("selectedAmount").innerText =
-        "Selected Amount: ₹" + amount;
-
-      hideMessage();
-    }
-
-
-    function clearSelection() {
-
-      selectedAmount = 0;
-
-      document.querySelectorAll(".amount-btn").forEach(function(btn) {
-        btn.classList.remove("selected");
-      });
-
-      let value = document.getElementById("amountInput").value;
-
-      if (value) {
-        document.getElementById("selectedAmount").innerText =
-          "Amount: ₹" + value;
-      } else {
-        document.getElementById("selectedAmount").innerText =
-          "No amount selected";
-      }
-
-      hideMessage();
-    }
-
-
-    function payNow() {
-
-      let amount =
-        Number(document.getElementById("amountInput").value);
-
-      if (!amount || amount <= 0) {
-
-        showMessage(
-          "Please select or enter a valid amount.",
-          "error"
-        );
-
-        return;
-      }
-
-      /*
-        Payment gateway integration will be added here.
-
-        IMPORTANT:
-        Do not put PayU Salt, Client Secret,
-        or other private credentials in this file.
-      */
-
-      showMessage(
-        "Amount selected: ₹" + amount +
-        ". Payment processing will be connected here.",
-        "info"
-      );
-    }
-
-
-    function showMessage(text, type) {
-
-      const message = document.getElementById("message");
-
-      message.innerText = text;
-      message.className = "message " + type;
-      message.style.display = "block";
-    }
-
-
-    function hideMessage() {
-
-      const message = document.getElementById("message");
-
-      message.style.display = "none";
-    }
-
-  </script>
 
 </body>
 </html>
