@@ -51,15 +51,15 @@
             document.getElementById('pay-btn').disabled = true;
 
             const txnid = "TXN" + new Date().getTime(); 
-            const merchantKey = "YOUR_PAYU_MERCHANT_KEY"; // 🔴 यहाँ अपनी PayU Key (टोकन) डालें
+            const merchantKey = "BuIISI"; // 🔴 यहाँ अपनी PayU Key (टोकन) डालें
             const productinfo = "Wallet Deposit";
             const firstname = "User"; 
             const email = "user@example.com";
             const phone = "9999999999";
             
             // 🔴 GitHub Pages URLs (यहाँ अपना Github यूजरनेम और रिपॉजिटरी नाम डालें)
-            const surl = "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/payment.html?status=success";
-            const furl = "https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/payment.html?status=failed";
+            const surl = "https://savi777.online/payment.html?status=success";
+            const furl = "https://savi777.online/payment.html?status=failed";
 
             try {
                 // 1. Firestore में पेंडिंग सेव करें (User ID के साथ)
