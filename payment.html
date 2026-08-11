@@ -51,15 +51,15 @@
             document.getElementById('pay-btn').disabled = true;
 
             const txnid = "TXN" + new Date().getTime(); 
-            const merchantKey = "BuIISI"; // 🔴 आपकी PayU Key
+            const merchantKey = "BuIISI"; // PayU Key
             const productinfo = "Wallet Deposit";
             const firstname = "User"; 
             const email = "user@example.com";
             const phone = "9999999999";
             
-            // 🔴 GitHub Pages URLs
-            const surl = "https://savi777.online/payment.html?status=success";
-            const furl = "https://savi777.online/payment.html?status=failed";
+            // 🔴 यहाँ surl और furl को आपके Firebase Webhook URL पर सेट कर दिया गया है
+            const surl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
+            const furl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
                 // 1. Firestore में पेंडिंग सेव करें (User ID के साथ)
@@ -101,8 +101,8 @@
                     furl: furl,
                     hash: data.hash,
                     udf1: userid,  
-                    pg: "UPI",          // यह बताता है कि पेमेंट मोड UPI है
-                    bankcode: "UPI"     // 🔴 यह PayU का पेज स्किप करके सीधे मोबाइल ऐप्स खोलेगा
+                    pg: "UPI",         
+                    bankcode: "UPI"    
                 };
 
                 for (const key in params) {
