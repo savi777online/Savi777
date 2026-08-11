@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure UPI Payment</title>
+    <title>Mahalakshmi - Secure Payment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
-        .payment-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; width: 300px; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
-        button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; }
-        button:hover { background-color: #218838; }
-        #status-msg { margin-top: 15px; font-weight: bold; }
+        body {
+            background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            max-height: 850px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-radius: 24px;
+        }
     </style>
 
     <!-- Firebase SDK -->
@@ -18,7 +36,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // आपकी Firebase कॉन्फ़िगरेशन
         const firebaseConfig = {
             apiKey: "AIzaSyBjG-uwtWfr3sFUxLhjs2e7fkbryAo1ysU",
             authDomain: "mahalakshmi-91935.firebaseapp.com",
@@ -33,58 +50,61 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // URL से User ID निकालना (जो Android Studio भेजेगा)
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || "UNKNOWN_USER";
 
-        document.getElementById('pay-btn').addEventListener('click', async () => {
-            const amount = document.getElementById('amount').value;
-            const statusMsg = document.getElementById('status-msg');
+        window.handleFastPayment = async function() {
+            const amountInput = document.getElementById('amount').value.trim();
+            const btn = document.getElementById('pay-btn');
+            const statusText = document.getElementById('status-text');
 
-            if (!amount || amount <= 0) {
+            if (!amountInput || Number(amountInput) <= 0) {
                 alert("Please enter a valid amount!");
                 return;
             }
 
-            statusMsg.style.color = "blue";
-            statusMsg.innerText = "Opening UPI Apps... Please wait.";
-            document.getElementById('pay-btn').disabled = true;
+            // UI feedback for instant speed
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing Securely...
+            `;
+            statusText.innerText = "Connecting to payment gateway...";
 
             const txnid = "TXN" + new Date().getTime(); 
-            const merchantKey = "BuIISI"; // PayU Key
+            const merchantKey = "BuIISI"; 
             const productinfo = "Wallet Deposit";
             const firstname = "User"; 
             const email = "user@example.com";
             const phone = "9999999999";
             
-            // 🔴 यहाँ surl और furl को आपके Firebase Webhook URL पर सेट कर दिया गया है
             const surl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
             const furl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
-                // 1. Firestore में पेंडिंग सेव करें (User ID के साथ)
                 await setDoc(doc(db, "transactions", txnid), {
-                    amount: amount,
+                    amount: amountInput,
                     status: "pending",
                     txnid: txnid,
                     userid: userid,
                     createdAt: new Date()
                 });
 
-                // 2. Cloud Function (Hash) कॉल करें
                 const functionURL = "https://generatepayuhash-u7nrsrlm5q-uc.a.run.app";
                 
                 const response = await fetch(functionURL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ txnid, amount, productinfo, firstname, email, userid })
+                    body: JSON.stringify({ txnid, amount: amountInput, productinfo, firstname, email, userid })
                 });
                 
                 const data = await response.json();
                 
-                if (!data.hash) throw new Error("Hash failed!");
+                if (!data.hash) throw new Error("Hash generation failed!");
 
-                // 3. PayU फॉर्म (Direct UPI के लिए)
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = "https://secure.payu.in/_payment"; 
@@ -92,7 +112,7 @@
                 const params = {
                     key: merchantKey,
                     txnid: txnid,
-                    amount: amount,
+                    amount: amountInput,
                     productinfo: productinfo,
                     firstname: firstname,
                     email: email,
@@ -118,30 +138,49 @@
 
             } catch (error) {
                 console.error(error);
-                statusMsg.style.color = "red";
-                statusMsg.innerText = "Error. Try again.";
-                document.getElementById('pay-btn').disabled = false;
-            }
-        });
-
-        // पेमेंट के बाद स्टेटस
-        window.onload = function() {
-            if (urlParams.get('status') === 'success') {
-                document.getElementById('status-msg').style.color = "green";
-                document.getElementById('status-msg').innerText = "Payment Successful! Points Added.";
-            } else if (urlParams.get('status') === 'failed') {
-                document.getElementById('status-msg').style.color = "red";
-                document.getElementById('status-msg').innerText = "Payment Failed!";
+                alert("Something went wrong. Please try again.");
+                btn.disabled = false;
+                btn.innerHTML = "🚀 Submit & Pay Securely";
+                statusText.innerText = "";
             }
         };
     </script>
 </head>
 <body>
-    <div class="payment-box">
-        <h2>Add Deposit</h2>
-        <input type="number" id="amount" placeholder="Enter Amount (₹)" required>
-        <button id="pay-btn">Pay with UPI</button>
-        <div id="status-msg"></div>
+
+<div class="app-container">
+    <!-- HEADER -->
+    <div class="p-6 text-center pt-10">
+        <div class="p-3 bg-blue-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto shadow-inner mb-3">
+            <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-14 h-14 object-contain">
+        </div>
+        <h1 class="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Instant Wallet Deposit</p>
     </div>
+
+    <!-- MAIN BOX -->
+    <div class="px-6 py-4 space-y-6 flex-1 flex flex-col justify-center">
+        <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-5 shadow-sm space-y-4">
+            <div>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2 px-1">Enter Deposit Amount (₹)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-lg font-black text-blue-600">₹</span>
+                    <input type="number" id="amount" inputmode="numeric" placeholder="100" class="w-full bg-white border border-gray-200 rounded-2xl py-3.5 pl-9 pr-4 text-lg font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
+                </div>
+            </div>
+
+            <button onclick="handleFastPayment()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-4 rounded-2xl tracking-wider text-xs uppercase shadow-lg transition-all transform active:scale-[0.99]">
+                🚀 Submit & Pay Securely
+            </button>
+            <div id="status-text" class="text-center text-[11px] font-bold text-blue-600"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="p-4 text-center">
+        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">© 2018 Mahalakshmi Secure Gateway</p>
+    </div>
+</div>
+
 </body>
 </html>
