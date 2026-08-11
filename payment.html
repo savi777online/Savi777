@@ -53,6 +53,20 @@
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || "UNKNOWN_USER";
 
+        // 🛡️ सुरक्षा चेक: अगर कोई पेज रिफ्रेश करे या डायरेक्ट वापस आए, तो इसे संभालना
+        window.onload = function() {
+            if (urlParams.get('status') === 'success') {
+                const statusText = document.getElementById('status-text');
+                statusText.style.color = "green";
+                statusText.innerText = "Payment Successful! Redirecting safely...";
+                
+                // तुरंत डैशबोर्ड पर भेजें ताकि कोई बार-बार रिफ्रेश न कर सके
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1500);
+            }
+        };
+
         window.handleFastPayment = async function() {
             const amountInput = document.getElementById('amount').value.trim();
             const btn = document.getElementById('pay-btn');
@@ -63,8 +77,9 @@
                 return;
             }
 
-            // UI feedback for instant speed
+            // 🔒 डबल क्लिक और बार-बार सबमिट करने से रोकने के लिए बटन को तुरंत लॉक करें
             btn.disabled = true;
+            btn.style.opacity = "0.7";
             btn.innerHTML = `
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -72,9 +87,10 @@
                 </svg>
                 Processing Securely...
             `;
-            statusText.innerText = "Connecting to payment gateway...";
+            statusText.innerText = "Securing transaction, please wait...";
 
-            const txnid = "TXN" + new Date().getTime(); 
+            // यूनिक ट्रांजैक्शन आईडी बनाना ताकि डेटाबेस में कभी डुप्लीकेट एंट्रियां न हों
+            const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000); 
             const merchantKey = "BuIISI"; 
             const productinfo = "Wallet Deposit";
             const firstname = "User"; 
@@ -85,6 +101,7 @@
             const furl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
+                // 1. Firestore में पेंडिंग ट्रांजैक्शन सेव करें
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
@@ -105,6 +122,7 @@
                 
                 if (!data.hash) throw new Error("Hash generation failed!");
 
+                // 2. PayU फॉर्म बनाकर सबमिट करना
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = "https://secure.payu.in/_payment"; 
@@ -140,6 +158,7 @@
                 console.error(error);
                 alert("Something went wrong. Please try again.");
                 btn.disabled = false;
+                btn.style.opacity = "1";
                 btn.innerHTML = "🚀 Submit & Pay Securely";
                 statusText.innerText = "";
             }
@@ -155,7 +174,7 @@
             <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-14 h-14 object-contain">
         </div>
         <h1 class="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
-        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Instant Wallet Deposit</p>
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Instant Secure Wallet Deposit</p>
     </div>
 
     <!-- MAIN BOX -->
