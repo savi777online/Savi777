@@ -23,11 +23,14 @@
             background: #ffffff;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center; /* Center mein align karne ke liye */
+            align-items: center;
             position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
             border-radius: 24px;
+            padding: 20px;
+            box-sizing: border-box;
         }
     </style>
 
@@ -53,14 +56,12 @@
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || "UNKNOWN_USER";
 
-        // 🛡️ सुरक्षा चेक: अगर कोई पेज रिफ्रेश करे या डायरेक्ट वापस आए, तो इसे संभालना
+        // 🛡️ सुरक्षा चेक: पेज रिफ्रेश फ्रॉड रोकने के लिए
         window.onload = function() {
             if (urlParams.get('status') === 'success') {
                 const statusText = document.getElementById('status-text');
                 statusText.style.color = "green";
                 statusText.innerText = "Payment Successful! Redirecting safely...";
-                
-                // तुरंत डैशबोर्ड पर भेजें ताकि कोई बार-बार रिफ्रेश न कर सके
                 setTimeout(() => {
                     window.location.href = "dashboard.html";
                 }, 1500);
@@ -77,19 +78,18 @@
                 return;
             }
 
-            // 🔒 डबल क्लिक और बार-बार सबमिट करने से रोकने के लिए बटन को तुरंत लॉक करें
+            // 🔒 डबल क्लिक रोकने के लिए बटन लॉक
             btn.disabled = true;
             btn.style.opacity = "0.7";
             btn.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Processing Securely...
+                Opening UPI Apps...
             `;
-            statusText.innerText = "Securing transaction, please wait...";
+            statusText.innerText = "Connecting to gateway...";
 
-            // यूनिक ट्रांजैक्शन आईडी बनाना ताकि डेटाबेस में कभी डुप्लीकेट एंट्रियां न हों
             const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000); 
             const merchantKey = "BuIISI"; 
             const productinfo = "Wallet Deposit";
@@ -101,7 +101,6 @@
             const furl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
-                // 1. Firestore में पेंडिंग ट्रांजैक्शन सेव करें
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
@@ -122,7 +121,6 @@
                 
                 if (!data.hash) throw new Error("Hash generation failed!");
 
-                // 2. PayU फॉर्म बनाकर सबमिट करना
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = "https://secure.payu.in/_payment"; 
@@ -140,7 +138,8 @@
                     hash: data.hash,
                     udf1: userid,  
                     pg: "UPI",         
-                    bankcode: "UPI"    
+                    bankcode: "UPI",
+                    enforce_paymethod: "upi" // Direct UPI intent trigger karne ke liye
                 };
 
                 for (const key in params) {
@@ -159,7 +158,7 @@
                 alert("Something went wrong. Please try again.");
                 btn.disabled = false;
                 btn.style.opacity = "1";
-                btn.innerHTML = "🚀 Submit & Pay Securely";
+                btn.innerHTML = "🚀 Pay Securely Now";
                 statusText.innerText = "";
             }
         };
@@ -168,37 +167,42 @@
 <body>
 
 <div class="app-container">
-    <!-- HEADER -->
-    <div class="p-6 text-center pt-10">
-        <div class="p-3 bg-blue-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto shadow-inner mb-3">
-            <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-14 h-14 object-contain">
+    
+    <!-- SQUARE POP-UP CARD (Compact & Zero Gap) -->
+    <div class="w-full max-w-[340px] bg-white border border-blue-100 rounded-3xl p-6 shadow-xl flex flex-col items-center space-y-4">
+        
+        <!-- LOGO & HEADER (Compact) -->
+        <div class="flex flex-col items-center text-center">
+            <div class="p-2.5 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center shadow-inner mb-2">
+                <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-12 h-12 object-contain">
+            </div>
+            <h1 class="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
+            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Instant Wallet Deposit</p>
         </div>
-        <h1 class="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
-        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Instant Secure Wallet Deposit</p>
-    </div>
 
-    <!-- MAIN BOX -->
-    <div class="px-6 py-4 space-y-6 flex-1 flex flex-col justify-center">
-        <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-5 shadow-sm space-y-4">
+        <!-- INPUT & BUTTON CONTAINER (Directly below image without gap) -->
+        <div class="w-full space-y-3">
             <div>
-                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2 px-1">Enter Deposit Amount (₹)</label>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-lg font-black text-blue-600">₹</span>
-                    <input type="number" id="amount" inputmode="numeric" placeholder="100" class="w-full bg-white border border-gray-200 rounded-2xl py-3.5 pl-9 pr-4 text-lg font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-base font-black text-blue-600">₹</span>
+                    <input type="number" id="amount" inputmode="numeric" placeholder="100" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-3 pl-8 pr-3 text-base font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
                 </div>
             </div>
 
-            <button onclick="handleFastPayment()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-4 rounded-2xl tracking-wider text-xs uppercase shadow-lg transition-all transform active:scale-[0.99]">
-                🚀 Submit & Pay Securely
+            <button onclick="handleFastPayment()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99]">
+                🚀 Pay Securely Now
             </button>
-            <div id="status-text" class="text-center text-[11px] font-bold text-blue-600"></div>
+            <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-4"></div>
         </div>
+
     </div>
 
-    <!-- FOOTER -->
-    <div class="p-4 text-center">
+    <!-- FOOTER TRADEMARK -->
+    <div class="absolute bottom-4 text-center w-full">
         <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">© 2018 Mahalakshmi Secure Gateway</p>
     </div>
+
 </div>
 
 </body>
