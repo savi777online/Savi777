@@ -6,32 +6,8 @@
     <title>Mahalakshmi - Add Balance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: sans-serif;
-        }
-        .app-container {
-            width: 100%;
-            max-width: 450px;
-            height: 100vh;
-            max-height: 850px;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            border-radius: 24px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+        body { background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; }
+        .app-container { width: 100%; max-width: 450px; height: 100vh; max-height: 850px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; border-radius: 24px; padding: 20px; box-sizing: border-box; }
     </style>
 
     <!-- Firebase SDK -->
@@ -103,31 +79,29 @@
             const amountInput = document.getElementById('amount').value.trim();
             if (!amountInput || Number(amountInput) <= 0) { alert("Please enter a valid amount!"); return; }
 
-            // 🔥 Unique Order ID Generator
-            const orderId = "MAHA" + new Date().getTime() + Math.floor(Math.random() * 1000);
-            const upiID = "savi777.payu@mairtel"; 
-            const payeeName = "SAVI777"; 
-            const note = "Order " + orderId; 
+            const txnid = "MAHA" + Date.now();
+            const upiID = "s0078204513092824@slc"; // Aapki Business UPI ID
+            const payeeName = "Ganesh Siddharth Patil"; 
+            const note = "Order_" + txnid;
 
             document.getElementById('status-text').innerText = "Opening UPI App...";
 
             try {
-                await setDoc(doc(db, "transactions", orderId), {
+                await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
                     processed: false,
-                    txnid: orderId,
+                    txnid: txnid,
                     userid: userid,
                     createdAt: new Date()
                 });
 
-                localStorage.setItem('pending_txnid', orderId);
+                localStorage.setItem('pending_txnid', txnid);
                 localStorage.setItem('pending_amount', amountInput);
 
-                // 🔥 UPI Intent में 'tr' (Transaction Ref) जोड़ दिया गया है
-                const upiUri = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amountInput}&cu=INR&tn=${encodeURIComponent(note)}&tr=${orderId}`;
+                // Fully Encoded UPI Intent URI
+                const upiUri = `upi://pay?pa=${encodeURIComponent(upiID)}&pn=${encodeURIComponent(payeeName)}&tn=${encodeURIComponent(note)}&am=${encodeURIComponent(amountInput)}&cu=INR&tr=${encodeURIComponent(txnid)}`;
                 window.location.href = upiUri;
-
             } catch (e) {
                 alert("Something went wrong. Please try again.");
             }
