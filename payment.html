@@ -3,127 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahalakshmi - Add Balance</title>
+    <title>Add Balance - Mahalakshmi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; }
-        .app-container { width: 100%; max-width: 450px; height: 100vh; max-height: 850px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; border-radius: 24px; padding: 20px; box-sizing: border-box; }
+        .app-container { width: 100%; max-width: 450px; height: 100vh; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-radius: 24px; padding: 20px; }
     </style>
-
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBjG-uwtWfr3sFUxLhjs2e7fkbryAo1ysU",
-            authDomain: "mahalakshmi-91935.firebaseapp.com",
-            databaseURL: "https://mahalakshmi-91935-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "mahalakshmi-91935",
-            storageBucket: "mahalakshmi-91935.firebasestorage.app",
-            messagingSenderId: "665618845136",
-            appId: "1:665618845136:web:f87b797e5a2a810db7fdd5",
-            measurementId: "G-P2FRX7C8DK"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
-
-        let isCheckingPayment = false;
-
-        async function checkAndProcessPayment(isAutoCheck = false) {
-            const txnid = localStorage.getItem('pending_txnid');
-            const amount = localStorage.getItem('pending_amount');
-            const statusText = document.getElementById('status-text');
-
-            if (!txnid || !amount || isCheckingPayment) return;
-            isCheckingPayment = true;
-
-            try {
-                const txRef = doc(db, "transactions", txnid);
-                const txSnap = await getDoc(txRef);
-
-                if (txSnap.exists()) {
-                    const txData = txSnap.data();
-                    if (txData.processed === true) {
-                        localStorage.removeItem('pending_txnid');
-                        localStorage.removeItem('pending_amount');
-                        window.location.replace("https://savi777online.github.io/savi/dashboard.html");
-                        return;
-                    }
-
-                    await setDoc(txRef, { status: "success", processed: true, updatedAt: new Date() }, { merge: true });
-                    const userRef = doc(db, "users", userid);
-                    await updateDoc(userRef, { walletBalance: increment(Number(amount)) });
-
-                    localStorage.removeItem('pending_txnid');
-                    localStorage.removeItem('pending_amount');
-                    statusText.style.color = "green";
-                    statusText.innerText = "Payment Successful! Balance Added.";
-                    setTimeout(() => { window.location.replace("https://savi777online.github.io/savi/dashboard.html"); }, 1200);
-                } else {
-                    isCheckingPayment = false;
-                }
-            } catch (e) {
-                isCheckingPayment = false;
-            }
-        }
-
-        document.addEventListener("visibilitychange", function() { if (document.visibilityState === "visible") checkAndProcessPayment(true); });
-        window.addEventListener("focus", function() { checkAndProcessPayment(true); });
-
-        window.handleDirectUPI = async function() {
-            const amountInput = document.getElementById('amount').value.trim();
-            if (!amountInput || Number(amountInput) <= 0) { alert("Please enter a valid amount!"); return; }
-
-            const txnid = "MAHA" + Date.now();
-            const upiID = "s0078204513092824@slc"; // Aapki Business UPI ID
-            const payeeName = "Ganesh Siddharth Patil"; 
-            const note = "Order_" + txnid;
-
-            document.getElementById('status-text').innerText = "Opening UPI App...";
-
-            try {
-                await setDoc(doc(db, "transactions", txnid), {
-                    amount: amountInput,
-                    status: "pending",
-                    processed: false,
-                    txnid: txnid,
-                    userid: userid,
-                    createdAt: new Date()
-                });
-
-                localStorage.setItem('pending_txnid', txnid);
-                localStorage.setItem('pending_amount', amountInput);
-
-                // Fully Encoded UPI Intent URI
-                const upiUri = `upi://pay?pa=${encodeURIComponent(upiID)}&pn=${encodeURIComponent(payeeName)}&tn=${encodeURIComponent(note)}&am=${encodeURIComponent(amountInput)}&cu=INR&tr=${encodeURIComponent(txnid)}`;
-                window.location.href = upiUri;
-            } catch (e) {
-                alert("Something went wrong. Please try again.");
-            }
-        };
-    </script>
 </head>
 <body>
     <div class="app-container">
-        <div class="w-full max-w-[340px] bg-white border border-blue-100 rounded-3xl p-6 shadow-xl flex flex-col items-center space-y-4">
-            <div class="flex flex-col items-center text-center">
-                <div class="p-2.5 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center shadow-inner mb-2">
-                    <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-12 h-12 object-contain">
-                </div>
-                <h1 class="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
-            </div>
-            <div class="w-full space-y-3">
-                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
-                <input type="number" id="amount" inputmode="numeric" placeholder="100" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-3 pl-4 pr-3 text-base font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
-                <button onclick="handleDirectUPI()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-black py-3.5 rounded-xl text-xs uppercase shadow-md active:scale-[0.99] transition-transform">⚡ Pay via UPI App</button>
-                <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-6"></div>
-            </div>
+        <div class="w-full max-w-[340px] text-center space-y-4">
+            <h1 class="text-xl font-black text-blue-800 uppercase tracking-widest">MAHALAKSHMI</h1>
+            <input type="number" id="amount" placeholder="Enter Amount (₹)" class="w-full p-4 border border-blue-200 rounded-xl text-center font-bold">
+            <button onclick="initiatePayment()" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase">⚡ Pay Now</button>
+            <p id="status-text" class="text-xs font-bold text-blue-600"></p>
         </div>
     </div>
+
+    <script>
+        async function initiatePayment() {
+            const amount = document.getElementById('amount').value;
+            if (!amount || amount < 1) return alert("Enter valid amount");
+            
+            // User ID fetch karna
+            const urlParams = new URLSearchParams(window.location.search);
+            const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile');
+            
+            const txnid = "TXN" + Date.now();
+            document.getElementById('status-text').innerText = "Initiating...";
+            
+            // 1. Hash Generate (Backend Call)
+            const response = await fetch("https://generatepayuhash-u7nrsrlm5q-uc.a.run.app", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    txnid, 
+                    amount, 
+                    productinfo: "Wallet", 
+                    firstname: "User", 
+                    email: "no-reply@mahalakshmi.com", 
+                    userid: userid 
+                })
+            });
+            const { hash } = await response.json();
+
+            // 2. PayU UPI Intent Form
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = "https://secure.payu.in/_payment";
+
+            const fields = {
+                key: "BuIISI",
+                txnid,
+                amount,
+                productinfo: "Wallet",
+                firstname: "User",
+                email: "no-reply@mahalakshmi.com",
+                hash: hash,
+                surl: "https://payuwebhook-u7nrsrlm5q-uc.a.run.app",
+                furl: "https://payuwebhook-u7nrsrlm5q-uc.a.run.app",
+                udf1: userid, // Webhook ke liye ID pass karna
+                payment_mode: "UPI",
+                upi_intent: "true"
+            };
+
+            for (const key in fields) {
+                const input = document.createElement("input");
+                input.type = "hidden"; input.name = key; input.value = fields[key];
+                form.appendChild(input);
+            }
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
 </body>
 </html>
