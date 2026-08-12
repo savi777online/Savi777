@@ -56,14 +56,13 @@
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
 
-        // Handle return status from PayU webhook/redirect
         window.onload = function() {
             const paymentStatus = urlParams.get('status');
             const statusText = document.getElementById('status-text');
 
             if (paymentStatus === 'success') {
                 statusText.style.color = "green";
-                statusText.innerText = "Payment Successful! Redirecting to Dashboard...";
+                statusText.innerText = "Payment Successful! Redirecting...";
                 setTimeout(() => {
                     window.location.replace("dashboard.html");
                 }, 1500);
@@ -90,9 +89,9 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Connecting to PayU...
+                Connecting...
             `;
-            statusText.innerText = "Securely loading gateway...";
+            statusText.innerText = "Generating secure payment link...";
 
             const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000); 
             const merchantKey = "BuIISI"; 
@@ -101,11 +100,9 @@
             const email = "user@example.com";
             const phone = "9999999999";
             
-            // Webhook and return URLs pointing to your Firebase Cloud Function
             const webhookUrl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
-                // Save pending transaction in Firestore
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
@@ -126,11 +123,10 @@
                 
                 if (!data.hash) throw new Error("Hash generation failed!");
 
-                // Create hidden form to submit securely to PayU inside WebView
                 const form = document.createElement("form");
                 form.method = "POST";
                 form.action = "https://secure.payu.in/_payment"; 
-                form.target = "_self"; // Ensures it stays within the Android WebView
+                form.target = "_self";
 
                 const params = {
                     key: merchantKey,
@@ -146,7 +142,7 @@
                     udf1: userid,  
                     pg: "UPI",       
                     bankcode: "UPI",
-                    enforce_paymethod: "upi"
+                    enforce_paymethod: "upi" // Ye PayU ko direct UPI intent / single option page par force karega
                 };
 
                 for (const key in params) {
@@ -165,7 +161,7 @@
                 alert("Something went wrong. Please try again.");
                 btn.disabled = false;
                 btn.style.opacity = "1";
-                btn.innerHTML = "🚀 Pay Securely Now";
+                btn.innerHTML = "⚡ Pay via UPI App";
                 statusText.innerText = "";
             }
         };
@@ -175,10 +171,8 @@
 
 <div class="app-container">
     
-    <!-- SQUARE POP-UP CARD -->
     <div class="w-full max-w-[340px] bg-white border border-blue-100 rounded-3xl p-6 shadow-xl flex flex-col items-center space-y-4">
         
-        <!-- LOGO & HEADER -->
         <div class="flex flex-col items-center text-center">
             <div class="p-2.5 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center shadow-inner mb-2">
                 <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-12 h-12 object-contain">
@@ -187,7 +181,6 @@
             <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Instant Wallet Deposit</p>
         </div>
 
-        <!-- INPUT & BUTTON CONTAINER -->
         <div class="w-full space-y-3">
             <div>
                 <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
@@ -197,15 +190,14 @@
                 </div>
             </div>
 
-            <button onclick="handlePayUCheckout()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99]">
-                🚀 Pay Securely Now
+            <button onclick="handlePayUCheckout()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99] flex items-center justify-center space-x-2">
+                <span>⚡ Pay via UPI App</span>
             </button>
             <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-4"></div>
         </div>
 
     </div>
 
-    <!-- FOOTER TRADEMARK -->
     <div class="absolute bottom-4 text-center w-full">
         <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">© 2018 Mahalakshmi Secure Gateway</p>
     </div>
