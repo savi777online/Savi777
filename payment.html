@@ -23,7 +23,7 @@
             background: #ffffff;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center mein align karne ke liye */
+            justify-content: center;
             align-items: center;
             position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -54,17 +54,26 @@
         const db = getFirestore(app);
 
         const urlParams = new URLSearchParams(window.location.search);
-        const userid = urlParams.get('userid') || "UNKNOWN_USER";
+        const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
 
-        // 🛡️ सुरक्षा चेक: पेज रिफ्रेश फ्रॉड रोकने के लिए
+        // 🛡️ Webview & Refresh Fraud Handling Check
         window.onload = function() {
-            if (urlParams.get('status') === 'success') {
+            // Agar browser mein khulne ki koshish ho toh usko force app ke andar hi lock karo
+            if (window.opener && window.opener !== window) {
+                try {
+                    window.opener.location.href = window.location.href;
+                    window.close();
+                    return;
+                } catch(e) {}
+            }
+
+            if (urlParams.get('status') === 'success' || window.location.href.includes('status=success')) {
                 const statusText = document.getElementById('status-text');
                 statusText.style.color = "green";
-                statusText.innerText = "Payment Successful! Redirecting safely...";
+                statusText.innerText = "Payment Successful! Returning to dashboard...";
                 setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 1500);
+                    window.location.replace("dashboard.html");
+                }, 1200);
             }
         };
 
@@ -78,7 +87,6 @@
                 return;
             }
 
-            // 🔒 डबल क्लिक रोकने के लिए बटन लॉक
             btn.disabled = true;
             btn.style.opacity = "0.7";
             btn.innerHTML = `
@@ -97,8 +105,10 @@
             const email = "user@example.com";
             const phone = "9999999999";
             
-            const surl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
-            const furl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
+            // Webview ke andar hi wapas redirect karne ke liye current page ka URL use hoga
+            const currentDomain = window.location.origin + window.location.pathname;
+            const surl = currentDomain + "?status=success&userid=" + userid;
+            const furl = currentDomain + "?status=failed&userid=" + userid;
 
             try {
                 await setDoc(doc(db, "transactions", txnid), {
@@ -139,7 +149,7 @@
                     udf1: userid,  
                     pg: "UPI",         
                     bankcode: "UPI",
-                    enforce_paymethod: "upi" // Direct UPI intent trigger karne ke liye
+                    enforce_paymethod: "upi"
                 };
 
                 for (const key in params) {
@@ -168,10 +178,10 @@
 
 <div class="app-container">
     
-    <!-- SQUARE POP-UP CARD (Compact & Zero Gap) -->
+    <!-- SQUARE POP-UP CARD -->
     <div class="w-full max-w-[340px] bg-white border border-blue-100 rounded-3xl p-6 shadow-xl flex flex-col items-center space-y-4">
         
-        <!-- LOGO & HEADER (Compact) -->
+        <!-- LOGO & HEADER -->
         <div class="flex flex-col items-center text-center">
             <div class="p-2.5 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center shadow-inner mb-2">
                 <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-12 h-12 object-contain">
@@ -180,7 +190,7 @@
             <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Instant Wallet Deposit</p>
         </div>
 
-        <!-- INPUT & BUTTON CONTAINER (Directly below image without gap) -->
+        <!-- INPUT & BUTTON CONTAINER -->
         <div class="w-full space-y-3">
             <div>
                 <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
