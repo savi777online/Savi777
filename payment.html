@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahalakshmi - Secure Payment</title>
+    <title>Mahalakshmi - Add Balance</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -37,7 +37,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBjG-uwtWfr3sFUxLhjs2e7fkbryAo1ysU",
@@ -53,10 +53,58 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // URL se userid aur status catch karna
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
 
-        window.handlePayUCheckout = async function() {
+        // Jab user payment karke wapas is page par aayega
+        window.onload = async function() {
+            const paymentStatus = urlParams.get('status');
+            const txnid = urlParams.get('txnid');
+            const amount = urlParams.get('amount');
+            const statusText = document.getElementById('status-text');
+
+            if (paymentStatus === 'success' && txnid && amount) {
+                statusText.style.color = "green";
+                statusText.innerText = "Verifying payment & updating wallet...";
+
+                try {
+                    const txRef = doc(db, "transactions", txnid);
+                    const txSnap = await getDoc(txRef);
+
+                    // Check karenge ki ye transaction pehle process toh nahi hua
+                    if (!txSnap.exists() || !txSnap.data().processed) {
+                        // 1. Transaction ko success mark karo
+                        await setDoc(txRef, { 
+                            status: "success", 
+                            processed: true, 
+                            updatedAt: new Date() 
+                        }, { merge: true });
+
+                        // 2. Sirf tabhi user ke wallet mein balance add hoga jab successful hoga
+                        const userRef = doc(db, "users", userid);
+                        await updateDoc(userRef, {
+                            walletBalance: increment(Number(amount))
+                        });
+                    }
+
+                    statusText.innerText = "Payment Successful! Balance Added.";
+                    setTimeout(() => {
+                        window.location.replace("dashboard.html"); // Aapke main dashboard ka page
+                    }, 2000);
+
+                } catch (e) {
+                    console.error(e);
+                    statusText.style.color = "red";
+                    statusText.innerText = "Error updating wallet. Contact support.";
+                }
+            } else if (paymentStatus === 'failed') {
+                document.getElementById('status-text').style.color = "red";
+                document.getElementById('status-text').innerText = "Payment Failed! No balance added.";
+            }
+        };
+
+        window.handleDirectUPI = async function() {
             const amountInput = document.getElementById('amount').value.trim();
             const btn = document.getElementById('pay-btn');
             const statusText = document.getElementById('status-text');
@@ -68,87 +116,40 @@
 
             btn.disabled = true;
             btn.style.opacity = "0.7";
-            btn.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Connecting...
-            `;
-            statusText.innerText = "Generating secure payment link...";
+            statusText.style.color = "blue";
+            statusText.innerText = "Preparing UPI apps...";
 
-            const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000); 
-            const merchantKey = "BuIISI"; 
-            const productinfo = "Wallet Deposit";
-            const firstname = "User"; 
-            const email = "user@example.com";
-            const phone = "9999999999";
-            
-            // Webhook URL jo backend me balance update karega aur success page dikhayega
-            const webhookUrl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
+            const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000);
+            const upiID = "savi777.payu@mairtel"; // Aapki di gayi UPI ID
+            const payeeName = "Mahalakshmi";
+            const note = "Wallet Deposit";
 
+            // Firestore mein 'pending' transaction save karo
             try {
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
+                    processed: false,
                     txnid: txnid,
                     userid: userid,
                     createdAt: new Date()
                 });
-
-                const functionURL = "https://generatepayuhash-u7nrsrlm5q-uc.a.run.app";
-                
-                const response = await fetch(functionURL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ txnid, amount: amountInput, productinfo, firstname, email, userid })
-                });
-                
-                const data = await response.json();
-                
-                if (!data.hash) throw new Error("Hash generation failed!");
-
-                const form = document.createElement("form");
-                form.method = "POST";
-                form.action = "https://secure.payu.in/_payment"; 
-                form.target = "_self";
-
-                const params = {
-                    key: merchantKey,
-                    txnid: txnid,
-                    amount: amountInput,
-                    productinfo: productinfo,
-                    firstname: firstname,
-                    email: email,
-                    phone: phone,
-                    surl: webhookUrl, // Seedha webhook par jayega jahan balance add hoga
-                    furl: webhookUrl, // Fail hone par bhi webhook handle karega
-                    hash: data.hash,
-                    udf1: userid,  
-                    pg: "UPI",       
-                    bankcode: "UPI",
-                    enforce_paymethod: "upi"
-                };
-
-                for (const key in params) {
-                    const input = document.createElement("input");
-                    input.type = "hidden";
-                    input.name = key;
-                    input.value = params[key];
-                    form.appendChild(input);
-                }
-
-                document.body.appendChild(form);
-                form.submit(); 
-
-            } catch (error) {
-                console.error(error);
-                alert("Something went wrong. Please try again.");
-                btn.disabled = false;
-                btn.style.opacity = "1";
-                btn.innerHTML = "⚡ Pay via UPI App";
-                statusText.innerText = "";
+            } catch (e) {
+                console.error(e);
             }
+
+            // Return URL (Payment successful hone par yahin wapas aayega)
+            const currentBaseUrl = window.location.href.split('?')[0];
+            const successUrl = `${currentBaseUrl}?status=success&txnid=${txnid}&amount=${amountInput}&userid=${userid}`;
+            const failureUrl = `${currentBaseUrl}?status=failed&txnid=${txnid}`;
+
+            // UPI Intent URI generate karna
+            const upiUri = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amountInput}&cu=INR&tn=${encodeURIComponent(note)}&url=${encodeURIComponent(successUrl)}`;
+
+            // UPI Apps open karna
+            window.location.href = upiUri;
+            
+            statusText.innerText = "Opening UPI App... Complete payment to add balance.";
         };
     </script>
 </head>
@@ -175,7 +176,7 @@
                 </div>
             </div>
 
-            <button onclick="handlePayUCheckout()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99] flex items-center justify-center space-x-2">
+            <button onclick="handleDirectUPI()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99] flex items-center justify-center space-x-2">
                 <span>⚡ Pay via UPI App</span>
             </button>
             <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-4"></div>
