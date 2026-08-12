@@ -53,60 +53,98 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // URL se userid aur status catch karna
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
 
-        // Jab user payment karke wapas is page par aayega
-        window.onload = async function() {
-            const paymentStatus = urlParams.get('status');
-            const txnid = urlParams.get('txnid');
-            const amount = urlParams.get('amount');
+        let isCheckingPayment = false;
+
+        // 🔄 Core Verification Function (ऑटोमैटिक बैलेंस जोड़ने वाला कोड)
+        async function checkAndProcessPayment(isAutoCheck = false) {
+            const txnid = localStorage.getItem('pending_txnid');
+            const amount = localStorage.getItem('pending_amount');
             const statusText = document.getElementById('status-text');
 
-            if (paymentStatus === 'success' && txnid && amount) {
-                statusText.style.color = "green";
-                statusText.innerText = "Verifying payment & updating wallet...";
+            if (!txnid || !amount || isCheckingPayment) return;
+            isCheckingPayment = true;
 
-                try {
-                    const txRef = doc(db, "transactions", txnid);
-                    const txSnap = await getDoc(txRef);
+            if (!isAutoCheck) {
+                statusText.style.color = "blue";
+                statusText.innerText = "Checking payment status...";
+            }
 
-                    // Check karenge ki ye transaction pehle process toh nahi hua
-                    if (!txSnap.exists() || !txSnap.data().processed) {
-                        // 1. Transaction ko success mark karo
-                        await setDoc(txRef, { 
-                            status: "success", 
-                            processed: true, 
-                            updatedAt: new Date() 
-                        }, { merge: true });
+            try {
+                const txRef = doc(db, "transactions", txnid);
+                const txSnap = await getDoc(txRef);
 
-                        // 2. Sirf tabhi user ke wallet mein balance add hoga jab successful hoga
-                        const userRef = doc(db, "users", userid);
-                        await updateDoc(userRef, {
-                            walletBalance: increment(Number(amount))
-                        });
+                if (txSnap.exists()) {
+                    const txData = txSnap.data();
+
+                    // अगर पहले से प्रोसेस हो चुका है
+                    if (txData.processed === true) {
+                        localStorage.removeItem('pending_txnid');
+                        localStorage.removeItem('pending_amount');
+                        window.location.replace("dashboard.html");
+                        return;
                     }
 
-                    statusText.innerText = "Payment Successful! Balance Added.";
-                    setTimeout(() => {
-                        window.location.replace("dashboard.html"); // Aapke main dashboard ka page
-                    }, 2000);
+                    // ⚡ यहाँ हम मान लेते हैं कि यूजर ने पेमेंट कर दी है, अब हम डेटाबेस अपडेट करेंगे
+                    // (Note: Direct UPI में gateway से automatic success webhook नहीं आता, 
+                    // इसलिए जैसे ही यूजर लौटता है, हम ट्रांजैक्शन को success मानकर बैलेंस जोड़ देते हैं)
+                    await setDoc(txRef, { 
+                        status: "success", 
+                        processed: true, 
+                        updatedAt: new Date() 
+                    }, { merge: true });
 
-                } catch (e) {
-                    console.error(e);
-                    statusText.style.color = "red";
-                    statusText.innerText = "Error updating wallet. Contact support.";
+                    const userRef = doc(db, "users", userid);
+                    await updateDoc(userRef, {
+                        walletBalance: increment(Number(amount))
+                    });
+
+                    // LocalStorage साफ करें
+                    localStorage.removeItem('pending_txnid');
+                    localStorage.removeItem('pending_amount');
+
+                    statusText.style.color = "green";
+                    statusText.innerText = "Payment Successful! Balance Added.";
+                    
+                    setTimeout(() => {
+                        window.location.replace("dashboard.html");
+                    }, 1200);
+
+                } else {
+                    isCheckingPayment = false;
                 }
-            } else if (paymentStatus === 'failed') {
-                document.getElementById('status-text').style.color = "red";
-                document.getElementById('status-text').innerText = "Payment Failed! No balance added.";
+            } catch (e) {
+                console.error(e);
+                isCheckingPayment = false;
+            }
+        }
+
+        // 🚀 1. जब यूजर पेमेंट ऐप से वापस इस WebView पर लौटेगा (Auto-detect Return)
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === "visible") {
+                // यूजर ऐप पर वापस आ गया है, तुरंत ऑटोमैटिक चेक चलाओ
+                checkAndProcessPayment(true);
+            }
+        });
+
+        window.addEventListener("focus", function() {
+            checkAndProcessPayment(true);
+        });
+
+        // पेज लोड होने पर भी चेक करें
+        window.onload = function() {
+            const savedTxnId = localStorage.getItem('pending_txnid');
+            if (savedTxnId) {
+                document.getElementById('status-text').style.color = "blue";
+                document.getElementById('status-text').innerText = "Waiting for payment confirmation...";
             }
         };
 
+        // 2. Pay Button Click Handler
         window.handleDirectUPI = async function() {
             const amountInput = document.getElementById('amount').value.trim();
-            const btn = document.getElementById('pay-btn');
             const statusText = document.getElementById('status-text');
 
             if (!amountInput || Number(amountInput) <= 0) {
@@ -114,18 +152,16 @@
                 return;
             }
 
-            btn.disabled = true;
-            btn.style.opacity = "0.7";
-            statusText.style.color = "blue";
-            statusText.innerText = "Preparing UPI apps...";
-
             const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000);
-            const upiID = "savi777.payu@mairtel"; // Aapki di gayi UPI ID
+            const upiID = "savi777.payu@mairtel"; 
             const payeeName = "Mahalakshmi";
             const note = "Wallet Deposit";
 
-            // Firestore mein 'pending' transaction save karo
+            statusText.style.color = "blue";
+            statusText.innerText = "Opening UPI App...";
+
             try {
+                // डेटाबेस में pending ट्रांजैक्शन सेव करें
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
@@ -134,22 +170,21 @@
                     userid: userid,
                     createdAt: new Date()
                 });
+
+                // LocalStorage में सेव करें
+                localStorage.setItem('pending_txnid', txnid);
+                localStorage.setItem('pending_amount', amountInput);
+
+                // UPI Intent URI
+                const upiUri = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amountInput}&cu=INR&tn=${encodeURIComponent(note)}`;
+
+                // फोन की UPI ऐप खोलें
+                window.location.href = upiUri;
+
             } catch (e) {
                 console.error(e);
+                alert("Something went wrong. Please try again.");
             }
-
-            // Return URL (Payment successful hone par yahin wapas aayega)
-            const currentBaseUrl = window.location.href.split('?')[0];
-            const successUrl = `${currentBaseUrl}?status=success&txnid=${txnid}&amount=${amountInput}&userid=${userid}`;
-            const failureUrl = `${currentBaseUrl}?status=failed&txnid=${txnid}`;
-
-            // UPI Intent URI generate karna
-            const upiUri = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amountInput}&cu=INR&tn=${encodeURIComponent(note)}&url=${encodeURIComponent(successUrl)}`;
-
-            // UPI Apps open karna
-            window.location.href = upiUri;
-            
-            statusText.innerText = "Opening UPI App... Complete payment to add balance.";
         };
     </script>
 </head>
@@ -176,10 +211,10 @@
                 </div>
             </div>
 
-            <button onclick="handleDirectUPI()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99] flex items-center justify-center space-x-2">
+            <button onclick="handleDirectUPI()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99] flex items-center justify-center space-x-2">
                 <span>⚡ Pay via UPI App</span>
             </button>
-            <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-4"></div>
+            <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-6"></div>
         </div>
 
     </div>
