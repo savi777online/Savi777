@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahalakshmi - Direct UPI Payment</title>
+    <title>Mahalakshmi - Secure Payment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -56,7 +56,24 @@
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
 
-        window.openDirectUpiApp = async function() {
+        // Handle return status from PayU webhook/redirect
+        window.onload = function() {
+            const paymentStatus = urlParams.get('status');
+            const statusText = document.getElementById('status-text');
+
+            if (paymentStatus === 'success') {
+                statusText.style.color = "green";
+                statusText.innerText = "Payment Successful! Redirecting to Dashboard...";
+                setTimeout(() => {
+                    window.location.replace("dashboard.html");
+                }, 1500);
+            } else if (paymentStatus === 'failed') {
+                statusText.style.color = "red";
+                statusText.innerText = "Payment Failed or Cancelled. Try again.";
+            }
+        };
+
+        window.handlePayUCheckout = async function() {
             const amountInput = document.getElementById('amount').value.trim();
             const btn = document.getElementById('pay-btn');
             const statusText = document.getElementById('status-text');
@@ -68,13 +85,27 @@
 
             btn.disabled = true;
             btn.style.opacity = "0.7";
-            btn.innerHTML = "Opening UPI Apps...";
-            statusText.innerText = "Launching payment apps...";
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Connecting to PayU...
+            `;
+            statusText.innerText = "Securely loading gateway...";
 
             const txnid = "TXN" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000); 
+            const merchantKey = "BuIISI"; 
+            const productinfo = "Wallet Deposit";
+            const firstname = "User"; 
+            const email = "user@example.com";
+            const phone = "9999999999";
+            
+            // Webhook and return URLs pointing to your Firebase Cloud Function
+            const webhookUrl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
-                // 1. Database mein pending transaction record karo
+                // Save pending transaction in Firestore
                 await setDoc(doc(db, "transactions", txnid), {
                     amount: amountInput,
                     status: "pending",
@@ -83,24 +114,50 @@
                     createdAt: new Date()
                 });
 
-                // 2. Apni Business/Merchant ki UPI ID yahan daalein (Jisme paise aane hain)
-                const merchantVpa = "Savi777.pay@mairtel"; // 🔴 Yahan apni asli UPI ID daalein
-                const merchantName = "savi777";
-                const transactionNote = "Wallet Deposit ID: " + userid;
+                const functionURL = "https://generatepayuhash-u7nrsrlm5q-uc.a.run.app";
+                
+                const response = await fetch(functionURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ txnid, amount: amountInput, productinfo, firstname, email, userid })
+                });
+                
+                const data = await response.json();
+                
+                if (!data.hash) throw new Error("Hash generation failed!");
 
-                // 3. Direct UPI Intent Scheme URL
-                const upiIntentUrl = `upi://pay?pa=${encodeURIComponent(merchantVpa)}&pn=${encodeURIComponent(merchantName)}&am=${encodeURIComponent(amountInput)}&cu=INR&tn=${encodeURIComponent(transactionNote)}&tr=${encodeURIComponent(txnid)}`;
+                // Create hidden form to submit securely to PayU
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "https://secure.payu.in/_payment"; 
 
-                // 4. Trigger Direct UPI App Popup inside WebView
-                window.location.href = upiIntentUrl;
+                const params = {
+                    key: merchantKey,
+                    txnid: txnid,
+                    amount: amountInput,
+                    productinfo: productinfo,
+                    firstname: firstname,
+                    email: email,
+                    phone: phone,
+                    surl: webhookUrl,
+                    furl: webhookUrl,
+                    hash: data.hash,
+                    udf1: userid,  
+                    pg: "UPI",         
+                    bankcode: "UPI",
+                    enforce_paymethod: "upi"
+                };
 
-                // 5. Kuch seconds baad user ko wapas dashboard par bhejne ka option ya auto-redirect
-                setTimeout(() => {
-                    statusText.innerText = "If payment completed, returning to dashboard...";
-                    setTimeout(() => {
-                        window.location.href = "dashboard.html?userid=" + userid;
-                    }, 2000);
-                }, 4000);
+                for (const key in params) {
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = key;
+                    input.value = params[key];
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit(); 
 
             } catch (error) {
                 console.error(error);
@@ -126,7 +183,7 @@
                 <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-12 h-12 object-contain">
             </div>
             <h1 class="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
-            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Instant UPI Deposit</p>
+            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Instant Wallet Deposit</p>
         </div>
 
         <!-- INPUT & BUTTON CONTAINER -->
@@ -139,8 +196,8 @@
                 </div>
             </div>
 
-            <button onclick="openDirectUpiApp()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99]">
-                🚀 Pay via UPI App
+            <button onclick="handlePayUCheckout()" id="pay-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black py-3.5 rounded-xl tracking-wider text-xs uppercase shadow-md transition-all transform active:scale-[0.99]">
+                🚀 Pay Securely Now
             </button>
             <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-4"></div>
         </div>
