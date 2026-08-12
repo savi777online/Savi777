@@ -44,7 +44,7 @@
         const txnid = "TXN" + Date.now();
         document.getElementById('status-text').innerText = "Initiating...";
 
-        // 1. Backend Call
+        // 1. Backend Call (Hash Generation)
         const response = await fetch("https://generatepayuhash-u7nrsrlm5q-uc.a.run.app", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -59,20 +59,27 @@
 
         const fields = {
             key: "BuIISI",
-            txnid, amount, productinfo: "Wallet", firstname: "User", email: "no-reply@mahalakshmi.com",
+            txnid, 
+            amount, 
+            productinfo: "Wallet", 
+            firstname: "User", 
+            email: "no-reply@mahalakshmi.com",
             hash: hash,
-            surl: "https://payuwebhook-u7nrsrlm5q-uc.a.run.app",
-            furl: "https://payuwebhook-u7nrsrlm5q-uc.a.run.app",
+            // Webhook backend me balance add karega, par user redirect hoke seedha aapke dashboard pe jayega
+            surl: "https://savi777online.github.io/savi/",
+            furl: "https://savi777online.github.io/savi/",
             udf1: userid,
             payment_mode: "UPI",
             enforce_payment_mode: "UPI",
-            upi_intent: "true"
+            upi_intent: "true",
             vpa: "savi777.payu@mairtel"
         };
 
         for (const key in fields) {
             const input = document.createElement("input");
-            input.type = "hidden"; input.name = key; input.value = fields[key];
+            input.type = "hidden"; 
+            input.name = key; 
+            input.value = fields[key];
             form.appendChild(input);
         }
         document.body.appendChild(form);
