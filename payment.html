@@ -56,22 +56,6 @@
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || "UNKNOWN_USER";
 
-        window.onload = function() {
-            const paymentStatus = urlParams.get('status');
-            const statusText = document.getElementById('status-text');
-
-            if (paymentStatus === 'success') {
-                statusText.style.color = "green";
-                statusText.innerText = "Payment Successful! Redirecting to Dashboard...";
-                setTimeout(() => {
-                    window.location.replace("dashboard.html");
-                }, 1500);
-            } else if (paymentStatus === 'failed') {
-                statusText.style.color = "red";
-                statusText.innerText = "Payment Failed or Cancelled. Try again.";
-            }
-        };
-
         window.handlePayUCheckout = async function() {
             const amountInput = document.getElementById('amount').value.trim();
             const btn = document.getElementById('pay-btn');
@@ -100,8 +84,8 @@
             const email = "user@example.com";
             const phone = "9999999999";
             
-            // Current page ka URL hi return URL (surl/furl) ke liye use karenge
-            const currentBaseUrl = window.location.href.split('?')[0];
+            // Webhook URL jo backend me balance update karega aur success page dikhayega
+            const webhookUrl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
 
             try {
                 await setDoc(doc(db, "transactions", txnid), {
@@ -137,8 +121,8 @@
                     firstname: firstname,
                     email: email,
                     phone: phone,
-                    surl: currentBaseUrl + "?status=success", // Payment success hone par yahin aayega
-                    furl: currentBaseUrl + "?status=failed",  // Payment fail hone par yahin aayega
+                    surl: webhookUrl, // Seedha webhook par jayega jahan balance add hoga
+                    furl: webhookUrl, // Fail hone par bhi webhook handle karega
                     hash: data.hash,
                     udf1: userid,  
                     pg: "UPI",       
