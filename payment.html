@@ -62,7 +62,7 @@
 
             if (paymentStatus === 'success') {
                 statusText.style.color = "green";
-                statusText.innerText = "Payment Successful! Redirecting...";
+                statusText.innerText = "Payment Successful! Redirecting to Dashboard...";
                 setTimeout(() => {
                     window.location.replace("dashboard.html");
                 }, 1500);
@@ -100,7 +100,8 @@
             const email = "user@example.com";
             const phone = "9999999999";
             
-            const webhookUrl = "https://payuwebhook-u7nrsrlm5q-uc.a.run.app";
+            // Current page ka URL hi return URL (surl/furl) ke liye use karenge
+            const currentBaseUrl = window.location.href.split('?')[0];
 
             try {
                 await setDoc(doc(db, "transactions", txnid), {
@@ -136,13 +137,13 @@
                     firstname: firstname,
                     email: email,
                     phone: phone,
-                    surl: webhookUrl,
-                    furl: webhookUrl,
+                    surl: currentBaseUrl + "?status=success", // Payment success hone par yahin aayega
+                    furl: currentBaseUrl + "?status=failed",  // Payment fail hone par yahin aayega
                     hash: data.hash,
                     udf1: userid,  
                     pg: "UPI",       
                     bankcode: "UPI",
-                    enforce_paymethod: "upi" // Ye PayU ko direct UPI intent / single option page par force karega
+                    enforce_paymethod: "upi"
                 };
 
                 for (const key in params) {
