@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahalakshmi - Add Balance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body { background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; }
+        .app-container { width: 100%; max-width: 450px; height: 100vh; max-height: 850px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; border-radius: 24px; padding: 20px; box-sizing: border-box; }
+        
+        /* Modal Animation */
+        @keyframes scaleUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-content { animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="w-full max-w-[340px] bg-white border border-blue-100 rounded-3xl p-6 shadow-xl flex flex-col items-center space-y-4">
+        <div class="flex flex-col items-center text-center">
+            <div class="p-2.5 bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center shadow-inner mb-2">
+                <img src="https://i.imgur.com/pCFtcKd.png" alt="Logo" class="w-12 h-12 object-contain">
+            </div>
+            <h1 class="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent tracking-widest uppercase">MAHALAKSHMI</h1>
+        </div>
+
+        <div class="w-full space-y-3">
+            <div>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">User ID / Mobile Number</label>
+                <input type="text" id="userid-input" placeholder="Enter Mobile Number" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-2.5 px-3 text-sm font-bold text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner mb-2">
+            </div>
+
+            <div>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-base font-black text-blue-600">₹</span>
+                    <input type="number" id="amount" placeholder="100" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-3 pl-8 pr-3 text-base font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
+                </div>
+            </div>
+
+            <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-black py-3.5 rounded-xl text-xs uppercase shadow-md active:scale-[0.99] transition-transform">⚡ Pay Now</button>
+            <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-6"></div>
+        </div>
+    </div>
+</div>
+
+<!-- BEAUTIFUL POPUP MODAL -->
+<div id="payment-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white rounded-3xl p-6 w-full max-w-[320px] space-y-4 text-center shadow-2xl">
+        <div id="modal-icon-container" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl font-bold"></div>
+        <h3 id="modal-title" class="text-gray-900 font-black text-lg"></h3>
+        <p id="modal-desc" class="text-xs text-gray-500 font-semibold leading-relaxed"></p>
+        <button id="modal-btn" onclick="closePopupAndRedirect()" class="w-full font-black py-3 rounded-xl text-xs uppercase tracking-widest shadow text-white"></button>
+    </div>
+</div>
+
+<script>
+    let redirectUrlAfterPopup = "";
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile');
+        if (userid) {
+            document.getElementById('userid-input').value = userid;
+            document.getElementById('userid-input').style.display = 'none';
+        }
+    };
+
+    function showPopup(isSuccess, titleText, descText) {
+        const modal = document.getElementById('payment-modal');
+        const iconContainer = document.getElementById('modal-icon-container');
+        const titleElem = document.getElementById('modal-title');
+        const descElem = document.getElementById('modal-desc');
+        const btnElem = document.getElementById('modal-btn');
+
+        titleElem.innerText = titleText;
+        descElem.innerText = descText;
+
+        if (isSuccess) {
+            iconContainer.className = "w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold";
+            iconContainer.innerHTML = "✓";
+            btnElem.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest shadow";
+            redirectUrlAfterPopup = "https://mahalakshmiplay.online/dashboard.html";
+        } else {
+            iconContainer.className = "w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold";
+            iconContainer.innerHTML = "✕";
+            btnElem.className = "w-full bg-rose-600 hover:bg-rose-700 text-white font-black py-3 rounded-xl text-xs uppercase tracking-widest shadow";
+            redirectUrlAfterPopup = "https://mahalakshmiplay.online/dashboard.html";
+        }
+
+        modal.classList.remove('hidden');
+    }
+
+    function closePopupAndRedirect() {
+        document.getElementById('payment-modal').classList.add('hidden');
+        if (redirectUrlAfterPopup) {
+            window.location.href = redirectUrlAfterPopup;
+        }
+    }
+
+    function initiatePayment() {
+        const amountInput = document.getElementById('amount').value;
+        const urlParams = new URLSearchParams(window.location.search);
+        let userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || document.getElementById('userid-input').value;
+
+        if (!userid) {
+            alert("Please enter your User ID or Mobile Number!");
+            return;
+        }
+        
+        if (!amountInput || amountInput < 1) {
+            alert("Enter valid amount");
+            return;
+        }
+        
+        const amountInPaise = Math.round(amountInput * 100);
+        const txnid = "TXN" + Date.now();
+        
+        document.getElementById('status-text').innerText = "Opening Gateway...";
+
+        var options = {
+            "key": "rzp_live_TPW1XP6gyRvQ20",
+            "amount": amountInPaise, 
+            "currency": "INR",
+            "name": "Mahalakshmi",
+            "description": "Wallet Deposit",
+            "image": "https://i.imgur.com/pCFtcKd.png",
+            "config": {
+                "display": {
+                    "blocks": {
+                        "utr": {
+                            "name": "pay_options",
+                            "instruments": [
+                                { "method": "upi" }
+                            ]
+                        }
+                    },
+                    "sequence": ["block.utr"],
+                    "preferences": {
+                        "show_default_blocks": false
+                    }
+                }
+            },
+            "handler": function (response){
+                document.getElementById('status-text').innerText = "Payment Successful!";
+                showPopup(true, "Payment Successful!", "Your payment was processed successfully. Redirecting to dashboard...");
+                
+                // Auto redirect after 2 seconds if user doesn't click button
+                setTimeout(() => {
+                    window.location.href = "https://mahalakshmiplay.online/dashboard.html";
+                }, 2000);
+            },
+            "prefill": {
+                "name": "User",
+                "email": "no-reply@mahalakshmi.com",
+                "contact": userid
+            },
+            "notes": {
+                "userid": userid,
+                "txnid": txnid
+            },
+            "theme": {
+                "color": "#2563eb"
+            }
+        };
+        
+        var rzp1 = new Razorpay(options);
+        
+        rzp1.on('payment.failed', function (response){
+            document.getElementById('status-text').innerText = "Payment Failed!";
+            showPopup(false, "Payment Failed", response.error.description || "The transaction could not be completed. Please try again.");
+        });
+        
+        rzp1.open();
+    }
+</script>
+</body>
+</html>
