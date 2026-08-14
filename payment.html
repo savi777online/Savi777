@@ -24,11 +24,20 @@
         </div>
 
         <div class="w-full space-y-3">
-            <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
-            <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-base font-black text-blue-600">₹</span>
-                <input type="number" id="amount" placeholder="100" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-3 pl-8 pr-3 text-base font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
+            <!-- User ID / Mobile Input (Agar URL mein na ho toh yahan se le lega) -->
+            <div>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">User ID / Mobile Number</label>
+                <input type="text" id="userid-input" placeholder="Enter Mobile Number" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-2.5 px-3 text-sm font-bold text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner mb-2">
             </div>
+
+            <div>
+                <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">Enter Deposit Amount (₹)</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-base font-black text-blue-600">₹</span>
+                    <input type="number" id="amount" placeholder="100" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-3 pl-8 pr-3 text-base font-black text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner">
+                </div>
+            </div>
+
             <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-black py-3.5 rounded-xl text-xs uppercase shadow-md active:scale-[0.99] transition-transform">⚡ Pay Now</button>
             <div id="status-text" class="text-center text-[11px] font-bold text-blue-600 h-6"></div>
         </div>
@@ -36,14 +45,33 @@
 </div>
 
 <script>
+    // Page load hote hi check karein agar URL mein userid hai toh input mein bhar dein
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile');
+        if (userid) {
+            document.getElementById('userid-input').value = userid;
+            document.getElementById('userid-input').style.display = 'none'; // Agar ID mil gayi toh input chhupa do
+        }
+    };
+
     function initiatePayment() {
         const amountInput = document.getElementById('amount').value;
+        
+        // URL ya localStorage ya manual input se userid uthayein
         const urlParams = new URLSearchParams(window.location.search);
-        const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile');
+        let userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || document.getElementById('userid-input').value;
+
+        if (!userid) {
+            alert("Please enter your User ID or Mobile Number!");
+            return;
+        }
         
-        if (!amountInput || amountInput < 1) return alert("Enter valid amount");
+        if (!amountInput || amountInput < 1) {
+            alert("Enter valid amount");
+            return;
+        }
         
-        // Razorpay amount paise mein hota hai (₹100 = 10000 paise)
         const amountInPaise = Math.round(amountInput * 100);
         const txnid = "TXN" + Date.now();
         
@@ -56,8 +84,6 @@
             "name": "Mahalakshmi",
             "description": "Wallet Deposit",
             "image": "https://i.imgur.com/pCFtcKd.png",
-            "txn_id": txnid,
-            // Sirf UPI options dikhane ke liye config
             "config": {
                 "display": {
                     "blocks": {
@@ -75,19 +101,20 @@
                 }
             },
             "handler": function (response){
-                document.getElementById('status-text').innerText = "Payment Successful! Redirecting...";
+                document.getElementById('status-text').innerText = "Payment Successful! Updating Balance...";
                 
                 console.log("Payment ID: ", response.razorpay_payment_id);
-                
-                // Payment successful hone ke baad user ko naye domain par redirect karega
+                console.log("User ID Sent:", userid);
+
+                // Payment successful hone ke baad webhook backend par data jayega aur dashboard par redirect hoga
                 setTimeout(() => {
-                    window.location.href = `https://mahalakshmiplay.online/dashboard?payment=success&txnid=${txnid}&payment_id=${response.razorpay_payment_id}`;
-                }, 1500);
+                    window.location.href = `https://mahalakshmiplay.online/?payment=success&txnid=${txnid}&payment_id=${response.razorpay_payment_id}&userid=${userid}&amount=${amountInput}`;
+                }, 2000);
             },
             "prefill": {
                 "name": "User",
                 "email": "no-reply@mahalakshmi.com",
-                "contact": userid || "9999999999"
+                "contact": userid
             },
             "notes": {
                 "userid": userid,
