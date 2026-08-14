@@ -43,30 +43,45 @@
         
         if (!amountInput || amountInput < 1) return alert("Enter valid amount");
         
-        // Razorpayamount paise mein hota hai (isliye * 100 kiya gaya hai, jaise ₹100 = 10000 paise)
+        // Razorpay amount paise mein hota hai (₹100 = 10000 paise)
         const amountInPaise = Math.round(amountInput * 100);
         const txnid = "TXN" + Date.now();
         
         document.getElementById('status-text').innerText = "Opening Razorpay...";
 
         var options = {
-            "key": "rzp_live_TPW1XP6gyRvQ20", // <-- Yahan apni Razorpay Key ID dalein
+            "key": "rzp_live_TPW1XP6gyRvQ20",
             "amount": amountInPaise, 
             "currency": "INR",
             "name": "Mahalakshmi",
             "description": "Wallet Deposit",
             "image": "https://i.imgur.com/pCFtcKd.png",
             "txn_id": txnid,
+            // Sirf UPI options dikhane ke liye config
+            "config": {
+                "display": {
+                    "blocks": {
+                        "utr": {
+                            "name": "pay_options",
+                            "instruments": [
+                                { "method": "upi" }
+                            ]
+                        }
+                    },
+                    "sequence": ["block.utr"],
+                    "preferences": {
+                        "show_default_blocks": false
+                    }
+                }
+            },
             "handler": function (response){
-                // Payment successful hone par ye chalega
                 document.getElementById('status-text').innerText = "Payment Successful! Redirecting...";
                 
-                // Payment ID mil jayegi, ise aap chahein toh backend bhej sakte hain balance update karne ke liye
                 console.log("Payment ID: ", response.razorpay_payment_id);
                 
-                // User ko wapas aapke naye domain par redirect kar dein
+                // Payment successful hone ke baad user ko naye domain par redirect karega
                 setTimeout(() => {
-                    window.location.href = `https://mahalakshmiplay.online/dashboard?payment=success&txnid=${txnid}`;
+                    window.location.href = `https://mahalakshmiplay.online/dashboard?payment=success&txnid=${txnid}&payment_id=${response.razorpay_payment_id}`;
                 }, 1500);
             },
             "prefill": {
