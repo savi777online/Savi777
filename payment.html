@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mahalakshmi - Add Balance</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         body { background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; }
         .app-container { width: 100%; max-width: 450px; height: 100vh; max-height: 850px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; border-radius: 24px; padding: 20px; box-sizing: border-box; }
@@ -34,56 +36,61 @@
 </div>
 
 <script>
-    async function initiatePayment() {
-        const amount = document.getElementById('amount').value;
+    function initiatePayment() {
+        const amountInput = document.getElementById('amount').value;
         const urlParams = new URLSearchParams(window.location.search);
         const userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile');
         
-        if (!amount || amount < 1) return alert("Enter valid amount");
+        if (!amountInput || amountInput < 1) return alert("Enter valid amount");
         
+        // Razorpayamount paise mein hota hai (isliye * 100 kiya gaya hai, jaise ₹100 = 10000 paise)
+        const amountInPaise = Math.round(amountInput * 100);
         const txnid = "TXN" + Date.now();
-        document.getElementById('status-text').innerText = "Initiating...";
+        
+        document.getElementById('status-text').innerText = "Opening Razorpay...";
 
-        // 1. Backend Call (Hash Generation)
-        const response = await fetch("https://generatepayuhash-u7nrsrlm5q-uc.a.run.app", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ txnid, amount, productinfo: "Wallet", firstname: "User", email: "no-reply@mahalakshmi.com", userid: userid })
-        });
-        const { hash } = await response.json();
-
-        // 2. Payment Form
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "https://secure.payu.in/_payment";
-
-        const fields = {
-            key: "BuIISI",
-            txnid, 
-            amount, 
-            productinfo: "Wallet", 
-            firstname: "User", 
-            email: "no-reply@mahalakshmi.com",
-            hash: hash,
-            // Webhook backend me balance add karega, par user redirect hoke seedha aapke dashboard pe jayega
-            surl: "https://savi777online.github.io/savi/",
-            furl: "https://savi777online.github.io/savi/",
-            udf1: userid,
-            payment_mode: "UPI",
-            enforce_payment_mode: "UPI",
-            upi_intent: "true",
-            vpa: "savi777.payu@mairtel"
+        var options = {
+            "key": "YOUR_RAZORPAY_KEY_ID", // <-- Yahan apni Razorpay Key ID dalein
+            "amount": amountInPaise, 
+            "currency": "INR",
+            "name": "Mahalakshmi",
+            "description": "Wallet Deposit",
+            "image": "https://i.imgur.com/pCFtcKd.png",
+            "txn_id": txnid,
+            "handler": function (response){
+                // Payment successful hone par ye chalega
+                document.getElementById('status-text').innerText = "Payment Successful! Redirecting...";
+                
+                // Payment ID mil jayegi, ise aap chahein toh backend bhej sakte hain balance update karne ke liye
+                console.log("Payment ID: ", response.razorpay_payment_id);
+                
+                // User ko wapas aapke naye domain par redirect kar dein
+                setTimeout(() => {
+                    window.location.href = `https://mahalakshmiplay.online/dashboard?payment=success&txnid=${txnid}`;
+                }, 1500);
+            },
+            "prefill": {
+                "name": "User",
+                "email": "no-reply@mahalakshmi.com",
+                "contact": userid || "9999999999"
+            },
+            "notes": {
+                "userid": userid,
+                "txnid": txnid
+            },
+            "theme": {
+                "color": "#2563eb"
+            }
         };
-
-        for (const key in fields) {
-            const input = document.createElement("input");
-            input.type = "hidden"; 
-            input.name = key; 
-            input.value = fields[key];
-            form.appendChild(input);
-        }
-        document.body.appendChild(form);
-        form.submit();
+        
+        var rzp1 = new Razorpay(options);
+        
+        rzp1.on('payment.failed', function (response){
+            document.getElementById('status-text').innerText = "Payment Failed!";
+            alert("Payment Failed: " + response.error.description);
+        });
+        
+        rzp1.open();
     }
 </script>
 </body>
