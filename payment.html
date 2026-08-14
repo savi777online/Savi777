@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mahalakshmi - Add Balance</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Razorpay Checkout Script -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         body { background: linear-gradient(135deg, #eff6ff 0%, #fdfbf7 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; }
@@ -24,7 +23,6 @@
         </div>
 
         <div class="w-full space-y-3">
-            <!-- User ID / Mobile Input (Agar URL mein na ho toh yahan se le lega) -->
             <div>
                 <label class="block text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1 px-1">User ID / Mobile Number</label>
                 <input type="text" id="userid-input" placeholder="Enter Mobile Number" class="w-full bg-blue-50/30 border border-gray-200 rounded-xl py-2.5 px-3 text-sm font-bold text-gray-800 focus:outline-none focus:border-blue-600 shadow-inner mb-2">
@@ -45,20 +43,17 @@
 </div>
 
 <script>
-    // Page load hote hi check karein agar URL mein userid hai toh input mein bhar dein
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         let userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile');
         if (userid) {
             document.getElementById('userid-input').value = userid;
-            document.getElementById('userid-input').style.display = 'none'; // Agar ID mil gayi toh input chhupa do
+            document.getElementById('userid-input').style.display = 'none';
         }
     };
 
     function initiatePayment() {
         const amountInput = document.getElementById('amount').value;
-        
-        // URL ya localStorage ya manual input se userid uthayein
         const urlParams = new URLSearchParams(window.location.search);
         let userid = urlParams.get('userid') || localStorage.getItem('app_user_mobile') || document.getElementById('userid-input').value;
 
@@ -103,13 +98,10 @@
             "handler": function (response){
                 document.getElementById('status-text').innerText = "Payment Successful! Updating Balance...";
                 
-                console.log("Payment ID: ", response.razorpay_payment_id);
-                console.log("User ID Sent:", userid);
-
-                // Payment successful hone ke baad webhook backend par data jayega aur dashboard par redirect hoga
                 setTimeout(() => {
-                    window.location.href = `https://mahalakshmiplay.online/?payment=success&txnid=${txnid}&payment_id=${response.razorpay_payment_id}&userid=${userid}&amount=${amountInput}`;
-                }, 2000);
+                    // Redirect back to dashboard with payment success flag
+                    window.location.href = `https://mahalakshmiplay.online/?payment=success&userid=${userid}`;
+                }, 1500);
             },
             "prefill": {
                 "name": "User",
