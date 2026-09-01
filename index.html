@@ -16,6 +16,10 @@
         
         header { background: linear-gradient(90deg, #030712, #111827); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
         header h1 { color: var(--primary); font-size: 26px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .wallet-box { background: rgba(0, 255, 204, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: background 0.3s; }
+        .wallet-box:hover { background: var(--primary); color: #000; }
         .cart-info { background: var(--primary); color: #000; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; }
 
         .nav-bar { background: #111827; padding: 12px 40px; border-bottom: 1px solid #1f2937; text-align: center; overflow-x: auto; white-space: nowrap; }
@@ -51,7 +55,14 @@
 
     <header>
         <h1>savi777 Store</h1>
-        <div class="cart-info">Massive Hardware Catalog</div>
+        <div class="header-right">
+            <!-- शॉपिंग वॉलेट बैलेंस बॉक्स जिस पर क्लिक करने पर deposit.html पर जाएगा -->
+            <a href="deposit.html" class="wallet-box">
+                <span>💰 Wallet:</span>
+                <span id="wallet-balance">₹0.00</span>
+            </a>
+            <div class="cart-info">Massive Hardware Catalog</div>
+        </div>
     </header>
 
     <div class="nav-bar">
@@ -63,6 +74,9 @@
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
         <a href="refund.html">Refund</a>
+        <!-- जोड़े गए नए लिंक्स -->
+        <a href="return.html">Return</a>
+        <a href="shipping.html">Shipping</a>
     </div>
 
     <div class="hero">
@@ -84,10 +98,9 @@
             <a href="terms.html">Terms & Conditions</a>
             <a href="privacy.html">Privacy Policy</a>
             <a href="refund.html">Refund Policy</a>
-            <!-- Shipping Policy का नया लिंक -->
-            <a href="refund.html#shipping-policy">Shipping Policy</a> 
+            <a href="return.html">Return Policy</a>
+            <a href="shipping.html">Shipping Policy</a>
         </div>
-        <!-- कॉपीराइट नाम अपडेट किया गया -->
         <p>&copy; 2026 Tech in market. All rights reserved. Powered by GitHub Pages.</p>
     </footer>
 
@@ -187,6 +200,14 @@
             localStorage.setItem('selectedPrice', price);
             window.location.href = 'checkout.html';
         }
+
+        // Wallet Balance Load (localStorage से बैलेंस फेच करने के लिए, डिफ़ॉल्ट ₹0.00)
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedBalance = localStorage.getItem('walletBalance');
+            if (savedBalance) {
+                document.getElementById('wallet-balance').innerText = '₹' + Number(savedBalance).toLocaleString('en-IN');
+            }
+        });
     </script>
 </body>
 </html>
